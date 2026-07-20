@@ -270,3 +270,54 @@ Agents must cross-reference existing documentation whenever possible.
 - Reference Pattern documents when implementing recurring UI solutions.
 
 Duplicate documentation is considered a defect.
+
+---
+
+## 13. Skills
+
+Every task must use a skill. Agents must load the appropriate skill before beginning work.
+
+The full list of available skills is at `docs/Skillindex.md`.
+
+Skills provide specialised instructions, workflows, and tool access for specific task types. They extend agent capabilities beyond the base toolset.
+
+Before starting any task:
+
+1. Identify which skill matches the task.
+2. Load the skill using the Skill tool.
+3. Follow the skill's instructions.
+
+Do not attempt complex tasks without loading a skill first.
+
+---
+
+## 14. Task Reports
+
+Every completed task must produce a detailed report saved to `docs/Reports/`.
+
+Reports document what was done, what changed, and what was verified.
+
+### Report Structure
+
+Each report must include:
+
+| Section | Content |
+|---------|---------|
+| Task | Short description of what was requested |
+| Approach | How the task was executed |
+| Changes | List of files modified and what changed in each |
+| Verification | Steps taken to confirm correctness |
+| Issues | Any blockers, edge cases, or notes for future work |
+
+### Report Naming
+
+Use the format: `YYYY-MM-DD-<short-description>.md`
+
+Example: `2026-07-20-fix-reui-upstream.md`
+
+### Rules
+
+- One report per task.
+- Write reports in ADS-STE100 style.
+- Save reports immediately after task completion.
+- Do not skip reports for small tasks.
