@@ -1,129 +1,103 @@
+You are taking over an implementation that does not match the approved shell design.
 
-- The PRD is a product-level document about BGD UI as a platform.
-- `workspace-spec/` contains implementation details for individual workspaces — which are independent products living inside BGD UI.
-- The PRD should not dictate where workspace documentation lives. Each workspace owns its own structure.
+Your task is not to add new features. Your task is to audit the current implementation, identify every deviation from the approved design, and correct the implementation until it matches the architect-approved specification.
 
-The correct fix is to remove `workspace-spec/` from the PRD entirely, not just rename it.
+Authoritative References (read in this order)
 
----
+1. "docs/AGENTS.md"
+2. "docs/bgd-ui-prd/PRD.md"
+3. "docs/bgd-ui-prd/bgd-shell-final-recommendation.md"
 
-What Needs to Change
-
-PRD Section 13.3 (File Organization)
-
-Current: Lists `docs/Architecture/` as part of the project structure.
-
-Problem: This implies the PRD controls workspace documentation location. It does not. Workspaces are independent.
-
-Fix: Remove the `Architecture/` or `workspace-spec/` entry from the PRD file organization. Keep only platform-level directories:
-
-```
-docs/
-├── PRD.md
-├── Glossary.md
-├── ADR/
-├── Designs/
-├── Masonry-yard/
-└── AGENTS.md
-```
-
-Workspace documentation lives in the workspace, not in the platform PRD.
-
-PRD Section 7 (External References)
-
-Current: References `docs/Architecture/Invoice/overview.md` and related documents.
-
-Fix: Remove these. The PRD should not reference workspace-specific specification documents. If a workspace needs to be mentioned (e.g., PRAV as an example), reference it by name only, not by file path.
-
-PRD Section 9.3 (Workspace Isolation)
-
-Current: Mentions `docs/Designs/` for workspace design references.
-
-Fix: This is fine. `docs/Designs/` is a platform-level directory (paint references). Keep it.
-
-ADR-001
-
-Current: References `docs/Architecture/Invoice/architecture.md`.
-
-Fix: Remove the specific file reference. ADR-001 is about workspace isolation as a principle, not about where invoice docs live.
+Treat "bgd-shell-final-recommendation.md" as the canonical shell specification.
 
 ---
 
-Revised Prompts
+Known Problems
+
+The current implementation has the following issues and they must be investigated first:
+
+- The shell design does not match the approved recommendation.
+- The visual design is poor and does not reflect the intended neutral design language.
+- There is horizontal scrolling.
+- The shell theme appears to leak into at least two workspaces.
+- Shell/workspace design isolation appears to be broken.
+
+Do not assume the implementation report is correct. Verify everything yourself.
 
 ---
 
-Prompt 1: Correct the PRD
+Audit Requirements
 
-Task: Remove workspace-specific documentation paths from `bgd-ui-prd/PRD.md`.
+Perform a complete implementation audit.
 
-Before You Start
+Verify:
 
-Read and follow `docs/AGENTS.md`.
+- Shell/workspace CSS isolation.
+- CSS Module usage.
+- Any global CSS imports.
+- Any selectors affecting "html", "body", ":root", or generic elements.
+- Theme implementation.
+- Design token usage.
+- Responsive layouts.
+- Overflow causing horizontal scrolling.
+- Navigation implementation.
+- Typography.
+- Spacing.
+- Card styling.
+- Search overlay.
+- Gallery layout.
+- Theme switching.
+- Accessibility implementation.
 
-Follow ADS-STE100 Simplified Technical English.
-
-Changes Required
-
-1. Section 13.3 (File Organization): Remove any entry for `docs/Architecture/` or workspace-specific directories. The file organization should show only platform-level directories: `PRD.md`, `Glossary.md`, `ADR/`, `Designs/`, `Masonry-yard/`, `AGENTS.md`. Workspaces are not listed here.
-
-2. Section 7 (External References): Remove all references to `docs/Architecture/Invoice/` or any workspace-specific specification documents. If PRAV or Sackville must be mentioned as examples, name them without file paths.
-
-3. Search the entire PRD: Remove any remaining references to `docs/Architecture/`, `docs/workspace-spec/`, or workspace-specific file paths. The PRD describes the platform, not individual workspaces.
-
-4. Section 9.3 (Workspace Isolation): Verify this section references `docs/Designs/` only for paint references. Remove any workspace-spec paths.
-
-5. Section 26 (Changelog): Add an entry documenting this cleanup.
-
-Constraints
-
-- Do not remove references to `docs/Designs/` — this is a platform directory.
-- Do not remove references to `docs/Masonry-yard/` — this is a platform directory.
-- Do not remove references to `docs/ADR/` — this is a platform directory.
-- Do not modify any product requirements, decisions, or constraints.
-- Do not add new sections.
-
-Deliverable
-
-Updated `bgd-ui-prd/PRD.md` with all workspace-specific file paths removed.
+Compare every implementation decision against the approved recommendation.
 
 ---
 
-Prompt 2: Update AGENTS.md
+Corrective Requirements
 
-Task: Update `docs/AGENTS.md` to reflect the `docs/workspace-spec/` directory and clarify its relationship to the platform.
+Correct every deviation from the recommendation.
 
-Before You Start
+In particular:
 
-Read the current `docs/AGENTS.md` completely.
+- Eliminate all horizontal scrolling.
+- Restore complete shell/workspace style isolation.
+- Ensure shell styles cannot affect any workspace.
+- Ensure removing the shell leaves every workspace visually unchanged.
+- Ensure adding new workspaces cannot change the shell.
+- Remove any global styling introduced by the shell.
+- Ensure every component uses semantic "--shell-*" tokens.
+- Do not hard-code design values in components.
 
-Follow ADS-STE100 Simplified Technical English.
+Do not redesign the shell.
 
-Changes Required
-
-1. Search for `docs/Architecture/`: Replace all occurrences with `docs/workspace-spec/`.
-
-2. Repository structure section: If `AGENTS.md` describes the repository layout, ensure it correctly shows:
-   - Platform directories: `docs/PRD.md`, `docs/Glossary.md`, `docs/ADR/`, `docs/Designs/`, `docs/Masonry-yard/`, `docs/AGENTS.md`
-   - Workspace directories: `docs/workspace-spec/` contains workspace-specific product documentation. This is not system architecture.
-
-3. AI instructions: If `AGENTS.md` instructs agents to read workspace specs before implementing, clarify that workspace specs are inputs to workspace implementation only, not to platform shell design.
-
-4. Clarify scope: Add or update text stating:
-   - `docs/workspace-spec/` contains workspace-specific product specifications (fields, behaviors, calculations).
-   - It does not contain system architecture.
-   - Platform architecture decisions are recorded in `docs/ADR/`.
-
-5. Changelog: Add an entry documenting this structural and semantic clarification.
-
-Constraints
-
-- Do not change any AI implementation rules beyond clarifying directory purpose.
-- Do not modify the PRD in this task.
-
-Deliverable
-
-Updated `docs/AGENTS.md` with correct directory references and clear scope definitions.
+Implement the approved design—not your own interpretation.
 
 ---
 
+Before Making Changes
+
+Produce a deviation report with:
+
+- Every issue found.
+- The file(s) responsible.
+- Which section of "bgd-shell-final-recommendation.md" or the PRD is being violated.
+- Your proposed fix.
+
+Wait for approval before making architectural changes. If a fix is purely corrective and aligns with the approved recommendation, implement it directly.
+
+---
+
+Deliverables
+
+1. Audit report.
+2. Deviation report.
+3. Corrected implementation.
+4. Summary of every file modified.
+5. Verification that:
+   - No horizontal scrolling exists.
+   - Shell/workspace isolation is restored.
+   - No shell CSS leaks into workspaces.
+   - The implementation matches the approved recommendation.
+   - Any remaining issues or implementation constraints are clearly documented.
+
+Do not introduce new architecture, new design language, or new UX patterns. Your objective is faithful implementation of the approved shell design.
