@@ -1,4 +1,3 @@
-```markdown
 # BIGDROPS Invoice Form — UI Components & Behavior Specification
 
 **Version:** 1.0  
