@@ -1,216 +1,392 @@
-# Task: Audit Paint References and Recommend the BGD UI Application Shell Design
+Prompt — Final Shell Design Recommendation (Architect Review Before Specification)
 
-## Before You Start (Mandatory)
+You are the Lead Design Architect for the BGD UI project.
 
-Do not begin the audit until you have fully synchronized with the repository.
+Your task is to produce the final design recommendation for the BGD UI Application Shell.
 
-You MUST follow the complete workflow defined in `docs/AGENTS.md`.
+This is the final architectural review before docs/Designs/Shell.md is written.
 
-This is mandatory.
+This document is not the design specification. It is the final recommendation that confirms the direction, resolves conflicts, and records the architectural decisions that the Shell specification will implement.
 
-Before producing any output:
-
-1. Read and comply with `docs/AGENTS.md`.
-2. Follow the documented repository workflow.
-3. Follow the AI implementation rules.
-4. Follow the documentation workflow.
-5. Follow the documentation writing standard (ADS-STE100 Simplified Technical English).
-6. Read `docs/bgd-ui-prd/PRD.md` completely.
-7. Review all Architecture documents relevant to the application shell.
-8. Audit **every** Paint reference in `docs/Designs/`.
-
-Do not skip documents.
-
-Do not sample only a few Paint references.
-
-If any document is missing, ambiguous, or conflicts with another document, stop immediately and report the issue before continuing.
 
 ---
 
-# Objective
+Objective
 
-Recommend a design language for the **BGD UI Application Shell**.
+Produce a complete, evidence-based recommendation that synthesizes:
 
-The application shell is the product itself.
+Paint (visual language)
 
-It includes:
+Cement (design system foundations)
 
-- Home
-- Workspace Gallery
-- Navigation
-- Search
-- Settings
-- Global layouts
-- Application chrome
-- Empty states
-- Loading states
-- Error states
-- Theme system
-- Global interaction patterns
+Blocks (component architecture)
 
-It does **not** include workspace implementations.
 
-Invoice, CRM, Inventory, Quotations, and every future workspace are independent products that live inside BGD UI.
+into one coherent direction for the BGD UI shell.
 
-The shell must have its own visual identity.
+Every recommendation must be justified using the repository documentation.
 
-The shell must never inherit the design language of any workspace.
-
-Workspace design decisions must not influence the shell.
 
 ---
 
-# Primary References
+Repository Review
 
-Treat these as the source of truth.
+Before making any recommendation, review:
 
-1. `docs/AGENTS.md`
-2. `docs/bgd-ui-prd/PRD.md`
-3. `docs/Architecture/**`
-4. `docs/Designs/**`
+docs/AGENTS.md
 
-The PRD defines the product.
+docs/bgd-ui-prd/PRD.md
 
-Architecture defines engineering constraints.
+docs/bgd-ui-prd/Glossary.md
 
-Paint references provide visual inspiration only.
+docs/bgd-ui-prd/ADR/
 
-No Paint reference is authoritative.
+docs/Skillindex.md
 
----
 
-# Audit Requirements
+Review every relevant design inspiration in:
 
-Audit every Paint reference individually.
+docs/Designs/
 
-For each Paint:
+Review the complete REUI documentation:
 
-- Overall design philosophy
-- Visual strengths
-- Visual weaknesses
-- Mobile suitability
-- Offline application suitability
-- Navigation quality
-- Information density
-- Accessibility
-- Light mode quality
-- Dark mode quality
-- Scalability
-- Long-term maintainability
-- Suitability for an application shell
-- Suitability for workspace content
-- Elements worth reusing
-- Elements that should be rejected
+docs/Masonry-yard/reui/
 
-Do not stop at describing the design.
+Treat REUI as both:
 
-Explain *why*.
+Cement
 
----
+design philosophy
 
-# Recommendation Strategy
+semantic foundations
 
-Do NOT simply choose one Paint.
+accessibility
 
-You may:
+tokens
 
-- Recommend one Paint almost entirely.
-- Combine multiple Paint references.
-- Cherry-pick successful ideas.
-- Reject unsuitable ideas.
-- Recommend original adaptations where necessary.
+architecture
 
-Every recommendation must include explicit reasoning.
+theming
 
-Every rejection must include explicit reasoning.
 
-Discuss trade-offs.
+
+and
+
+Blocks
+
+components
+
+layouts
+
+interaction patterns
+
+responsive behaviour
+
+composition
+
+
+
 
 ---
 
-# Evaluation Criteria
+Architect Responsibilities
 
-Prioritize:
+You are no longer exploring options.
 
-- Mobile-first usability
-- Offline-first experience
-- Long-term maintainability
-- Accessibility
-- Scalability
-- Neutral application shell
-- Clear separation between shell and workspaces
-- Support for many future workspaces
-- Consistent Light and Dark mode
+You are making final recommendations.
 
-Do not optimize for trends.
+When multiple solutions exist:
 
-Optimize for longevity.
+compare them
 
----
+justify them
 
-# Deliverables
+reject weaker alternatives
 
-Produce a technical recommendation document containing:
+recommend one final direction
 
-1. Confirmation that the AGENTS.md workflow was followed.
-2. Documents reviewed.
-3. PRD constraints that influenced the recommendation.
-4. Audit summary for every Paint reference.
-5. Comparative analysis across all Paint references.
-6. Recommended application shell direction.
-7. Paint references adopted.
-8. Paint references rejected.
-9. Cherry-picked ideas from multiple Paint references.
-10. High-level color strategy.
-11. High-level typography strategy.
-12. High-level spacing and layout strategy.
-13. Navigation strategy.
-14. Home screen direction.
-15. Workspace Gallery direction.
-16. Light mode strategy.
-17. Dark mode strategy.
-18. Accessibility considerations.
-19. Risks and trade-offs.
-20. Open questions that require product decisions.
-21. Recommended next steps.
+
+Every recommendation must include reasoning.
+
 
 ---
 
-# Constraints
+Required Deliverables
 
-Do not redesign existing workspaces.
+1. Repository Review
 
-Do not modify:
+List every document reviewed.
 
-- PRD
-- Architecture
-- Design references
-- AGENTS.md
+Summarize why it mattered.
+
+
+---
+
+2. PRD Constraints
+
+Identify every shell constraint including:
+
+UX
+
+architecture
+
+accessibility
+
+responsiveness
+
+offline requirements
+
+isolation
+
+performance
+
+scalability
+
+
+
+---
+
+3. Cement Recommendation
+
+Recommend the final foundation including:
+
+design philosophy
+
+semantic token strategy
+
+typography philosophy
+
+spacing philosophy
+
+elevation philosophy
+
+accessibility philosophy
+
+responsive philosophy
+
+CSS architecture
+
+theme architecture
+
+
+Explain what is adopted from REUI.
+
+Explain what is intentionally changed.
+
+
+---
+
+4. Block Recommendation
+
+Recommend the component architecture.
+
+Cover:
+
+navigation
+
+cards
+
+search
+
+filters
+
+settings
+
+dialogs
+
+sheets
+
+overlays
+
+lists
+
+empty states
+
+loading states
+
+error states
+
+
+Explain how REUI patterns evolve to meet the PRD.
+
+
+---
+
+5. Paint Recommendation
+
+Review all shortlisted visual references.
+
+Explain:
+
+what is adopted
+
+what is rejected
+
+why
+
+
+Recommend the final visual language.
+
+
+---
+
+6. Final Synthesis
+
+Explain how:
+
+Paint
+
+
+Cement
+
+
+Blocks
+
+become one unified design language.
+
+The shell must feel like a single coherent product—not three separate ideas.
+
+
+---
+
+7. Resolve Remaining Decisions
+
+Make final recommendations for:
+
+canvas philosophy
+
+typography
+
+spacing
+
+borders
+
+elevation
+
+navigation
+
+responsive behaviour
+
+card styling
+
+search experience
+
+settings
+
+loading
+
+empty states
+
+iconography
+
+motion philosophy
+
+
+If a decision cannot be finalized because repository evidence is missing, explain why and clearly identify what information is required.
+
+
+---
+
+8. Accent Colour Recommendation
+
+Audit existing workspace branding.
+
+Review:
+
+PRAV
+
+Sackville
+
+AMRA
+
+
+Recommend a shell accent colour that:
+
+does not overlap with existing workspace identities
+
+works in both themes
+
+supports WCAG 2.1 AA
+
+is used sparingly
+
+remains visually neutral
+
+
+Document:
+
+rejected candidates
+
+reasoning
+
+final recommendation
+
+
+If the audit cannot be completed from the available repository, state that explicitly rather than inventing a colour.
+
+
+---
+
+9. Risks
+
+Identify remaining:
+
+architectural risks
+
+UX risks
+
+accessibility risks
+
+maintainability risks
+
+
+Recommend mitigations.
+
+
+---
+
+10. Readiness Assessment
+
+Separate recommendations into:
+
+Ready for Shell.md
+
+These decisions are complete and should be implemented.
+
+Requires Validation
+
+Items needing stakeholder review or missing repository evidence.
+
+Future ADRs
+
+Identify any architectural decisions that should be documented as new ADRs before implementation (for example, shell design independence if not already covered).
+
+
+---
+
+Constraints
+
+This is a recommendation document, not a specification.
 
 Do not write implementation code.
 
-Do not generate a design system.
+Do not create CSS.
 
-Do not create components.
+Do not define design tokens or final hex values unless they can be justified directly from repository evidence.
 
-Do not create tokens.
+Do not create component specifications.
 
-Do not invent requirements that contradict the PRD.
+Do not create mockups or wireframes.
 
-If the PRD leaves something undefined, state the assumption instead of guessing.
+Do not write Shell.md.
 
----
+Do not invent requirements.
 
-# Output Standard
+Follow ADS-STE100 Simplified Technical English.
 
-Write in ADS-STE100 Simplified Technical English.
+Every recommendation must cite its supporting evidence from the repository where possible.
 
-Use concise technical language.
+When evidence is insufficient, explicitly state the assumption or unresolved decision instead of guessing.
 
-Avoid marketing language.
 
-Support every recommendation with explicit reasoning.
-
-This task ends with a recommendation only.
-
-The complete Application Shell Design Specification will be written in a separate task after this recommendation is reviewed and approved.
+Goal: Produce the final architect-approved recommendation that serves as the single authoritative input for authoring docs/Designs/Shell.md.
