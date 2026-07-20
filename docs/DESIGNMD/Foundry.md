@@ -1,198 +1,288 @@
-# Elva — Style Reference
-> Monumental type on warm concrete
+# Foundry — Style Reference
+> orange-lit type cathedral — a black room where enormous illuminated letterforms hang as exhibits and the only guide rails are pale wireframe borders and one neon marker color.
 
-**Theme:** light
+**Theme:** dark
 
-Elva is a typographic monument, not a typical agency site. The entire visual system is built on a custom Basis sans-serif rendered at extreme sizes — from 12px navigation to 640px hero headlines — on a warm bone-white canvas with near-zero color information. The signature moves are compressed display lines at line-height 0.82 with -0.06em tracking that force words to stack as architectural blocks, and generous 80–160px section gaps that make negative space the primary compositional tool. There are no buttons, cards, or shadows — only text links with arrows and a handful of pictogram glyphs (heart, asterisk, peace sign, victory hand) that replace individual letters in the display type, acting as typographic flourishes rather than traditional icons. The warm undertone of the #262523 text prevents the minimalism from feeling cold or clinical — the page reads as printed matter on warm paper.
+Foundry is a type foundry presented as a dark workbench where the products are also the interface. A near-black canvas (#121212) hosts sharp-cornered UI chrome built almost entirely from monospaced text and hairline borders, giving the whole site the feel of a developer's terminal crossed with a gallery wall. The only chromatic voice is a vivid orange (#ff4d00) used as a structural accent on the logo, outlined action borders, and selective highlights — never as a filled button background, which keeps the accent feeling like a warning lamp or marker stroke rather than a brand paint job. Every screen is a specimen: massive custom display faces (90–234px) dominate the viewport, the UI recedes around them, and even sidebar items are styled as labeled tags. Compact spacing, near-zero radii (2.8px), and uppercase monospace metadata reinforce a precise, industrial, no-decoration sensibility — decoration lives entirely inside the typefaces themselves.
 
 ## Tokens — Colors
 
 | Name | Value | Token | Role |
 |------|-------|-------|------|
-| Warm Obsidian | `#262523` | `--color-warm-obsidian` | Primary text, logos, pictogram strokes, structural elements — the near-black with a brown undertone is the only ink in the system and gives the minimalism its printed-on-paper warmth |
-| Bone White | `#ececec` | `--color-bone-white` | Page canvas and primary surface — the warm slightly-grayed white fills the entire viewport and provides the breathing room around monumental type |
-| Pale Ash | `#cfcdcd` | `--color-pale-ash` | Secondary surface and hairline borders — one step darker than the canvas, used for subtle dividers and the rare nested surface |
-| Pure Black | `#000000` | `--color-pure-black` | Sparing deep contrast for the smallest marks and AAA contrast anchors — never used for body text (that is always Warm Obsidian) |
+| Ember Orange | `#ff4d00` | `--color-ember-orange` | Orange accent for outlined action borders, linked labels, and lightweight interactive emphasis. Do not promote it to the primary CTA color |
+| Foundry Black | `#121212` | `--color-foundry-black` | Page background, section canvas, main surface — the dominant ground that lets white type and orange accents read as luminous |
+| Chalk White | `#e2e8f0` | `--color-chalk-white` | Hairline borders, nav rules, link underlines, tag outlines — the wireframe color that constructs the entire UI scaffold |
+| Bone White | `#efefef` | `--color-bone-white` | Primary body and UI text, icon strokes, button text, secondary surface fills — the readable text color and the inverse fill used for emphasized controls |
+| Soot | `#3a3a3a` | `--color-soot` | Low-contrast structural borders, subtle dividers between stacked sections — the quietest rule line, only visible against the bone-white inverted surfaces |
+| Ash | `#747474` | `--color-ash` | Muted helper text, inactive labels, secondary metadata — recedes so the monospace chrome can carry hierarchy without competing with display type |
 
 ## Tokens — Typography
 
-### Basis Grotesque — Primary workhorse typeface — carries the entire system from 10px metadata to 640px hero statements. Weight 400 for body and display, 500 for navigation and small labels, 700 reserved for rare emphasis. The extreme size range is the signature: Basis is asked to perform as both a 10px caption and a building-scale poster without switching families. · `--font-basis-grotesque`
-- **Substitute:** Inter or Manrope — a neo-grotesque with similar proportions and warm default tracking; the closest free match for the full weight range
-- **Weights:** 400, 500, 700
-- **Sizes:** 10, 12, 15, 16, 32, 40, 120, 160, 640
-- **Line height:** 0.80, 0.82, 0.90, 1.00, 1.20, 1.30, 2.00
-- **Letter spacing:** -0.02em at 10–16px, -0.04em at 32–40px, -0.06em at 120–160px, -0.08em at 640px
-- **Role:** Primary workhorse typeface — carries the entire system from 10px metadata to 640px hero statements. Weight 400 for body and display, 500 for navigation and small labels, 700 reserved for rare emphasis. The extreme size range is the signature: Basis is asked to perform as both a 10px caption and a building-scale poster without switching families.
+### JetBrains Mono — The operating-system font: drives the sidebar navigation, font-spec labels, button text, metadata strips, and body copy. Treated as a UI element itself — uppercase, tracked-out (0.04–0.06em) for labels, tight (-0.02em) for body. Its monospaced geometry is the visual signature of every chrome component. · `--font-jetbrains-mono`
+- **Substitute:** JetBrains Mono, IBM Plex Mono, Space Mono
+- **Weights:** 400, 700
+- **Sizes:** 12px, 14px, 18px
+- **Line height:** 1.14, 1.29, 1.30, 1.32, 1.40, 1.50
+- **Letter spacing:** -0.02em, 0.01em, 0.04em, 0.06em
+- **Role:** The operating-system font: drives the sidebar navigation, font-spec labels, button text, metadata strips, and body copy. Treated as a UI element itself — uppercase, tracked-out (0.04–0.06em) for labels, tight (-0.02em) for body. Its monospaced geometry is the visual signature of every chrome component.
 
-### Messina Sans — Secondary editorial display face — reserved for oversized moments at 240px+ where a slightly more humanist, wider-cut character set can break the Basis rhythm. The 1.0 line-height (versus Basis's 0.82) creates a more relaxed, poster-like cadence when both faces appear together. · `--font-messina-sans`
-- **Substitute:** Editorial New or Druk Wide — a wide-cut editorial sans with similar humanist warmth at display scale
-- **Weights:** 500
-- **Sizes:** 240
-- **Line height:** 1.00
-- **Letter spacing:** -0.08em
-- **Role:** Secondary editorial display face — reserved for oversized moments at 240px+ where a slightly more humanist, wider-cut character set can break the Basis rhythm. The 1.0 line-height (versus Basis's 0.82) creates a more relaxed, poster-like cadence when both faces appear together.
+### Inter — Secondary text voice for longer-form copy blocks and supporting paragraphs that need a less technical rhythm than the monospace. Appears sparingly so the monospace remains the dominant signal. · `--font-inter`
+- **Substitute:** Inter, system-ui, -apple-system, Segoe UI
+- **Weights:** 400
+- **Sizes:** 14px, 16px, 18px
+- **Line height:** 1.29, 1.30, 1.50
+- **Letter spacing:** normal
+- **Role:** Secondary text voice for longer-form copy blocks and supporting paragraphs that need a less technical rhythm than the monospace. Appears sparingly so the monospace remains the dominant signal.
+
+### Basement Grotesque, FFFLAUTA, B-Mecha, Bunker, Caniche, Carpenter, Curia, Adhesion, Trovador, XER0, Blob — Display specimens — the products. Each fills a full-width section at monumental size, set tight (0.95–1.10 leading) with a hair of positive tracking. An AI agent should treat these as content blocks to be authored, not as system fonts to be re-created; substitute with the user's own display typefaces at proportional sizes. · `--font-basement-grotesque-ffflauta-b-mecha-bunker-caniche-carpenter-curia-adhesion-trovador-xer0-blob`
+- **Weights:** 400 (each is a single-weight specimen)
+- **Sizes:** 90px (FFFLAUTA) → 120px (Basement Grotesque, B-Mecha) → 156–234px (the rest)
+- **Line height:** 0.95–1.20
+- **Letter spacing:** 0.01em
+- **Role:** Display specimens — the products. Each fills a full-width section at monumental size, set tight (0.95–1.10 leading) with a hair of positive tracking. An AI agent should treat these as content blocks to be authored, not as system fonts to be re-created; substitute with the user's own display typefaces at proportional sizes.
+
+### FFFLAUTA 400 — FFFLAUTA 400 — detected in extracted data but not described by AI · `--font-ffflauta-400`
+- **Weights:** 400
+- **Sizes:** 90px
+- **Line height:** 1.1
+- **Letter spacing:** 0.01
+- **Role:** FFFLAUTA 400 — detected in extracted data but not described by AI
+
+### Basement Grotesque Black Expanded — Basement Grotesque Black Expanded — detected in extracted data but not described by AI · `--font-basement-grotesque-black-expanded`
+- **Weights:** 400
+- **Sizes:** 120px
+- **Line height:** 0.95
+- **Letter spacing:** 0.01
+- **Role:** Basement Grotesque Black Expanded — detected in extracted data but not described by AI
+
+### Mecha Regular — Mecha Regular — detected in extracted data but not described by AI · `--font-mecha-regular`
+- **Weights:** 400
+- **Sizes:** 120px
+- **Line height:** 1.2
+- **Letter spacing:** 0.01
+- **Role:** Mecha Regular — detected in extracted data but not described by AI
+
+### Curia Regular — Curia Regular — detected in extracted data but not described by AI · `--font-curia-regular`
+- **Weights:** 400
+- **Sizes:** 156px
+- **Line height:** 1.1
+- **Letter spacing:** 0.01
+- **Role:** Curia Regular — detected in extracted data but not described by AI
+
+### Adhesion Regular — Adhesion Regular — detected in extracted data but not described by AI · `--font-adhesion-regular`
+- **Weights:** 400
+- **Sizes:** 164px
+- **Line height:** 1.1
+- **Letter spacing:** 0.01
+- **Role:** Adhesion Regular — detected in extracted data but not described by AI
+
+### Carpenter Regular — Carpenter Regular — detected in extracted data but not described by AI · `--font-carpenter-regular`
+- **Weights:** 400
+- **Sizes:** 169px
+- **Line height:** 1.1
+- **Letter spacing:** 0.01
+- **Role:** Carpenter Regular — detected in extracted data but not described by AI
+
+### Bunker Regular — Bunker Regular — detected in extracted data but not described by AI · `--font-bunker-regular`
+- **Weights:** 400
+- **Sizes:** 185px
+- **Line height:** 1.1
+- **Letter spacing:** 0.01
+- **Role:** Bunker Regular — detected in extracted data but not described by AI
+
+### Trovador Regular — Trovador Regular — detected in extracted data but not described by AI · `--font-trovador-regular`
+- **Weights:** 400
+- **Sizes:** 198px
+- **Line height:** 1.1
+- **Letter spacing:** 0.01
+- **Role:** Trovador Regular — detected in extracted data but not described by AI
+
+### XER0 Regular — XER0 Regular — detected in extracted data but not described by AI · `--font-xer0-regular`
+- **Weights:** 400
+- **Sizes:** 198px
+- **Line height:** 1.1
+- **Letter spacing:** 0.01
+- **Role:** XER0 Regular — detected in extracted data but not described by AI
+
+### Caniche Regular — Caniche Regular — detected in extracted data but not described by AI · `--font-caniche-regular`
+- **Weights:** 400
+- **Sizes:** 203px
+- **Line height:** 1.1
+- **Letter spacing:** 0.01
+- **Role:** Caniche Regular — detected in extracted data but not described by AI
+
+### Blob Regular — Blob Regular — detected in extracted data but not described by AI · `--font-blob-regular`
+- **Weights:** 400
+- **Sizes:** 234px
+- **Line height:** 1.1
+- **Letter spacing:** 0.01
+- **Role:** Blob Regular — detected in extracted data but not described by AI
 
 ### Type Scale
 
 | Role | Size | Line Height | Letter Spacing | Token |
 |------|------|-------------|----------------|-------|
-| caption | 10px | 12 | -0.2px | `--text-caption` |
-| body | 15px | 30 | -0.3px | `--text-body` |
-| subheading | 32px | 28.8 | -1.28px | `--text-subheading` |
-| heading-sm | 40px | 40 | -1.6px | `--text-heading-sm` |
-| heading | 120px | 108 | -7.2px | `--text-heading` |
-| heading-lg | 160px | 131.2 | -9.6px | `--text-heading-lg` |
-| display | 240px | 240 | -19.2px | `--text-display` |
+| caption | 12px | 1.4 | 0.04px | `--text-caption` |
+| body-sm | 14px | 1.29 | -0.02px | `--text-body-sm` |
+| body | 16px | 1.5 | — | `--text-body` |
+| subheading | 18px | 1.32 | — | `--text-subheading` |
+| display | 120px | 0.95 | 0.01px | `--text-display` |
 
 ## Tokens — Spacing & Shapes
 
-**Base unit:** 8px
+**Base unit:** 4px
 
-**Density:** spacious
+**Density:** compact
 
 ### Spacing Scale
 
 | Name | Value | Token |
 |------|-------|-------|
-| 16 | 16px | `--spacing-16` |
-| 40 | 40px | `--spacing-40` |
-| 80 | 80px | `--spacing-80` |
-| 160 | 160px | `--spacing-160` |
-| 240 | 240px | `--spacing-240` |
+| 4 | 4px | `--spacing-4` |
+| 8 | 8px | `--spacing-8` |
+| 12 | 12px | `--spacing-12` |
+| 20 | 20px | `--spacing-20` |
+| 24 | 24px | `--spacing-24` |
+| 100 | 100px | `--spacing-100` |
 
 ### Border Radius
 
 | Element | Value |
 |---------|-------|
-| tags | 70px |
-| cards | 10px |
-| inputs | 10px |
-| buttons | 10px |
+| nav | 2.8px |
+| tags | 2.8px |
+| cards | 8px |
+| buttons | 2.8px |
 
 ### Layout
 
-- **Section gap:** 80px
-- **Card padding:** 40px
-- **Element gap:** 16px
+- **Page max-width:** 1440px
+- **Section gap:** 64px
+- **Card padding:** 15px
+- **Element gap:** 8px
 
 ## Components
 
-### Brand Wordmark
-**Role:** Site identity lockup
+### Sidebar Nav Item (Tag)
+**Role:** Navigation entry styled as a labeled tag, the primary wayfinding element
 
-"Elva" set in Basis weight 700 at ~32px, with the subtitle "A Third And Grove Company" in Basis weight 400 at 10px below it. Color #262523. Sits at the top-left of the viewport with 40px padding from the edges. No symbol or mark — the wordmark is the entire identity.
+Inverted surface fill (#efefef) with #121212 text; 2.8px radius; ~10px vertical padding and 6–10px horizontal padding; 12–14px JetBrains Mono 400, uppercase, letter-spacing 0.04em. When a count badge appears (e.g. "10"), the number is a separate inline pill in the same color, no border separator.
 
-### Top Navigation
-**Role:** Primary site navigation
+### Sidebar Section Header
+**Role:** Group label above nav tag clusters
 
-Horizontal row of text links (WORK, COMPANY, CAPABILITIES, CONTACT) in Basis weight 500 at 12px, uppercase, letter-spacing -0.24px, color #262523. Items separated by 40px gaps. No background, no border, no underline. Pinned to the top edge of the viewport, right-of-center alignment.
+No background; 12–14px JetBrains Mono 700 (or 400 with +0.06em tracking), uppercase, #efefef; preceded by a small geometric marker (L-shaped bracket in #efefef).
 
-### Contact Email Link
-**Role:** Primary contact affordance
+### Outlined Action Button (BUY NOW)
+**Role:** Primary commercial action
 
-Email address (e.g. INFO@HELLOELVA.COM) in Basis weight 500 at 12px, uppercase, color #262523, positioned at the far top-right of the viewport. Behaves as a plain text link with a 200ms opacity-to-0.6 hover state. No arrow glyph.
+Transparent fill; 1px solid #ff4d00 border; 2.8px radius; 10px 15px padding; 12–14px JetBrains Mono 400, uppercase, letter-spacing 0.04em, #ff4d00 text. The orange outline is the entire signal — no fill, no shadow.
 
-### Display Hero Headline
-**Role:** Monumental typographic statement
+### Ghost Action Button (EXPLORE)
+**Role:** Secondary action paired with the outlined CTA
 
-The signature element. Full-bleed text in Basis weight 400 at 160px (or 640px for the absolute largest moments), line-height 0.82, letter-spacing -9.6px, color #262523. Left-aligned to the viewport edge (no max-width container), starting at roughly 100px from the top. Words stack as architectural blocks rather than flowing as prose. Individual letters may be replaced by pictogram glyphs. Always ends with a period.
+Transparent fill; 1px solid #efefef border; 2.8px radius; 10px 15px padding; 12–14px JetBrains Mono 400, uppercase, #efefef text and border.
 
-### Pictogram Glyph
-**Role:** Typographic flourish replacing a letter
+### Font Specimen Card
+**Role:** Showcase block for a single typeface in the catalog grid
 
-Monochrome line-art icon (heart, asterisk, peace sign, victory hand) sized to match the cap-height of the surrounding 160–640px Basis text. Color #262523, no fill, stroke weight 6–8px. Inserted inline to substitute for a specific letter, never used standalone. Functions as a typographic ornament, not as a UI icon.
+Full-width band on #121212 canvas, separated by a 1px #e2e8f0 hairline at the top. Interior: a top metadata strip (font name on the left, "N STYLES / N HEIGHTS" plus a glyph-size toggle and mode toggle in the center, action buttons on the right), then a generous vertical gap to the display specimen set at 90–234px. No card background, no shadow — the hairline border IS the card chrome.
 
-### Section Label Pill
-**Role:** Small marker for content sections
+### Metadata Strip
+**Role:** Top utility bar of each specimen section
 
-Short text (e.g. "HELLO") in Basis weight 500 at 10px, uppercase, letter-spacing -0.2px, color #262523. Background #ececec with optional 1px #cfcdcd border. 70px border-radius (pill-shaped), 6px vertical / 12px horizontal padding. Functions as a quiet wayfinding marker, not a button.
+Single horizontal row, 12–14px JetBrains Mono 400 uppercase, #efefef text; 1px #e2e8f0 bottom border. Houses: section name (left), type stats and toggles (center), action buttons (right). 10–15px vertical padding.
 
-### Inline Newsletter Notice
-**Role:** Compact contextual update with link
+### Ticker / Announcement Bar
+**Role:** Scrolling top-of-page notification
 
-Two stacked lines of body-sm text (12px Basis weight 400/500) in color #262523. First line is a statement, second line is a text link followed by a rightward arrow glyph (→) in the same color. No background, no border. Acts as the only contextual action surface on the page.
+1px tall hairline border in #e2e8f0, dark fill; inline monospaced text scrolling horizontally; small geometric triangle markers as separators between phrases.
 
-### Text Link with Arrow
-**Role:** Primary interactive element (replaces buttons)
+### Logo Mark
+**Role:** Brand identifier, top-left, persistent across screens
 
-Inline text in Basis weight 500 at 12–15px, color #262523, no underline. Followed by a rightward arrow glyph (→) in the same color and size. Hover state: opacity transitions to 0.6 over 200ms. This is the only interactive pattern in the system — there are no filled buttons, no outlined buttons, no icon buttons.
+Two-line stacked wordmark in Basement Grotesque (or equivalent heavy display face) set in #ff4d00 — "BASEMENT" over "FOUNDRY." The period is part of the mark. Orange against black is the loudest single element on any screen.
 
-### Body Paragraph
-**Role:** Long-form text content
+### Body Copy Block
+**Role:** Long-form descriptive paragraph
 
-Basis weight 400 at 15px, line-height 2.0 (30px), letter-spacing -0.3px, color #262523. Max-width 480px for readability. No first-line indent, no bold emphasis within paragraphs, no drop caps. The 2.0 line-height is unusually airy and is a deliberate choice — it treats body text as editorial prose, not as UI copy.
+Inter 400, 14–16px, line-height 1.5, #efefef; sits below a specimen as a quiet explanatory footnote. Constrained to roughly 40–50ch column width.
+
+### Glyph Toggle / Mode Pill
+**Role:** Small control switching the displayed character set or display mode
+
+Inline JetBrains Mono 12–14px, uppercase; current state shown with a small icon glyph (Aa, ¶, etc.) rather than a colored fill; sits inside the metadata strip.
 
 ## Do's and Don'ts
 
 ### Do
-- Use Basis at 120px+ for every display moment, with line-height ≤ 0.90 and letter-spacing ≤ -0.06em — the compressed stacking is the signature
-- Keep the canvas at #ececec and all ink at #262523 — chromatic color breaks the printed-on-paper warmth
-- Maintain section gaps of at least 80px; use 160px+ for the gap above the hero headline
-- Replace individual letters in display text with pictogram glyphs (heart, asterisk, peace sign, victory hand) at matching cap-height
-- Set body text at 15px with 2.0 line-height — the airy leading is editorial, not utilitarian
-- Use 70px border-radius only for pill-shaped tags and section labels; use 10px for any nested surface
-- Make every interactive element a text link followed by a → arrow — never a filled or outlined button
+- Use JetBrains Mono 400 for all UI chrome — nav, labels, metadata, buttons, section headers. It is the operating-system font.
+- Set sidebar items and button text in uppercase with 0.04em letter-spacing; reserve tight tracking (-0.02em) for running body text only.
+- Use the orange #ff4d00 only as a 1px outlined border or as a text accent — never as a filled background. The outlined-buy-now button is the canonical use.
+- Keep all corners sharp: 2.8px for nav, tags, and buttons; 8px only for larger card containers. Nothing round.
+- Build depth through color inversion (bone-white panel on near-black canvas) and hairline #e2e8f0 borders — never through drop shadows.
+- Let one display typeface fill the full width of its section at 90–234px; treat the specimen area as an exhibition, not a constrained content card.
+- Pair every action button with a ghost companion (e.g. outlined orange BUY NEXT to ghost white EXPLORE) in the same row.
 
 ### Don't
-- Don't introduce filled buttons, outlined buttons, or any button-shaped affordance — text links with arrows are the only interactive pattern
-- Don't add drop shadows, gradients, or any elevation effect — depth is communicated through type size and negative space only
-- Don't use #000000 for body or display text — always use #262523 to preserve the warm undertone
-- Don't center text or constrain it to a max-width container — content left-aligns to the viewport edge for an editorial spread feel
-- Don't use color to create hierarchy — use size and weight only
-- Don't set display type with line-height above 1.0 — the 0.80–0.90 compression is what makes the headline a monument
-- Don't use icons in the traditional UI sense (nav icons, button icons, status icons) — pictograms belong inline with display text only
+- Don't fill buttons or surfaces with #ff4d00 — it is exclusively a stroke and text accent.
+- Don't introduce new accent colors; the palette is monochromatic neutrals plus exactly one chromatic voice.
+- Don't apply drop shadows or heavy elevation to any component; the system is flat by design.
+- Don't set body copy or metadata in the display typefaces — those are specimen content, not UI fonts.
+- Don't use radii larger than 8px anywhere; the 2.8px tag radius is a signature and any rounding larger breaks the blueprint feel.
+- Don't use Inter for labels, buttons, or metadata — reserve it for paragraph-length supporting copy only.
+- Don't center the page layout: the sidebar is fixed-left, content is left-aligned within its column, and the canvas extends right.
 
 ## Surfaces
 
 | Level | Name | Value | Purpose |
 |-------|------|-------|---------|
-| 0 | Canvas | `#ececec` | Page background — the warm bone-white that fills the entire viewport and provides the breathing room around monumental type |
-| 1 | Subtle Surface | `#cfcdcd` | Secondary surface for the rare nested element or alternating section band — just one step darker than the canvas |
+| 0 | Canvas | `#121212` | Full-bleed page background — the dark room the type hangs in |
+| 1 | Inverted Surface | `#efefef` | Bone-white panels used for featured inversions and emphasized controls; rare but high-contrast |
 
 ## Elevation
 
-This design system is deliberately shadowless. All depth is communicated through type size, weight, and negative space — never through drop shadows, borders, or stacked surfaces. The flatness reinforces the printed-on-paper quality and keeps the type as the undisputed visual hierarchy. If a element needs to feel 'above' another, it gets larger and tighter, not elevated.
+The design intentionally avoids drop shadows. Depth is communicated through color inversion (dark canvas vs bone-white panels) and hairline borders, not through shadow stacks — a flat, blueprint-like surface treatment that keeps focus on the type itself.
 
 ## Imagery
 
-No photography, no illustration, no decorative graphics. The visual language IS the typography — the Basis custom sans rendered at building-scale, with negative space as the composition. The only graphic elements are four hand-drawn pictogram glyphs (heart, asterisk, peace sign, victory hand) that replace individual letters in the display headline, acting as typographic flourishes rather than standalone icons. These glyphs are monochrome line-art, sized to match the x-height of the surrounding letters. The page is a poster, not a product page.
+Imagery is entirely typographic. The hero is a large 3D graffiti-style rendering of a display face in orange-on-black that fills the viewport; subsequent sections are full-bleed type specimens at 90–234px. No photography, no illustration, no icons beyond small geometric monospace markers (L-bracket section leaders, triangle separators in the ticker, Aa glyph-toggle icons). The visual language is type-as-image, with the only texture coming from the layered 3D extrusion of the hero specimen.
 
 ## Layout
 
-Full-bleed, edge-to-edge content with no max-width container. All text left-aligns to the viewport edge, creating a raw editorial spread rather than a centered web page. The navigation sits as a whisper at the very top — brand wordmark top-left, primary nav center-right, contact email far-right — with the entire upper third of the viewport left as negative space. The hero display headline begins at roughly 100px from the top and fills the remaining viewport. Sections flow vertically with 80–160px gaps, never alternating light and dark bands. There is no visible grid, no card system, no sidebar — just monumental type cascading down the page like a single column of poster art.
+Fixed-left sidebar (≈200px) holding all primary navigation as labeled tags grouped by section, with a persistent logo at the top and a small footer block (legal, social, support links). The main content area extends right to a max-width of ~1440px, starting with a full-bleed ticker bar, then a hero section that occupies the full content width with a massive specimen and a quiet body-copy footnote, then a vertical stack of full-width specimen cards separated by 1px hairline rules. No centered hero, no alternating light/dark bands — the canvas stays near-black throughout and emphasis comes from occasional inverted bone-white surfaces and the orange accent. Spacing is compact: ~64px between major sections, ~8–10px between chrome elements.
 
 ## Agent Prompt Guide
 
-## Quick Color Reference
-- text: #262523
-- background: #ececec
-- secondary surface: #cfcdcd
-- border: #cfcdcd
-- accent: none
-- primary action: no distinct CTA color
+Quick Color Reference
+- text (primary): #efefef
+- text (muted/helper): #747474
+- background (canvas): #121212
+- border (hairline): #e2e8f0
+- accent: #ff4d00
+- primary action: #efefef (filled action)
 
-## Example Component Prompts
+3–5 Example Component Prompts
+1. **Sidebar tag nav item**: Inverted #efefef fill, #121212 text, 2.8px radius, 10px 10px padding. Label in JetBrains Mono 14px, weight 400, uppercase, letter-spacing 0.04em. If a count follows (e.g. "BUNKER 4"), render the number as inline text on the same line, no separator.
 
-1. **Display Hero Headline**: Full-bleed, edge-to-edge. Set in Basis weight 400, size 160px, line-height 0.82, letter-spacing -9.6px, color #262523. Begin text at 100px from viewport top, left-align to the viewport edge (no max-width). Allow the final line to end with a period. Optionally replace one letter per line with a pictogram glyph (heart, asterisk, peace sign, or victory hand) at matching cap-height.
+2. Create a Primary Action Button: #efefef background, #747474 text, 9999px radius, compact pill padding. Use this filled treatment for the main CTA.
 
-2. **Pictogram Glyph Inline**: A monochrome line-art icon (heart, asterisk, peace sign, or victory hand) sized to match the cap-height of 160px Basis text, color #262523, no fill, stroke weight 8px. Inserted inline to replace a specific letter in a display headline. Never used standalone.
+3. **Ghost secondary action button**: Transparent fill, 1px solid #efefef border, 2.8px radius, 10px 15px padding. Text in JetBrains Mono 12px, weight 400, uppercase, letter-spacing 0.04em, color #efefef. Label "EXPLORE".
 
-3. **Top Navigation Item**: 12px Basis weight 500, uppercase, letter-spacing -0.24px, color #262523. Separated by 40px gap from adjacent items. Pinned to the top edge of the viewport with 40px horizontal padding from each edge. No background, no border, no underline. Hover state: opacity 0.6 over 200ms.
+4. **Font specimen card**: Full-width band on #121212 canvas with a 1px #e2e8f0 top border. Top metadata strip: font name in JetBrains Mono 12px uppercase #efefef on the left, "N STYLES / N HEIGHTS" + glyph/mode toggles centered, action buttons on the right. Below, a 60–80px vertical gap, then a single display specimen set full-width at 120–200px in #efefef.
 
-4. **Section Label Pill**: 10px Basis weight 500, uppercase, letter-spacing -0.2px, color #262523. Background #ececec with 1px #cfcdcd border. 70px border-radius, 6px vertical / 12px horizontal padding. Functions as a quiet wayfinding marker.
+5. **Top ticker bar**: Full-bleed, 1px tall, #121212 background, 1px #e2e8f0 bottom border. Scrolling inline text in JetBrains Mono 12px uppercase, #efefef, separated by small triangle markers.
 
-5. **Inline Text Link with Arrow**: 12–15px Basis weight 500, color #262523, no underline. Followed immediately by a rightward arrow glyph (→) in the same color and size. Hover state: opacity transitions to 0.6 over 200ms. This is the only interactive pattern in the system.
+## Typeface-as-Content Rule
 
-## Typographic Scale Philosophy
-
-The type scale spans four orders of magnitude — from 10px captions to 640px hero statements — within a single font family (Basis). This is not a responsive scale; it is a fixed scale of dramatic size contrasts that forces every element on the page to declare its hierarchy through size alone. The smaller end (10–16px) uses -0.02em tracking and 1.2–2.0 line-height for editorial body text. The mid-range (32–40px) steps up to -0.04em tracking and 0.9–1.0 line-height. The display range (120–640px) tightens further to -0.06em to -0.08em tracking with line-height as low as 0.80, which forces words to stack as architectural blocks rather than flow as prose. The 2.0 line-height on 15px body text is deliberately airy — it treats paragraphs as editorial prose, not as UI copy. When in doubt, make it bigger and tighter.
+Every display face in the catalog (Basement Grotesque, Bunker, Curia, Adhesion, Trovador, XER0, etc.) is content, not system typography. An AI agent reproducing a page should pick one of these custom families to fill the hero/specimen area, but the rest of the UI must always fall back to JetBrains Mono (UI) and Inter (long body copy). Never use a specimen face for nav, buttons, labels, or metadata.
 
 ## Similar Brands
 
-- **Pentagram** — Both treat type as architecture — monumental sans-serif headlines that function as visual identity rather than just content, with the wordmark carrying the entire brand
-- **Manual** — Same extreme monochrome palette and editorial spread layout — the page is a poster, not a product, with negative space doing the compositional work
-- **Ueno** — Same custom-typographic approach and playful pictogram-as-letter substitution in display headlines
-- **Resn** — Same integration of hand-drawn pictogram glyphs inline with oversized display text, treating icons as typographic ornaments rather than UI elements
+- **Dinamo Font Gauntlet (ABC Dinamo)** — Same product-as-interface logic — the homepage is a wall of massive type specimens, dark canvas, monospaced chrome
+- **OH no Type** — Type foundry site with fixed left sidebar, dark background, and oversized display specimens filling the viewport with minimal UI decoration
+- **Grilli Type** — Dark-mode catalog site that treats specimen type as hero content and keeps UI chrome tight and monospaced
+- **Pangram Pangram** — Bold display-first type foundry with sharp corners, dark canvas, and minimal-color UI letting the typefaces do all the visual work
 
 ## Quick Start
 
@@ -201,69 +291,76 @@ The type scale spans four orders of magnitude — from 10px captions to 640px he
 ```css
 :root {
   /* Colors */
-  --color-warm-obsidian: #262523;
-  --color-bone-white: #ececec;
-  --color-pale-ash: #cfcdcd;
-  --color-pure-black: #000000;
+  --color-ember-orange: #ff4d00;
+  --color-foundry-black: #121212;
+  --color-chalk-white: #e2e8f0;
+  --color-bone-white: #efefef;
+  --color-soot: #3a3a3a;
+  --color-ash: #747474;
 
   /* Typography — Font Families */
-  --font-basis-grotesque: 'Basis Grotesque', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-messina-sans: 'Messina Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-jetbrains-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-basement-grotesque-ffflauta-b-mecha-bunker-caniche-carpenter-curia-adhesion-trovador-xer0-blob: 'Basement Grotesque, FFFLAUTA, B-Mecha, Bunker, Caniche, Carpenter, Curia, Adhesion, Trovador, XER0, Blob', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ffflauta-400: 'FFFLAUTA 400', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-basement-grotesque-black-expanded: 'Basement Grotesque Black Expanded', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mecha-regular: 'Mecha Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-curia-regular: 'Curia Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-adhesion-regular: 'Adhesion Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-carpenter-regular: 'Carpenter Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-bunker-regular: 'Bunker Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-trovador-regular: 'Trovador Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-xer0-regular: 'XER0 Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-caniche-regular: 'Caniche Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-blob-regular: 'Blob Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* Typography — Scale */
-  --text-caption: 10px;
-  --leading-caption: 12;
-  --tracking-caption: -0.2px;
-  --text-body: 15px;
-  --leading-body: 30;
-  --tracking-body: -0.3px;
-  --text-subheading: 32px;
-  --leading-subheading: 28.8;
-  --tracking-subheading: -1.28px;
-  --text-heading-sm: 40px;
-  --leading-heading-sm: 40;
-  --tracking-heading-sm: -1.6px;
-  --text-heading: 120px;
-  --leading-heading: 108;
-  --tracking-heading: -7.2px;
-  --text-heading-lg: 160px;
-  --leading-heading-lg: 131.2;
-  --tracking-heading-lg: -9.6px;
-  --text-display: 240px;
-  --leading-display: 240;
-  --tracking-display: -19.2px;
+  --text-caption: 12px;
+  --leading-caption: 1.4;
+  --tracking-caption: 0.04px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.29;
+  --tracking-body-sm: -0.02px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --text-subheading: 18px;
+  --leading-subheading: 1.32;
+  --text-display: 120px;
+  --leading-display: 0.95;
+  --tracking-display: 0.01px;
 
   /* Typography — Weights */
   --font-weight-regular: 400;
-  --font-weight-medium: 500;
   --font-weight-bold: 700;
 
   /* Spacing */
-  --spacing-unit: 8px;
-  --spacing-16: 16px;
-  --spacing-40: 40px;
-  --spacing-80: 80px;
-  --spacing-160: 160px;
-  --spacing-240: 240px;
+  --spacing-unit: 4px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-100: 100px;
 
   /* Layout */
-  --section-gap: 80px;
-  --card-padding: 40px;
-  --element-gap: 16px;
+  --page-max-width: 1440px;
+  --section-gap: 64px;
+  --card-padding: 15px;
+  --element-gap: 8px;
 
   /* Border Radius */
-  --radius-lg: 10px;
-  --radius-full: 70px;
+  --radius-sm: 2.8px;
+  --radius-lg: 8px;
 
   /* Named Radii */
-  --radius-tags: 70px;
-  --radius-cards: 10px;
-  --radius-inputs: 10px;
-  --radius-buttons: 10px;
+  --radius-nav: 2.8px;
+  --radius-tags: 2.8px;
+  --radius-cards: 8px;
+  --radius-buttons: 2.8px;
 
   /* Surfaces */
-  --surface-canvas: #ececec;
-  --surface-subtle-surface: #cfcdcd;
+  --surface-canvas: #121212;
+  --surface-inverted-surface: #efefef;
 }
 ```
 
@@ -272,47 +369,54 @@ The type scale spans four orders of magnitude — from 10px captions to 640px he
 ```css
 @theme {
   /* Colors */
-  --color-warm-obsidian: #262523;
-  --color-bone-white: #ececec;
-  --color-pale-ash: #cfcdcd;
-  --color-pure-black: #000000;
+  --color-ember-orange: #ff4d00;
+  --color-foundry-black: #121212;
+  --color-chalk-white: #e2e8f0;
+  --color-bone-white: #efefef;
+  --color-soot: #3a3a3a;
+  --color-ash: #747474;
 
   /* Typography */
-  --font-basis-grotesque: 'Basis Grotesque', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-messina-sans: 'Messina Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-jetbrains-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-basement-grotesque-ffflauta-b-mecha-bunker-caniche-carpenter-curia-adhesion-trovador-xer0-blob: 'Basement Grotesque, FFFLAUTA, B-Mecha, Bunker, Caniche, Carpenter, Curia, Adhesion, Trovador, XER0, Blob', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-ffflauta-400: 'FFFLAUTA 400', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-basement-grotesque-black-expanded: 'Basement Grotesque Black Expanded', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mecha-regular: 'Mecha Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-curia-regular: 'Curia Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-adhesion-regular: 'Adhesion Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-carpenter-regular: 'Carpenter Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-bunker-regular: 'Bunker Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-trovador-regular: 'Trovador Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-xer0-regular: 'XER0 Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-caniche-regular: 'Caniche Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-blob-regular: 'Blob Regular', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   /* Typography — Scale */
-  --text-caption: 10px;
-  --leading-caption: 12;
-  --tracking-caption: -0.2px;
-  --text-body: 15px;
-  --leading-body: 30;
-  --tracking-body: -0.3px;
-  --text-subheading: 32px;
-  --leading-subheading: 28.8;
-  --tracking-subheading: -1.28px;
-  --text-heading-sm: 40px;
-  --leading-heading-sm: 40;
-  --tracking-heading-sm: -1.6px;
-  --text-heading: 120px;
-  --leading-heading: 108;
-  --tracking-heading: -7.2px;
-  --text-heading-lg: 160px;
-  --leading-heading-lg: 131.2;
-  --tracking-heading-lg: -9.6px;
-  --text-display: 240px;
-  --leading-display: 240;
-  --tracking-display: -19.2px;
+  --text-caption: 12px;
+  --leading-caption: 1.4;
+  --tracking-caption: 0.04px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.29;
+  --tracking-body-sm: -0.02px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --text-subheading: 18px;
+  --leading-subheading: 1.32;
+  --text-display: 120px;
+  --leading-display: 0.95;
+  --tracking-display: 0.01px;
 
   /* Spacing */
-  --spacing-16: 16px;
-  --spacing-40: 40px;
-  --spacing-80: 80px;
-  --spacing-160: 160px;
-  --spacing-240: 240px;
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-100: 100px;
 
   /* Border Radius */
-  --radius-lg: 10px;
-  --radius-full: 70px;
+  --radius-sm: 2.8px;
+  --radius-lg: 8px;
 }
 ```
