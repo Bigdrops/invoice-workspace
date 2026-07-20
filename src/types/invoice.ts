@@ -123,6 +123,7 @@ export interface InvoiceTotals {
   vat: number
   wht: number
   additionalCharges: number
+  additionalChargeItems: Array<{ title: string; value: number }>
   installTotal: number
   grandTotal: number
   amountInWords: string

@@ -1,33 +1,29 @@
-# Business Workspaces
+# BIGDROPS — Invoice Workspace Collection
 
-[![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=white)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-38bdf8?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![shadcn/ui](https://img.shields.io/badge/shadcn/ui-0.0.1-000000?style=flat-square&logo=shadcnui&logoColor=white)](https://ui.shadcn.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)](LICENSE)
+A gallery of production-ready invoice workspace implementations. Each workspace explores a completely different design language, built by a different "design team" against the same business problem.
 
-A growing collection of production-ready business application screens built for mobile-first workflows, using React, TypeScript, Tailwind CSS, and shadcn/ui.
-
-Unlike component libraries, this repository delivers complete, copy-pasteable workspaces that solve real business problems — from invoicing to inventory.
+This is not one application with themes. It is a collection of independent implementations — like shadcn/ui, but for complete business screens instead of individual components.
 
 ---
 
-## What Makes This Different
+## What This Is
 
-- **Mobile-first by default** — every workspace is designed for thumbs, not mice
-- **Production-ready interactions** — loading states, error handling, optimistic updates, and accessibility
-- **Consistent design language** — all workspaces share the same visual and interaction patterns
-- **Modular architecture** — each workspace is isolated, copyable, and extendable
-- **Built on shadcn/ui** — accessible, unstyled primitives with Tailwind utility classes
-- **Full TypeScript** — types are exported, IntelliSense works out of the box
+| What | What It Is Not |
+|------|----------------|
+| A gallery of invoice workspaces | A single invoice application |
+| Independent design explorations | A theme system |
+| Production-ready React components | Mockups or prototypes |
+| Copy-pasteable implementations | A shared component library |
 
 ---
 
 ## Current Workspaces
 
-| Workspace | Status |
-|-----------|--------|
-| Invoice Creation | [![Status](https://img.shields.io/badge/Status-In_Progress-yellow?style=flat-square)]() |
+| Workspace | Design Language | Inspiration |
+|-----------|----------------|-------------|
+| **PRAV** | Engineering dossier on warm parchment | PRAV.md |
+| **Sackville** | Editorial risograph zine on cream | SACKVILLE.md |
+| **AMRA** | Monochrome minimal with lavender accent | AMRA.md |
 
 ---
 
@@ -35,50 +31,103 @@ Unlike component libraries, this repository delivers complete, copy-pasteable wo
 
 | Workspace | Status |
 |-----------|--------|
-| Quotation | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
-| Purchase Order | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
-| Delivery Note | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
-| Customers | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
-| Inventory | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
-| Expenses | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
-| Dashboard | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
-| CRM | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
-| Projects | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
-| Reports | [![Status](https://img.shields.io/badge/Status-Planned-blue?style=flat-square)]() |
+| Invoice — Mono | Planned |
+| Invoice — EaseHealth | Planned |
+| Invoice — Convex | Planned |
+| Invoice — Hyperstudio | Planned |
+| Invoice — Rootly | Planned |
+| Invoice — Outseta | Planned |
+| Inventory | Planned |
+| CRM | Planned |
+
+---
+
+## Architecture
+
+```
+src/
+├── App.tsx              ← Gallery + workspace switching
+├── gallery/             ← Workspace browser
+├── types/               ← Shared business types
+├── lib/                 ← Shared utilities
+└── workspaces/invoice/
+    ├── prav/            ← PRAV workspace (own CSS, own components)
+    ├── sackville/       ← Sackville workspace (own CSS, own components)
+    └── amra/            ← AMRA workspace (own CSS, own components)
+```
+
+**Rules:**
+
+- Each workspace is fully self-contained
+- Each workspace owns its own CSS, colors, typography, spacing, animations
+- No shared design tokens, no shared theme, no shared component styling
+- Only business logic (types, calculations, mock data) is shared
+- A change in one workspace never affects another
+
+---
+
+## Design References
+
+Every workspace begins by selecting one design reference from `docs/DESIGNMD/`. That document becomes the design inspiration — one workspace, one design language.
+
+---
+
+## How to Run
+
+```bash
+# Install dependencies
+bun install
+
+# Development server
+bun run dev
+
+# Production build
+bun run build
+```
+
+The application opens into the workspace gallery. Select any workspace to explore it.
+
+---
+
+## How to Create a New Workspace
+
+1. Pick one `docs/DESIGNMD/` file
+2. Read it completely
+3. Build a new invoice workspace inspired by it
+4. Place it in `src/workspaces/invoice/<name>/`
+5. Register it in `src/App.tsx`
+
+That's it. No shared theme updates. No design token registration. No component library changes.
+
+---
+
+## Screenshots
+
+> Coming soon — each workspace will be screenshotted at 375px, 768px, and 1280px.
 
 ---
 
 ## Tech Stack
 
-| Technology | Badge |
-|------------|-------|
-| React 19 | [![React](https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=white)](https://reactjs.org/) |
-| TypeScript | [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/) |
-| Tailwind CSS | [![Tailwind](https://img.shields.io/badge/Tailwind-3.0-38bdf8?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/) |
-| shadcn/ui | [![shadcn/ui](https://img.shields.io/badge/shadcn/ui-0.0.1-000000?style=flat-square&logo=shadcnui&logoColor=white)](https://ui.shadcn.com/) |
+- React 19
+- TypeScript 5.9
+- Vite 7
+- Tailwind CSS 3.4
+- shadcn/ui patterns
 
 ---
 
-## Mobile-First Design Principles
+## Contribution Guidelines
 
-Every workspace in this collection is built with mobile as the primary environment. This means:
-
-- Touch targets are at least 44×44 CSS pixels
-- Interactive elements are placed within thumb reach
-- Scrollable content uses momentum scrolling and pull-to-refresh where appropriate
-- Dialogs are replaced by bottom sheets on small viewports
-- Tables become cards on mobile, preserving information density
-- All interactions work without hover states
-- Safe-area insets are respected for notched devices
-
-Desktop is a progressive enhancement, not the default.
+- Every workspace must be completely independent
+- Do not create shared visual layers
+- Do not modify existing workspaces when adding new ones
+- Each workspace must compile into its own isolated CSS and JS chunk
+- Mobile-first. No horizontal scrolling. No spreadsheet layouts.
+- Production quality. No placeholders. No Lorem ipsum.
 
 ---
 
-## Getting Started
+## License
 
-```bash
-git clone https://github.com/your-username/business-workspaces.git
-cd business-workspaces
-bun install
-bun dev
+Internal use only.

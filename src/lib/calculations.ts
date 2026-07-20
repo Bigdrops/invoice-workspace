@@ -55,15 +55,7 @@ export function calculateTotals(
   }
 
   let additionalCharges = 0
-  if (commercial.additionalCharges.type === 'percentage') {
-    if (commercial.additionalCharges.timing === 'after_tax') {
-      additionalCharges = (afterDiscount + vat) * (commercial.additionalCharges.value / 100)
-    } else {
-      additionalCharges = afterDiscount * (commercial.additionalCharges.value / 100)
-    }
-  } else if (commercial.additionalCharges.type === 'flat') {
-    additionalCharges = commercial.additionalCharges.value
-  }
+  additionalCharges = commercial.additionalCharges.items.reduce((sum, c) => sum + c.value, 0)
 
   const install = installTotal(allItems)
 
@@ -75,6 +67,7 @@ export function calculateTotals(
     vat,
     wht,
     additionalCharges,
+    additionalChargeItems: commercial.additionalCharges.items.map((c) => ({ title: c.title, value: c.value })),
     installTotal: install,
     grandTotal: Math.max(0, grandTotal),
     amountInWords: '',

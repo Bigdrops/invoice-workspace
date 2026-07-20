@@ -1,0 +1,1 @@
+export { InvoiceWorkspace } from './InvoiceWorkspace'

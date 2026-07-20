@@ -56,7 +56,7 @@ export function getDefaultCommercial(): CommercialSettings {
     discount: { type: 'none', value: 0, timing: 'before_tax' },
     vat: { enabled: true, percentage: 7.5 },
     wht: { type: 'none', value: 0 },
-    additionalCharges: { type: 'none', value: 0, timing: 'after_tax' },
+    additionalCharges: { items: [], timing: 'after_tax' },
     customFields: [],
   }
 }
@@ -66,6 +66,7 @@ export function getDefaultAdditional(): AdditionalInfo {
     notes: '',
     terms: '',
     signatory: '',
+    signatureUrl: '',
     referenceLinks: [],
   }
 }
