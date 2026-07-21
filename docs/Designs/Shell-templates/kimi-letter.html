@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>BGD UI · Workspace Gallery</title>
+
+    <!-- Google Fonts: Playfair Display + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* ══════════════════════════════════════════════════════════════
+           BGD UI SHELL — Design Tokens
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell {
+            /* ── Colors ── */
+            --bgd-color-ink: #191b1f;
+            --bgd-color-paper: #ffffff;
+            --bgd-color-mist: #f6f9f9;
+            --bgd-color-fog: #9fabad;
+            --bgd-color-hairline: #e6ebec;
+            --bgd-color-teal: #186f64;
+            --bgd-color-teal-light: #2a9d8f;
+
+            /* ── Typography ── */
+            --bgd-font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            --bgd-font-display: 'Playfair Display', ui-serif, 'Times New Roman', serif;
+
+            /* ── Spacing ── */
+            --bgd-space-4: 4px;
+            --bgd-space-8: 8px;
+            --bgd-space-12: 12px;
+            --bgd-space-16: 16px;
+            --bgd-space-24: 24px;
+            --bgd-space-32: 32px;
+            --bgd-space-48: 48px;
+            --bgd-space-64: 64px;
+            --bgd-space-72: 72px;
+
+            /* ── Layout ── */
+            --bgd-max-width: 1200px;
+            --bgd-section-gap: 64px;
+
+            /* ── Border Radius ── */
+            --bgd-radius: 2px;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           RESET — Scoped to shell only
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell,
+        .bgd-shell * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bgd-shell {
+            font-family: var(--bgd-font-body);
+            background: var(--bgd-color-paper);
+            color: var(--bgd-color-ink);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .bgd-shell ::selection {
+            background: var(--bgd-color-teal);
+            color: var(--bgd-color-paper);
+        }
+
+        .bgd-shell :focus-visible {
+            outline: 2px solid var(--bgd-color-teal);
+            outline-offset: 2px;
+        }
+
+        .bgd-shell button,
+        .bgd-shell .clickable,
+        .bgd-shell [role="button"] {
+            touch-action: manipulation;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           SCROLLBAR
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .bgd-shell ::-webkit-scrollbar-track {
+            background: var(--bgd-color-mist);
+        }
+        .bgd-shell ::-webkit-scrollbar-thumb {
+            background: var(--bgd-color-ink);
+            border-radius: 2px;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           ANIMATIONS
+           ══════════════════════════════════════════════════════════════ */
+        @keyframes bgdFadeUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bgdScaleIn {
+            0% { opacity: 0; transform: scale(0.96); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes bgdFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1.5deg); }
+        }
+
+        .bgd-shell .animate-fade-up {
+            animation: bgdFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            opacity: 0;
+        }
+
+        .bgd-shell .animate-scale-in {
+            animation: bgdScaleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            opacity: 0;
+        }
+
+        .bgd-shell .stagger-1 { animation-delay: 0.05s; }
+        .bgd-shell .stagger-2 { animation-delay: 0.1s; }
+        .bgd-shell .stagger-3 { animation-delay: 0.15s; }
+        .bgd-shell .stagger-4 { animation-delay: 0.2s; }
+        .bgd-shell .stagger-5 { animation-delay: 0.25s; }
+        .bgd-shell .stagger-6 { animation-delay: 0.3s; }
+        .bgd-shell .stagger-7 { animation-delay: 0.35s; }
+        .bgd-shell .stagger-8 { animation-delay: 0.4s; }
+
+        /* ══════════════════════════════════════════════════════════════
+           CONTAINER
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-container {
+            max-width: var(--bgd-max-width);
+            margin: 0 auto;
+            padding: 0 var(--bgd-space-16);
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .bgd-shell .bgd-container {
+                padding: 0 var(--bgd-space-32);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bgd-shell .bgd-container {
+                padding: 0 var(--bgd-space-48);
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           NAVIGATION
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--bgd-space-16) 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 30;
+            transition: background 0.3s ease, border-bottom 0.3s ease;
+            background: transparent;
+            color: var(--bgd-color-paper);
+        }
+
+        .bgd-shell .bgd-nav.scrolled {
+            background: var(--bgd-color-paper);
+            color: var(--bgd-color-ink);
+            border-bottom: 1px solid var(--bgd-color-hairline);
+        }
+
+        .bgd-shell .bgd-nav .bgd-brand {
+            font-family: var(--bgd-font-display);
+            font-weight: 600;
+            font-size: 24px;
+            letter-spacing: 0.02em;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--bgd-space-8);
+            color: inherit;
+        }
+
+        .bgd-shell .bgd-nav .bgd-brand-icon {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border: 2px solid currentColor;
+            border-radius: var(--bgd-radius);
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .bgd-shell .bgd-nav .bgd-brand-icon::after {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            background: currentColor;
+            opacity: 0.3;
+        }
+
+        .bgd-shell .bgd-nav-links {
+            display: none;
+            align-items: center;
+            gap: var(--bgd-space-24);
+        }
+
+        @media (min-width: 768px) {
+            .bgd-shell .bgd-nav-links {
+                display: flex;
+            }
+            .bgd-shell .bgd-hamburger {
+                display: none !important;
+            }
+        }
+
+        .bgd-shell .bgd-nav-link {
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 13px;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+            letter-spacing: 0.02em;
+            color: inherit;
+            opacity: 0.7;
+            padding: var(--bgd-space-8);
+        }
+
+        .bgd-shell .bgd-nav-link:hover,
+        .bgd-shell .bgd-nav-link:focus {
+            opacity: 1;
+        }
+
+        .bgd-shell .bgd-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--bgd-space-12);
+        }
+
+        /* Ghost Button */
+        .bgd-shell .btn-ghost {
+            background: transparent;
+            color: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--bgd-radius);
+            padding: 8px 20px;
+            font-family: var(--bgd-font-body);
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            min-height: 40px;
+        }
+
+        .bgd-shell .bgd-nav.scrolled .btn-ghost {
+            border-color: var(--bgd-color-hairline);
+            color: var(--bgd-color-ink);
+        }
+
+        .bgd-shell .btn-ghost:hover,
+        .bgd-shell .btn-ghost:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .bgd-shell .bgd-nav.scrolled .btn-ghost:hover,
+        .bgd-shell .bgd-nav.scrolled .btn-ghost:focus {
+            background: var(--bgd-color-mist);
+            border-color: var(--bgd-color-ink);
+        }
+
+        /* Search Toggle */
+        .bgd-shell .search-toggle {
+            background: none;
+            border: none;
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 13px;
+            color: inherit;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: opacity 0.2s ease;
+            touch-action: manipulation;
+            opacity: 0.6;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .bgd-shell .search-toggle:hover,
+        .bgd-shell .search-toggle:focus {
+            opacity: 1;
+        }
+
+        /* Hamburger */
+        .bgd-shell .bgd-hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            padding: 0;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            touch-action: manipulation;
+            min-height: 44px;
+            min-width: 44px;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .bgd-shell .bgd-hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 1px;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-origin: center;
+            position: absolute;
+        }
+
+        .bgd-shell .bgd-hamburger span:nth-child(1) { top: 5px; }
+        .bgd-shell .bgd-hamburger span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+        .bgd-shell .bgd-hamburger span:nth-child(3) { bottom: 5px; }
+
+        .bgd-shell .bgd-hamburger.active span:nth-child(1) {
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+        }
+        .bgd-shell .bgd-hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateY(-50%) scaleX(0);
+        }
+        .bgd-shell .bgd-hamburger.active span:nth-child(3) {
+            bottom: 50%;
+            transform: translateY(50%) rotate(-45deg);
+        }
+
+        /* Mobile Menu */
+        .bgd-shell #bgd-mobile-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 340px;
+            height: 100vh;
+            z-index: 100;
+            background: var(--bgd-color-paper);
+            border-left: 1px solid var(--bgd-color-hairline);
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: var(--bgd-space-4);
+            overflow-y: auto;
+        }
+
+        .bgd-shell #bgd-mobile-menu.open {
+            transform: translateX(0);
+        }
+
+        .bgd-shell #bgd-mobile-menu .bgd-nav-link {
+            font-size: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--bgd-color-hairline);
+            display: block;
+            color: var(--bgd-color-ink);
+            opacity: 0.7;
+        }
+
+        .bgd-shell #bgd-mobile-menu .bgd-nav-link:hover,
+        .bgd-shell #bgd-mobile-menu .bgd-nav-link:focus {
+            opacity: 1;
+        }
+
+        .bgd-shell #bgd-menu-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 99;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .bgd-shell #bgd-menu-backdrop.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .bgd-shell .menu-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: 1px solid var(--bgd-color-hairline);
+            border-radius: var(--bgd-radius);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bgd-color-ink);
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .bgd-shell .menu-close:hover,
+        .bgd-shell .menu-close:focus {
+            border-color: var(--bgd-color-ink);
+        }
+
+        .bgd-shell .menu-close svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           HERO
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-hero {
+            background: var(--bgd-color-ink);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px var(--bgd-space-16) 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .bgd-shell .bgd-hero {
+                padding: 100px var(--bgd-space-32) 80px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bgd-shell .bgd-hero {
+                padding: 120px var(--bgd-space-48) 100px;
+            }
+        }
+
+        .bgd-shell .bgd-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 820px;
+        }
+
+        .bgd-shell .bgd-hero-eyebrow {
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--bgd-space-16);
+        }
+
+        .bgd-shell .bgd-hero h1 {
+            font-family: var(--bgd-font-display);
+            font-weight: 600;
+            font-size: clamp(48px, 10vw, 80px);
+            line-height: 1.1;
+            letter-spacing: 0.02em;
+            color: var(--bgd-color-paper);
+            margin-bottom: var(--bgd-space-16);
+        }
+
+        .bgd-shell .bgd-hero h1 .highlight {
+            color: var(--bgd-color-teal);
+        }
+
+        .bgd-shell .bgd-hero p {
+            font-family: var(--bgd-font-display);
+            font-weight: 400;
+            font-size: clamp(18px, 2.5vw, 22px);
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.02em;
+            max-width: 560px;
+            margin: 0 auto var(--bgd-space-32);
+        }
+
+        .bgd-shell .bgd-hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--bgd-space-12);
+            justify-content: center;
+        }
+
+        .bgd-shell .btn-teal {
+            background: var(--bgd-color-teal);
+            color: var(--bgd-color-paper);
+            border: none;
+            border-radius: var(--bgd-radius);
+            padding: 12px 27px;
+            font-family: var(--bgd-font-body);
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.15s ease;
+            touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--bgd-space-8);
+            text-decoration: none;
+            min-height: 48px;
+        }
+
+        .bgd-shell .btn-teal:hover,
+        .bgd-shell .btn-teal:focus {
+            opacity: 0.85;
+            transform: scale(0.98);
+        }
+        .bgd-shell .btn-teal:active {
+            transform: scale(0.96);
+        }
+
+        .bgd-shell .btn-ghost-white {
+            background: transparent;
+            color: var(--bgd-color-paper);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--bgd-radius);
+            padding: 12px 27px;
+            font-family: var(--bgd-font-body);
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+            touch-action: manipulation;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            min-height: 48px;
+        }
+
+        .bgd-shell .btn-ghost-white:hover,
+        .bgd-shell .btn-ghost-white:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Hero Render */
+        .bgd-shell .bgd-hero-render {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 900px;
+            height: 55%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.5;
+            background: radial-gradient(ellipse at center bottom, rgba(24, 111, 100, 0.15) 0%, transparent 70%);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .bgd-shell .bgd-render-shape {
+            width: 100%;
+            max-width: 600px;
+            height: 100%;
+            max-height: 320px;
+            position: relative;
+            animation: bgdFloat 6s ease-in-out infinite;
+        }
+
+        .bgd-shell .bgd-render-shape .shape-layer {
+            position: absolute;
+            border-radius: 0;
+            background: linear-gradient(135deg, rgba(24, 111, 100, 0.3), rgba(42, 157, 143, 0.2));
+            backdrop-filter: blur(1px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .bgd-shell .bgd-render-shape .shape-layer:nth-child(1) {
+            width: 60%;
+            height: 60%;
+            bottom: 0;
+            left: 10%;
+            background: linear-gradient(135deg, rgba(24, 111, 100, 0.25), rgba(42, 157, 143, 0.15));
+            border-color: rgba(24, 111, 100, 0.15);
+            transform: skewX(-6deg);
+        }
+
+        .bgd-shell .bgd-render-shape .shape-layer:nth-child(2) {
+            width: 40%;
+            height: 40%;
+            top: 10%;
+            right: 5%;
+            background: linear-gradient(135deg, rgba(42, 157, 143, 0.2), rgba(24, 111, 100, 0.15));
+            border-color: rgba(42, 157, 143, 0.15);
+            transform: skewX(4deg);
+        }
+
+        .bgd-shell .bgd-render-shape .shape-layer:nth-child(3) {
+            width: 30%;
+            height: 50%;
+            bottom: 20%;
+            right: 15%;
+            background: linear-gradient(135deg, rgba(24, 111, 100, 0.15), rgba(42, 157, 143, 0.2));
+            border-color: rgba(24, 111, 100, 0.12);
+            transform: skewX(-3deg);
+        }
+
+        .bgd-shell .bgd-render-shape .shape-layer:nth-child(4) {
+            width: 20%;
+            height: 20%;
+            top: 30%;
+            left: 15%;
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+        }
+
+        .bgd-shell .bgd-render-shape .shape-layer:nth-child(5) {
+            width: 80%;
+            height: 2px;
+            bottom: 15%;
+            left: 10%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+            border: none;
+            border-radius: 0;
+        }
+
+        .bgd-shell .bgd-render-shape .shape-layer:nth-child(6) {
+            width: 2px;
+            height: 50%;
+            bottom: 10%;
+            left: 30%;
+            background: linear-gradient(0deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            border: none;
+            border-radius: 0;
+        }
+
+        /* Scroll Indicator */
+        .bgd-shell .bgd-scroll-indicator {
+            position: absolute;
+            bottom: var(--bgd-space-24);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--bgd-space-8);
+            color: rgba(255, 255, 255, 0.2);
+            font-family: var(--bgd-font-body);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            z-index: 2;
+            animation: bgdFadeUp 1s ease-out 1.2s forwards;
+            opacity: 0;
+        }
+
+        .bgd-shell .bgd-scroll-indicator .line {
+            width: 1px;
+            height: 32px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           SECTIONS
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-section {
+            padding: var(--bgd-space-48) 0;
+        }
+
+        @media (min-width: 768px) {
+            .bgd-shell .bgd-section {
+                padding: var(--bgd-space-64) 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bgd-shell .bgd-section {
+                padding: var(--bgd-space-72) 0;
+            }
+        }
+
+        .bgd-shell .bgd-section-alt {
+            background: var(--bgd-color-mist);
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           WORKSPACE CARD
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-workspace-card {
+            background: var(--bgd-color-paper);
+            border: 1px solid var(--bgd-color-hairline);
+            border-radius: var(--bgd-radius);
+            padding: var(--bgd-space-24);
+            transition: border-color 0.2s ease, background 0.2s ease;
+            cursor: pointer;
+            touch-action: manipulation;
+            display: flex;
+            flex-direction: column;
+            gap: var(--bgd-space-12);
+            position: relative;
+        }
+
+        .bgd-shell .bgd-workspace-card:hover,
+        .bgd-shell .bgd-workspace-card:focus {
+            border-color: var(--bgd-color-ink);
+            background: var(--bgd-color-mist);
+        }
+
+        .bgd-shell .bgd-workspace-card:active {
+            transform: scale(0.98);
+        }
+
+        .bgd-shell .bgd-workspace-card .card-tag {
+            font-family: var(--bgd-font-body);
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--bgd-color-fog);
+            align-self: flex-start;
+            padding: 2px 0;
+            border-bottom: 1.5px solid var(--bgd-color-hairline);
+        }
+
+        .bgd-shell .bgd-workspace-card .card-name {
+            font-family: var(--bgd-font-display);
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 1.1;
+            letter-spacing: 0.02em;
+            color: var(--bgd-color-ink);
+        }
+
+        .bgd-shell .bgd-workspace-card .card-domain {
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--bgd-color-ink);
+            opacity: 0.6;
+        }
+
+        .bgd-shell .bgd-workspace-card .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--bgd-space-8);
+            margin-top: var(--bgd-space-4);
+        }
+
+        .bgd-shell .bgd-workspace-card .card-meta .pill {
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 12px;
+            padding: 4px 12px;
+            border: 1px solid var(--bgd-color-hairline);
+            border-radius: var(--bgd-radius);
+            color: var(--bgd-color-ink);
+            opacity: 0.5;
+        }
+
+        .bgd-shell .bgd-workspace-card .card-meta .pill.accent {
+            border-color: var(--bgd-color-teal);
+            color: var(--bgd-color-teal);
+            opacity: 1;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           WORKSPACE GRID
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-workspace-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--bgd-space-16);
+            padding-bottom: var(--bgd-space-8);
+        }
+
+        @media (min-width: 480px) {
+            .bgd-shell .bgd-workspace-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .bgd-shell .bgd-workspace-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: var(--bgd-space-20);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bgd-shell .bgd-workspace-grid {
+                gap: var(--bgd-space-24);
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           SEARCH
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-search {
+            position: relative;
+            margin-bottom: var(--bgd-space-16);
+            display: none;
+        }
+
+        .bgd-shell .bgd-search.visible {
+            display: block;
+        }
+
+        .bgd-shell .bgd-search input {
+            width: 100%;
+            padding: 14px 18px 14px 48px;
+            background: var(--bgd-color-paper);
+            border: 1px solid var(--bgd-color-hairline);
+            border-radius: var(--bgd-radius);
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 16px;
+            color: var(--bgd-color-ink);
+            outline: none;
+            transition: border-color 0.2s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .bgd-shell .bgd-search input::placeholder {
+            color: var(--bgd-color-fog);
+            opacity: 0.6;
+        }
+
+        .bgd-shell .bgd-search input:focus {
+            border-color: var(--bgd-color-ink);
+        }
+
+        .bgd-shell .bgd-search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--bgd-color-fog);
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .bgd-shell .bgd-search-icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            stroke-width: 1.75;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           CATEGORY FILTER
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--bgd-space-8);
+            padding: var(--bgd-space-12) 0 var(--bgd-space-20);
+        }
+
+        .bgd-shell .bgd-category-pill {
+            background: transparent;
+            border: 1px solid var(--bgd-color-hairline);
+            border-radius: var(--bgd-radius);
+            padding: 6px 18px;
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 13px;
+            color: var(--bgd-color-ink);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+            opacity: 0.5;
+        }
+
+        .bgd-shell .bgd-category-pill:hover {
+            opacity: 0.8;
+            border-color: var(--bgd-color-ink);
+        }
+
+        .bgd-shell .bgd-category-pill.active {
+            background: var(--bgd-color-ink);
+            color: var(--bgd-color-paper);
+            border-color: var(--bgd-color-ink);
+            opacity: 1;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           SECTION LABEL
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-section-label {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding-bottom: var(--bgd-space-12);
+            border-bottom: 1px solid var(--bgd-color-hairline);
+            margin-bottom: var(--bgd-space-20);
+        }
+
+        .bgd-shell .bgd-section-label h2 {
+            font-family: var(--bgd-font-display);
+            font-weight: 600;
+            font-size: clamp(28px, 4vw, 46px);
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+            color: var(--bgd-color-ink);
+        }
+
+        .bgd-shell .bgd-section-label span {
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--bgd-color-fog);
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           EMPTY STATE
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-empty {
+            text-align: center;
+            padding: var(--bgd-space-48) var(--bgd-space-24);
+            color: var(--bgd-color-fog);
+            border: 1px solid var(--bgd-color-hairline);
+            background: var(--bgd-color-mist);
+        }
+
+        .bgd-shell .bgd-empty p {
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 16px;
+        }
+
+        .bgd-shell .bgd-empty strong {
+            color: var(--bgd-color-ink);
+            font-weight: 500;
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           FOOTER
+           ══════════════════════════════════════════════════════════════ */
+        .bgd-shell .bgd-footer {
+            border-top: 1px solid var(--bgd-color-hairline);
+            padding: var(--bgd-space-32) 0 var(--bgd-space-40);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--bgd-space-16);
+            margin-top: var(--bgd-space-16);
+        }
+
+        .bgd-shell .bgd-footer-text {
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 13px;
+            color: var(--bgd-color-fog);
+            text-align: center;
+        }
+
+        .bgd-shell .bgd-footer-text .brand {
+            font-family: var(--bgd-font-display);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--bgd-color-ink);
+        }
+
+        .bgd-shell .bgd-footer-links {
+            display: flex;
+            align-items: center;
+            gap: var(--bgd-space-24);
+        }
+
+        .bgd-shell .bgd-footer-links a {
+            font-family: var(--bgd-font-body);
+            font-weight: 400;
+            font-size: 13px;
+            color: var(--bgd-color-fog);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .bgd-shell .bgd-footer-links a:hover,
+        .bgd-shell .bgd-footer-links a:focus {
+            color: var(--bgd-color-ink);
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           RESPONSIVE TWEAKS
+           ══════════════════════════════════════════════════════════════ */
+        @media (max-width: 374px) {
+            .bgd-shell .bgd-workspace-card {
+                padding: var(--bgd-space-16);
+            }
+            .bgd-shell .bgd-workspace-card .card-name {
+                font-size: 20px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .bgd-shell .bgd-workspace-card {
+                padding: var(--bgd-space-28);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bgd-shell .bgd-workspace-card {
+                padding: var(--bgd-space-32);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bgd-shell">
+
+    <!-- ════════════════════════════════════════════════════════════════
+    NAVIGATION
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="bgd-container" style="position:fixed; top:0; left:0; right:0; z-index:30; pointer-events:none;">
+        <div class="bgd-nav" id="bgd-nav" style="pointer-events:auto;">
+            <a href="#" class="bgd-brand">
+                <span class="bgd-brand-icon"></span>
+                BGD UI
+            </a>
+
+            <nav class="bgd-nav-links" aria-label="Main navigation">
+                <a href="#workspaces" class="bgd-nav-link">Gallery</a>
+                <a href="#about" class="bgd-nav-link">About</a>
+                <a href="#workspaces" class="bgd-nav-link">Workspaces</a>
+                <a href="#" class="bgd-nav-link">Docs</a>
+            </nav>
+
+            <div class="bgd-nav-actions">
+                <button class="search-toggle" id="search-toggle" aria-label="Search workspaces">Search</button>
+                <a href="#workspaces" class="btn-ghost">Explore</a>
+                <button class="bgd-hamburger" id="hamburger-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════════
+    HERO
+    ════════════════════════════════════════════════════════════════ -->
+    <section class="bgd-hero" id="hero" aria-label="Hero">
+        <div class="bgd-hero-content animate-fade-up stagger-1">
+            <div class="bgd-hero-eyebrow">BGD UI Shell</div>
+            <h1>
+                Workspace<br />
+                <span class="highlight">Gallery</span>
+            </h1>
+            <p>
+                A curated collection of mobile business workspaces — each with its own design language, built on a neutral platform.
+            </p>
+            <div class="bgd-hero-actions">
+                <a href="#workspaces" class="btn-teal">Explore workspaces</a>
+                <a href="#about" class="btn-ghost-white">Learn more</a>
+            </div>
+        </div>
+
+        <div class="bgd-hero-render" aria-hidden="true">
+            <div class="bgd-render-shape">
+                <div class="shape-layer"></div>
+                <div class="shape-layer"></div>
+                <div class="shape-layer"></div>
+                <div class="shape-layer"></div>
+                <div class="shape-layer"></div>
+                <div class="shape-layer"></div>
+            </div>
+        </div>
+
+        <div class="bgd-scroll-indicator">
+            <span>Scroll</span>
+            <div class="line"></div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════
+    ABOUT SECTION
+    ════════════════════════════════════════════════════════════════ -->
+    <section class="bgd-section bgd-section-alt" id="about">
+        <div class="bgd-container">
+            <div class="bgd-section-label animate-fade-up stagger-2">
+                <h2>About</h2>
+                <span>what this is</span>
+            </div>
+            <div style="max-width: 640px;">
+                <p style="font-family: var(--bgd-font-body); font-size: 16px; line-height: 1.6; color: var(--bgd-color-ink); opacity: 0.7; margin-bottom: var(--bgd-space-16);">
+                    BGD UI is a personal-first, offline-first mobile application. It is a curated collection of mobile-friendly screens, workspaces, components, and interaction patterns for business applications.
+                </p>
+                <p style="font-family: var(--bgd-font-body); font-size: 16px; line-height: 1.6; color: var(--bgd-color-ink); opacity: 0.7;">
+                    Each workspace owns its own visual identity. The shell is neutral. Workspaces are distinct.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════
+    WORKSPACE GALLERY
+    ════════════════════════════════════════════════════════════════ -->
+    <main class="bgd-container" role="main" id="workspaces">
+
+        <div class="bgd-section" style="padding-top: var(--bgd-space-32);">
+
+            <!-- Search -->
+            <div class="bgd-search" id="search-bar">
+                <span class="bgd-search-icon">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </span>
+                <input type="text" placeholder="Search workspaces..." id="search-input" aria-label="Search workspaces" />
+            </div>
+
+            <!-- Categories -->
+            <div class="bgd-categories animate-fade-up stagger-3">
+                <button class="bgd-category-pill active" data-category="all">All</button>
+                <button class="bgd-category-pill" data-category="invoice">Invoice</button>
+                <button class="bgd-category-pill" data-category="crm">CRM</button>
+                <button class="bgd-category-pill" data-category="inventory">Inventory</button>
+                <button class="bgd-category-pill" data-category="sales">Sales</button>
+            </div>
+
+            <!-- Section Label -->
+            <div class="bgd-section-label animate-fade-up stagger-4">
+                <h2>Workspaces</h2>
+                <span id="workspace-count">6 total</span>
+            </div>
+
+            <!-- Grid -->
+            <div class="bgd-workspace-grid" id="workspace-grid" role="list">
+
+                <!-- PRAV -->
+                <div class="bgd-workspace-card animate-scale-in stagger-5" role="listitem"
+                    data-workspace="prav" data-category="invoice" data-status="live"
+                    data-name="PRAV" data-domain="Invoice" data-design="Warm Parchment">
+                    <span class="card-tag">Live</span>
+                    <div class="card-name">PRAV</div>
+                    <div class="card-domain">Engineering dossier · Invoice</div>
+                    <div class="card-meta">
+                        <span class="pill">Warm parchment</span>
+                        <span class="pill accent">Dossier</span>
+                    </div>
+                </div>
+
+                <!-- Sackville -->
+                <div class="bgd-workspace-card animate-scale-in stagger-6" role="listitem"
+                    data-workspace="sackville" data-category="invoice" data-status="live"
+                    data-name="Sackville" data-domain="Invoice" data-design="Editorial Risograph">
+                    <span class="card-tag">Live</span>
+                    <div class="card-name">Sackville</div>
+                    <div class="card-domain">Editorial risograph · Invoice</div>
+                    <div class="card-meta">
+                        <span class="pill">Cream risograph</span>
+                        <span class="pill accent">Zine</span>
+                    </div>
+                </div>
+
+                <!-- AMRA -->
+                <div class="bgd-workspace-card animate-scale-in stagger-7" role="listitem"
+                    data-workspace="amra" data-category="invoice" data-status="live"
+                    data-name="AMRA" data-domain="Invoice" data-design="Monochrome Minimal">
+                    <span class="card-tag">Live</span>
+                    <div class="card-name">AMRA</div>
+                    <div class="card-domain">Monochrome minimal · Invoice</div>
+                    <div class="card-meta">
+                        <span class="pill">Monochrome</span>
+                        <span class="pill accent">Lavender</span>
+                    </div>
+                </div>
+
+                <!-- CRM -->
+                <div class="bgd-workspace-card animate-scale-in stagger-8" role="listitem"
+                    data-workspace="crm" data-category="crm" data-status="planned"
+                    data-name="CRM" data-domain="Customer Relationship" data-design="Modern Utility">
+                    <span class="card-tag">Planned</span>
+                    <div class="card-name">CRM</div>
+                    <div class="card-domain">Customer Relationship · Management</div>
+                    <div class="card-meta">
+                        <span class="pill">Modern utility</span>
+                        <span class="pill">CRM</span>
+                    </div>
+                </div>
+
+                <!-- Inventory -->
+                <div class="bgd-workspace-card animate-scale-in stagger-9" role="listitem"
+                    data-workspace="inventory" data-category="inventory" data-status="planned"
+                    data-name="Inventory" data-domain="Inventory" data-design="Teal Terminal">
+                    <span class="card-tag">Planned</span>
+                    <div class="card-name">Inventory</div>
+                    <div class="card-domain">Inventory · Management</div>
+                    <div class="card-meta">
+                        <span class="pill">Teal terminal</span>
+                        <span class="pill accent">Terminal</span>
+                    </div>
+                </div>
+
+                <!-- Quotations -->
+                <div class="bgd-workspace-card animate-scale-in stagger-10" role="listitem"
+                    data-workspace="quotations" data-category="sales" data-status="planned"
+                    data-name="Quotations" data-domain="Sales" data-design="Warm Amber">
+                    <span class="card-tag">Planned</span>
+                    <div class="card-name">Quotations</div>
+                    <div class="card-domain">Sales · Quotations</div>
+                    <div class="card-meta">
+                        <span class="pill">Warm amber</span>
+                        <span class="pill">Sales</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Divider -->
+            <hr style="border: none; border-top: 1px solid var(--bgd-color-hairline); margin: var(--bgd-space-16) 0;" />
+
+            <!-- Footer -->
+            <footer class="bgd-footer" role="contentinfo">
+                <div class="bgd-footer-links">
+                    <a href="#">Gallery</a>
+                    <a href="#">Workspaces</a>
+                    <a href="#">About</a>
+                    <a href="#">Docs</a>
+                </div>
+                <p class="bgd-footer-text">
+                    <span class="brand">BGD UI</span> · Shell v2.0 · Offline-first
+                </p>
+                <p class="bgd-footer-text" style="font-size: 12px; opacity: 0.4;">
+                    Built for the author · Workspaces are independent products
+                </p>
+            </footer>
+
+        </div>
+
+    </main>
+
+    <!-- Mobile Menu Backdrop -->
+    <div id="bgd-menu-backdrop"></div>
+
+    <!-- Mobile Menu -->
+    <nav id="bgd-mobile-menu" aria-label="Mobile navigation">
+        <button class="menu-close" id="menu-close-btn" aria-label="Close navigation menu">
+            <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <div style="margin-top: var(--bgd-space-48); display: flex; flex-direction: column; gap: var(--bgd-space-4);">
+            <a href="#workspaces" class="bgd-nav-link">Gallery</a>
+            <a href="#about" class="bgd-nav-link">About</a>
+            <a href="#workspaces" class="bgd-nav-link">Workspaces</a>
+            <a href="#" class="bgd-nav-link">Docs</a>
+            <hr style="border: none; border-top: 1px solid var(--bgd-color-hairline); margin: var(--bgd-space-12) 0;" />
+            <div style="margin-top: var(--bgd-space-8); display: flex; flex-direction: column; gap: var(--bgd-space-8);">
+                <a href="#workspaces" class="btn-teal" style="width: 100%; justify-content: center;">Explore</a>
+                <a href="#about" class="btn-ghost" style="width: 100%; justify-content: center; border-color: var(--bgd-color-hairline); color: var(--bgd-color-ink);">About</a>
+            </div>
+        </div>
+
+        <div style="margin-top: auto; padding-top: var(--bgd-space-16); border-top: 1px solid var(--bgd-color-hairline); font-family: var(--bgd-font-body); font-size: 13px; color: var(--bgd-color-fog);">
+            <span>BGD UI Shell</span>
+            <span style="display: block; margin-top: 4px; opacity: 0.5;">v2.0 · 2026</span>
+        </div>
+    </nav>
+
+</div>
+
+<script>
+    (function() {
+        'use strict';
+
+        // Nav scroll transition
+        const nav = document.getElementById('bgd-nav');
+        const hero = document.getElementById('hero');
+        let heroHeight = 0;
+
+        function updateHeroHeight() {
+            if (hero) heroHeight = hero.offsetHeight;
+        }
+        updateHeroHeight();
+        window.addEventListener('resize', updateHeroHeight);
+
+        window.addEventListener('scroll', function() {
+            const scrollY = window.scrollY;
+            const threshold = heroHeight * 0.6;
+
+            if (scrollY > threshold) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu
+        const hamburger = document.getElementById('hamburger-btn');
+        const menu = document.getElementById('bgd-mobile-menu');
+        const backdrop = document.getElementById('bgd-menu-backdrop');
+        const closeBtn = document.getElementById('menu-close-btn');
+        let isOpen = false;
+
+        function openMenu() {
+            if (isOpen) return;
+            isOpen = true;
+            menu.classList.add('open');
+            backdrop.classList.add('visible');
+            hamburger.classList.add('active');
+            hamburger.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            if (!isOpen) return;
+            isOpen = false;
+            menu.classList.remove('open');
+            backdrop.classList.remove('visible');
+            hamburger.classList.remove('active');
+            hamburger.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        hamburger.addEventListener('click', function() {
+            if (isOpen) closeMenu(); else openMenu();
+        });
+        closeBtn.addEventListener('click', closeMenu);
+        backdrop.addEventListener('click', closeMenu);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && isOpen) closeMenu();
+        });
+
+        menu.querySelectorAll('.bgd-nav-link').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (isOpen) closeMenu();
+            });
+        });
+
+        let menuResizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(menuResizeTimer);
+            menuResizeTimer = setTimeout(function() {
+                if (window.innerWidth >= 768 && isOpen) {
+                    closeMenu();
+                }
+            }, 150);
+        });
+
+        // Search
+        const searchToggle = document.getElementById('search-toggle');
+        const searchBar = document.getElementById('search-bar');
+        const searchInput = document.getElementById('search-input');
+        const workspaceCards = document.querySelectorAll('.bgd-workspace-card');
+        const grid = document.getElementById('workspace-grid');
+        let searchVisible = false;
+
+        function toggleSearch() {
+            searchVisible = !searchVisible;
+            searchBar.classList.toggle('visible', searchVisible);
+            if (searchVisible) {
+                searchInput.focus();
+                searchBar.style.animation = 'none';
+                requestAnimationFrame(function() {
+                    searchBar.style.animation = 'bgdFadeUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards';
+                });
+            }
+            searchToggle.setAttribute('aria-expanded', searchVisible);
+        }
+
+        searchToggle.addEventListener('click', toggleSearch);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && searchVisible) {
+                toggleSearch();
+            }
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                toggleSearch();
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (searchVisible &&
+                !searchBar.contains(e.target) &&
+                !searchToggle.contains(e.target)) {
+                toggleSearch();
+            }
+        });
+
+        // Category Filter
+        const categoryPills = document.querySelectorAll('.bgd-category-pill');
+        let activeCategory = 'all';
+
+        function filterWorkspaces(query, category) {
+            let visibleCount = 0;
+
+            workspaceCards.forEach(function(card) {
+                const name = (card.dataset.name || '').toLowerCase();
+                const domain = (card.dataset.domain || '').toLowerCase();
+                const design = (card.dataset.design || '').toLowerCase();
+                const status = (card.dataset.status || '').toLowerCase();
+                const cardCategory = (card.dataset.category || '').toLowerCase();
+
+                const matchesCategory = category === 'all' || cardCategory === category;
+                const matchesQuery = query === '' ||
+                    name.includes(query) ||
+                    domain.includes(query) ||
+                    design.includes(query) ||
+                    status.includes(query);
+
+                if (matchesCategory && matchesQuery) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const countEl = document.getElementById('workspace-count');
+            if (countEl) {
+                countEl.textContent = visibleCount + ' total';
+            }
+
+            let emptyState = document.querySelector('.bgd-empty-state');
+            if (visibleCount === 0) {
+                if (!emptyState) {
+                    emptyState = document.createElement('div');
+                    emptyState.className = 'bgd-empty bgd-empty-state';
+                    const categoryLabel = category === 'all' ? 'workspaces' : category + ' workspaces';
+                    emptyState.innerHTML = `
+                        <p>No ${categoryLabel} match your search</p>
+                        <p style="font-size:14px; opacity:0.5; margin-top:8px;">Try adjusting your filters</p>
+                    `;
+                    grid.parentNode.insertBefore(emptyState, grid.nextSibling);
+                } else {
+                    emptyState.style.display = '';
+                }
+            } else {
+                if (emptyState) {
+                    emptyState.style.display = 'none';
+                }
+            }
+        }
+
+        categoryPills.forEach(function(pill) {
+            pill.addEventListener('click', function() {
+                categoryPills.forEach(function(p) { p.classList.remove('active'); });
+                this.classList.add('active');
+                activeCategory = this.dataset.category || 'all';
+                const query = searchInput.value.toLowerCase().trim();
+                filterWorkspaces(query, activeCategory);
+            });
+        });
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            filterWorkspaces(query, activeCategory);
+        });
+
+        // Card Interactions
+        workspaceCards.forEach(function(card) {
+            card.addEventListener('click', function() {
+                const name = this.dataset.name || 'Workspace';
+                const status = this.dataset.status || 'unknown';
+                const domain = this.dataset.domain || '';
+
+                this.style.transform = 'scale(0.97)';
+                setTimeout(function() {
+                    card.style.transform = '';
+                }, 200);
+
+                const msg = status === 'live' ?
+                    'Opening "' + name + '" — ' + domain + ' workspace' :
+                    '"' + name + '" is in development · Planned workspace';
+
+                const notif = document.createElement('div');
+                notif.style.cssText = 'position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--bgd-color-ink); color: var(--bgd-color-paper); padding: 16px 32px; border-radius: var(--bgd-radius); font-family: var(--bgd-font-body); font-weight: 500; font-size: 16px; z-index: 1000; max-width: 90%; text-align: center; transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease; opacity: 0; pointer-events: none; border: 1px solid rgba(255,255,255,0.06);';
+                notif.textContent = msg;
+                document.body.appendChild(notif);
+
+                requestAnimationFrame(function() {
+                    notif.style.opacity = '1';
+                    notif.style.transform = 'translateX(-50%) translateY(0)';
+                });
+
+                setTimeout(function() {
+                    notif.style.opacity = '0';
+                    notif.style.transform = 'translateX(-50%) translateY(20px)';
+                    setTimeout(function() {
+                        if (notif.parentNode) notif.remove();
+                    }, 400);
+                }, 2500);
+            });
+
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        // Init
+        const total = document.querySelectorAll('.bgd-workspace-card').length;
+        const countEl = document.getElementById('workspace-count');
+        if (countEl) countEl.textContent = total + ' total';
+
+        console.log('BGD UI Shell');
+        console.log(total + ' workspaces registered');
+
+        // iOS 100vh fix
+        function setVH() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', vh + 'px');
+        }
+        setVH();
+        window.addEventListener('resize', setVH);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(setVH, 200);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    const offset = 80;
+                    const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({ top: top, behavior: 'smooth' });
+                }
+            });
+        });
+
+    })();
+</script>
+
+</body>
+</html>
