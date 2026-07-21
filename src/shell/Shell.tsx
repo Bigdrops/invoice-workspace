@@ -64,30 +64,33 @@ export function Shell({ topics, workspaces, loading }: ShellProps) {
   if (screen === 'workspace' && WorkspaceComponent) {
     return (
       <div data-theme={resolved}>
-        <div className="bgd-shell">
-          <TopBar showBack onBack={handleBackToTopicList} title={activeWorkspace?.name} />
+        <div className="bgd-shell" style={{ borderBottom: '1px solid var(--shell-color-border)' }}>
+          <TopBar onToggleTheme={handleToggleTheme} themeIsDark={resolved === 'dark'} />
+          <div style={{
+            maxWidth: 'var(--shell-page-max-width)',
+            margin: '0 auto',
+            padding: 'var(--shell-spacing-12) var(--shell-spacing-32)',
+          }}>
+            <button
+              type="button"
+              className="shell-link"
+              onClick={handleBackToTopicList}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--shell-spacing-4)' }}
+            >
+              ← {activeWorkspace?.name}
+            </button>
+          </div>
         </div>
-        <div style={{ paddingTop: 'var(--shell-topbar-height)' }}>
+        <div className="bgd-shell">
           <Suspense
             fallback={
-              <div
-                style={{
-                  minHeight: '100vh',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: '#ffffff',
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: '16px',
-                    color: '#6c757d',
-                    fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif",
-                  }}
-                >
-                  Loading workspace...
-                </span>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '60vh',
+              }}>
+                <span className="shell-caption">Loading workspace...</span>
               </div>
             }
           >
@@ -100,26 +103,33 @@ export function Shell({ topics, workspaces, loading }: ShellProps) {
 
   return (
     <div className="bgd-shell" data-theme={resolved} style={{ minHeight: '100vh' }}>
-      {screen === 'settings' ? (
-        <Settings
-          workspaceCount={workspaces.length}
-          onBack={handleBackFromSettings}
-        />
-      ) : (
-        <Gallery
-          topics={topics}
-          workspaces={workspaces}
-          loading={loading}
-          themeMode={mode}
-          resolved={resolved}
-          onToggleTheme={handleToggleTheme}
-          onSelectTopic={handleSelectTopic}
-          onSelectWorkspace={handleSelectWorkspace}
-          onOpenSettings={handleOpenSettings}
-          onBackToTopics={handleBackToTopics}
-          activeTopicId={screen === 'topic' ? activeTopicId : null}
-        />
-      )}
+      <TopBar onToggleTheme={handleToggleTheme} themeIsDark={resolved === 'dark'} />
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        padding: 'var(--shell-spacing-16)',
+      }}>
+        {screen === 'settings' ? (
+          <Settings
+            workspaceCount={workspaces.length}
+            onBack={handleBackFromSettings}
+          />
+        ) : (
+          <Gallery
+            topics={topics}
+            workspaces={workspaces}
+            loading={loading}
+            themeMode={mode}
+            resolved={resolved}
+            onToggleTheme={handleToggleTheme}
+            onSelectTopic={handleSelectTopic}
+            onSelectWorkspace={handleSelectWorkspace}
+            onOpenSettings={handleOpenSettings}
+            onBackToTopics={handleBackToTopics}
+            activeTopicId={screen === 'topic' ? activeTopicId : null}
+          />
+        )}
+      </div>
     </div>
   )
 }

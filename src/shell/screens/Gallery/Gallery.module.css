@@ -1,60 +1,96 @@
+.wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
 .page {
-  padding: var(--shell-spacing-4xl) var(--shell-spacing-lg) var(--shell-spacing-6xl);
-  max-width: 600px;
+  position: relative;
+  z-index: 1;
+  padding: 0 var(--shell-spacing-16) var(--shell-spacing-48);
+  max-width: 640px;
   margin: 0 auto;
 }
 
-.list {
+.hero {
+  padding: var(--shell-spacing-40) 0 var(--shell-spacing-32);
+}
+
+.subtitle {
+  margin-top: var(--shell-spacing-8);
+  font-size: var(--shell-text-body);
+  color: var(--shell-color-text-secondary);
+}
+
+.grid {
   display: flex;
   flex-direction: column;
+  gap: var(--shell-spacing-12);
 }
 
-.topicRow {
+.topicCard {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--shell-spacing-lg) 0;
-  border-bottom: 1px solid var(--shell-color-border);
-  text-align: left;
+  gap: var(--shell-spacing-12);
   width: 100%;
+  padding: var(--shell-spacing-20) var(--shell-spacing-24);
+  background: var(--shell-color-surface);
+  border: 1px solid var(--shell-color-border);
+  border-radius: var(--shell-radius-lg);
   cursor: pointer;
-  gap: var(--shell-spacing-sm);
+  text-align: left;
+  box-shadow: var(--shell-shadow-card);
+  transition: box-shadow var(--shell-transition), border-color var(--shell-transition);
 }
 
-.topicRow:hover .topicName {
-  text-decoration: underline;
+.topicCard:hover {
+  box-shadow: var(--shell-shadow-elevated);
+  border-color: var(--shell-color-accent);
 }
 
-.topicRow:last-of-type {
-  border-bottom: none;
+.topicCard:active {
+  transform: scale(0.99);
 }
 
 .topicName {
-  font-size: var(--shell-text-body);
-  line-height: var(--shell-text-body-leading);
-  font-weight: var(--shell-font-weight);
+  font-family: var(--shell-font-display);
+  font-size: var(--shell-text-heading-sm);
+  font-weight: var(--shell-font-weight-medium);
   color: var(--shell-color-text);
+  flex: 1;
 }
 
-.topicArrow {
-  font-size: var(--shell-text-body);
-  line-height: var(--shell-text-body-leading);
+.topicCount {
+  font-size: var(--shell-text-caption);
   color: var(--shell-color-text-secondary);
   flex-shrink: 0;
 }
 
+.topicArrow {
+  color: var(--shell-color-text-secondary);
+  flex-shrink: 0;
+  transition: transform var(--shell-transition), color var(--shell-transition);
+}
+
+.topicCard:hover .topicArrow {
+  color: var(--shell-color-accent);
+  transform: translateX(3px);
+}
+
 .settingsLink {
-  display: block;
-  margin-top: var(--shell-spacing-4xl);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--shell-spacing-8);
+  margin-top: var(--shell-spacing-48);
   font-size: var(--shell-text-body);
-  line-height: var(--shell-text-body-leading);
   color: var(--shell-color-text-secondary);
   cursor: pointer;
-  border: none;
-  background: none;
+  min-height: 44px;
+  padding: var(--shell-spacing-8) var(--shell-spacing-16);
+  border-radius: var(--shell-radius-full);
+  transition: background var(--shell-transition), color var(--shell-transition);
 }
 
 .settingsLink:hover {
-  text-decoration: underline;
+  background: var(--shell-color-surface-alt);
   color: var(--shell-color-text);
 }

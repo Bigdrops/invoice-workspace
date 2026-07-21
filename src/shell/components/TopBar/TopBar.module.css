@@ -3,43 +3,68 @@
   align-items: center;
   justify-content: space-between;
   height: var(--shell-topbar-height);
-  padding: 0 var(--shell-spacing-lg);
+  padding: 0 var(--shell-spacing-32);
   border-bottom: 1px solid var(--shell-color-border);
+  background: var(--shell-color-surface);
 }
 
-.left {
+.nav {
   display: flex;
   align-items: center;
+  gap: var(--shell-spacing-8);
 }
 
-.right {
-  display: flex;
-  align-items: center;
-}
-
-.backBtn {
-  font-size: var(--shell-text-body);
-  font-weight: var(--shell-font-weight);
+.logo {
+  font-family: var(--shell-font-display);
+  font-size: 24px;
+  font-weight: 400;
   color: var(--shell-color-text);
-  min-height: 44px;
-  display: flex;
-  align-items: center;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  margin-right: var(--shell-spacing-24);
 }
 
-.backBtn:hover {
-  text-decoration: underline;
+.navItem {
+  font-family: var(--shell-font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--shell-color-text-muted);
+  cursor: pointer;
+  padding: var(--shell-spacing-8) var(--shell-spacing-16);
+  border-radius: var(--shell-radius-full);
+  transition: background var(--shell-transition), color var(--shell-transition);
+  border: none;
+  background: none;
+}
+
+.navItem:hover {
+  color: var(--shell-color-text);
+  background: var(--shell-color-surface-hover);
+}
+
+.navItemActive {
+  color: var(--shell-color-text);
+  background: var(--shell-color-surface-hover);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--shell-spacing-8);
 }
 
 .themeBtn {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--shell-color-text);
-  border-radius: var(--shell-radius);
+  color: var(--shell-color-text-muted);
+  border-radius: var(--shell-radius-button);
+  transition: background var(--shell-transition), color var(--shell-transition);
 }
 
 .themeBtn:hover {
-  background: var(--shell-color-border);
+  background: var(--shell-color-surface-hover);
+  color: var(--shell-color-text);
 }

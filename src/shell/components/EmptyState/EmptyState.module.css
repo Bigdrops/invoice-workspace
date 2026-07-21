@@ -2,12 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--shell-spacing-6xl) var(--shell-spacing-lg);
+  padding: var(--shell-spacing-48) 0;
   text-align: center;
 }
 
 .text {
-  font-size: var(--shell-text-body);
-  line-height: var(--shell-text-body-leading);
-  color: var(--shell-color-text-secondary);
+  font-size: var(--shell-text-caption);
+  color: var(--shell-color-text-muted);
 }

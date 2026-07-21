@@ -1,40 +1,77 @@
-.bgd-shell .shell-display {
+.bgd-shell {
+  font-family: var(--shell-font-body);
+  font-weight: var(--shell-font-weight-medium);
+}
+
+/* Typography utilities */
+.shell-display {
+  font-family: var(--shell-font-display);
   font-size: var(--shell-text-display);
   line-height: var(--shell-text-display-leading);
   font-weight: var(--shell-font-weight);
-  color: var(--shell-color-text);
+  letter-spacing: 0.02em;
 }
 
-.bgd-shell .shell-heading {
+.shell-heading-lg {
+  font-family: var(--shell-font-display);
+  font-size: var(--shell-text-heading-lg);
+  line-height: var(--shell-text-heading-lg-leading);
+  font-weight: var(--shell-font-weight);
+  letter-spacing: 0.02em;
+}
+
+.shell-heading {
+  font-family: var(--shell-font-display);
   font-size: var(--shell-text-heading);
   line-height: var(--shell-text-heading-leading);
+  letter-spacing: var(--shell-text-heading-tracking);
   font-weight: var(--shell-font-weight);
-  color: var(--shell-color-text);
 }
 
-.bgd-shell .shell-body {
+.shell-subheading {
+  font-family: var(--shell-font-body);
+  font-size: var(--shell-text-subheading);
+  line-height: var(--shell-text-subheading-leading);
+  font-weight: var(--shell-font-weight-medium);
+}
+
+.shell-body {
+  font-family: var(--shell-font-body);
   font-size: var(--shell-text-body);
   line-height: var(--shell-text-body-leading);
-  font-weight: var(--shell-font-weight);
+  font-weight: var(--shell-font-weight-medium);
 }
 
-.bgd-shell .shell-caption {
+.shell-caption {
+  font-family: var(--shell-font-body);
   font-size: var(--shell-text-caption);
   line-height: var(--shell-text-caption-leading);
-  font-weight: var(--shell-font-weight);
-  color: var(--shell-color-text-secondary);
+  font-weight: var(--shell-font-weight-medium);
+  color: var(--shell-color-text-muted);
 }
 
-.bgd-shell .shell-back-link {
-  font-size: var(--shell-text-body);
-  line-height: var(--shell-text-body-leading);
+.shell-micro {
+  font-family: var(--shell-font-mono);
+  font-size: var(--shell-text-micro);
+  line-height: var(--shell-text-micro-leading);
   font-weight: var(--shell-font-weight);
-  color: var(--shell-color-text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--shell-color-text-muted);
+}
+
+.shell-link {
+  font-family: var(--shell-font-body);
+  font-size: var(--shell-text-caption);
+  font-weight: var(--shell-font-weight-medium);
+  color: var(--shell-color-text-muted);
+  transition: color var(--shell-transition);
+  background: none;
+  border: none;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
+  padding: 0;
 }
 
-.bgd-shell .shell-back-link:hover {
-  text-decoration: underline;
+.shell-link:hover {
+  color: var(--shell-color-text);
 }
