@@ -5,9 +5,10 @@ import { Gallery } from './screens/Gallery/Gallery'
 import { Settings } from './screens/Settings/Settings'
 import { TopBar } from './components/TopBar/TopBar'
 
-import './styles/tokens.css'
-import './styles/reset.css'
-import './styles/typography.css'
+import './styles/moving-parts-tokens.css'
+import './styles/moving-parts-reset.css'
+import './styles/moving-parts-typography.css'
+import './styles/moving-parts-components.css'
 
 type ShellScreen = 'home' | 'topic' | 'workspace' | 'settings'
 
@@ -63,52 +64,40 @@ export function Shell({ topics, workspaces, loading }: ShellProps) {
 
   if (screen === 'workspace' && WorkspaceComponent) {
     return (
-      <div data-theme={resolved}>
-        <div className="bgd-shell" style={{ borderBottom: '1px solid var(--shell-color-border)' }}>
-          <TopBar onToggleTheme={handleToggleTheme} themeIsDark={resolved === 'dark'} />
-          <div style={{
-            maxWidth: 'var(--shell-page-max-width)',
-            margin: '0 auto',
-            padding: 'var(--shell-spacing-12) var(--shell-spacing-32)',
-          }}>
-            <button
-              type="button"
-              className="shell-link"
-              onClick={handleBackToTopicList}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--shell-spacing-4)' }}
-            >
-              ← {activeWorkspace?.name}
-            </button>
-          </div>
-        </div>
-        <div className="bgd-shell">
-          <Suspense
-            fallback={
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minHeight: '60vh',
-              }}>
-                <span className="shell-caption">Loading workspace...</span>
-              </div>
-            }
+      <div className="moving-parts-shell" data-theme={resolved}>
+        <TopBar onToggleTheme={handleToggleTheme} themeIsDark={resolved === 'dark'} />
+        <div className="mp-container" style={{ paddingTop: 'var(--mp-space-12)', paddingBottom: 'var(--mp-space-12)' }}>
+          <button
+            type="button"
+            className="btn-ghost"
+            onClick={handleBackToTopicList}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--mp-space-4)' }}
           >
-            <WorkspaceComponent />
-          </Suspense>
+            ← {activeWorkspace?.name}
+          </button>
         </div>
+        <Suspense
+          fallback={
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: '60vh',
+            }}>
+              <span className="mp-mono">Loading workspace...</span>
+            </div>
+          }
+        >
+          <WorkspaceComponent />
+        </Suspense>
       </div>
     )
   }
 
   return (
-    <div className="bgd-shell" data-theme={resolved} style={{ minHeight: '100vh' }}>
+    <div className="moving-parts-shell" data-theme={resolved} style={{ minHeight: '100vh' }}>
       <TopBar onToggleTheme={handleToggleTheme} themeIsDark={resolved === 'dark'} />
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        padding: 'var(--shell-spacing-16)',
-      }}>
+      <div className="mp-container" style={{ paddingTop: 'var(--mp-space-16)' }}>
         {screen === 'settings' ? (
           <Settings
             workspaceCount={workspaces.length}
