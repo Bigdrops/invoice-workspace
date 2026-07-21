@@ -1,0 +1,63 @@
+.moving-parts-shell *,
+.moving-parts-shell *::before,
+.moving-parts-shell *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.moving-parts-shell {
+  font-family: var(--mp-font-display);
+  background: var(--mp-surface-canvas);
+  color: var(--mp-color-onyx);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.moving-parts-shell ::selection {
+  background: var(--mp-color-electric);
+  color: var(--mp-color-pure);
+}
+
+.moving-parts-shell :focus-visible {
+  outline: 2px solid var(--mp-color-electric);
+  outline-offset: 2px;
+}
+
+.moving-parts-shell button,
+.moving-parts-shell .clickable,
+.moving-parts-shell [role="button"] {
+  touch-action: manipulation;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .moving-parts-shell *,
+  .moving-parts-shell *::before,
+  .moving-parts-shell *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.moving-parts-shell ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.moving-parts-shell ::-webkit-scrollbar-track {
+  background: var(--mp-color-bone);
+}
+
+.moving-parts-shell ::-webkit-scrollbar-thumb {
+  background: var(--mp-color-fog);
+  border-radius: var(--mp-radius-small);
+}
+
+.moving-parts-shell ::-webkit-scrollbar-thumb:hover {
+  background: var(--mp-color-ash);
+}
