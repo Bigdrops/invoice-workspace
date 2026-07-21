@@ -1,0 +1,172 @@
+/* ─── Headlines ─── */
+
+.moving-parts-shell h1,
+.moving-parts-shell h2,
+.moving-parts-shell h3,
+.moving-parts-shell h4,
+.moving-parts-shell h5,
+.moving-parts-shell h6 {
+  font-family: var(--mp-font-display);
+  font-weight: 700;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  color: var(--mp-color-onyx);
+}
+
+.moving-parts-shell h1 {
+  font-size: clamp(48px, 10vw, 94px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.moving-parts-shell h2 {
+  font-size: clamp(32px, 5vw, 56px);
+}
+
+.moving-parts-shell h3 {
+  font-size: clamp(24px, 3vw, 36px);
+}
+
+.moving-parts-shell h4 {
+  font-size: 1.25rem;
+}
+
+.moving-parts-shell h5 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.moving-parts-shell h6 {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* ─── Body ─── */
+
+.moving-parts-shell p {
+  font-family: var(--mp-font-display);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--mp-color-onyx);
+  opacity: 0.7;
+}
+
+/* ─── Links ─── */
+
+.moving-parts-shell a {
+  font-family: var(--mp-font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--mp-color-onyx);
+  text-decoration: none;
+  text-decoration-color: var(--mp-color-electric);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+  transition: text-decoration-color 0.15s ease;
+}
+
+.moving-parts-shell a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--mp-color-electric);
+}
+
+/* ─── Code ─── */
+
+.moving-parts-shell code {
+  font-family: var(--mp-font-mono);
+  font-size: 0.875em;
+  background: var(--mp-color-bone);
+  padding: 0.15em 0.4em;
+  border-radius: var(--mp-radius-small);
+  color: var(--mp-color-onyx);
+}
+
+.moving-parts-shell pre {
+  font-family: var(--mp-font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  background: var(--mp-color-carbon);
+  color: var(--mp-color-fog);
+  padding: var(--mp-space-16);
+  border-radius: var(--mp-radius-buttons);
+  overflow-x: auto;
+}
+
+.moving-parts-shell pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* ─── Blockquote ─── */
+
+.moving-parts-shell blockquote {
+  font-family: var(--mp-font-serif);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--mp-color-slate);
+  border-left: 3px solid var(--mp-color-electric);
+  padding-left: var(--mp-space-16);
+  margin: var(--mp-space-16) 0;
+}
+
+/* ─── Lists ─── */
+
+.moving-parts-shell ul,
+.moving-parts-shell ol {
+  font-family: var(--mp-font-display);
+  font-size: 1rem;
+  line-height: 1.6;
+  padding-left: var(--mp-space-24);
+  margin: var(--mp-space-8) 0;
+}
+
+.moving-parts-shell ul {
+  list-style-type: disc;
+}
+
+.moving-parts-shell ol {
+  list-style-type: decimal;
+}
+
+.moving-parts-shell li {
+  margin: var(--mp-space-4) 0;
+}
+
+/* ─── Small / Muted ─── */
+
+.moving-parts-shell small {
+  font-family: var(--mp-font-display);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--mp-color-ash);
+}
+
+.moving-parts-shell .muted {
+  color: var(--mp-color-ash);
+}
+
+/* ─── Strong / Bold ─── */
+
+.moving-parts-shell strong,
+.moving-parts-shell b {
+  font-weight: 700;
+  color: var(--mp-color-onyx);
+}
+
+/* ─── Utility Classes ─── */
+
+.moving-parts-shell .mp-mono {
+  font: 700 0.75rem/1.25 var(--mp-font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.moving-parts-shell .mp-serif {
+  font: italic 300 1.5rem/1.2 var(--mp-font-serif);
+  opacity: 0.6;
+}
