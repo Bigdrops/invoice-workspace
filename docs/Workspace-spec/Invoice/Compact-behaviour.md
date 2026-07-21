@@ -1,31 +1,35 @@
+https://github.com/Bigdrops/bigdrops-app/blob/main/docs%2FReports%2FGENERAL%2Finvoice-form-functional-inventory.md for source and inspiration.
+this is the live version above.
+
+
 ```markdown
-# Invoice Workspace — Behavioral Architecture (Final)
-**Version:** 2.3 | **Date:** 2026-07-21 | **Status:** Final
+# Document Workspace — Behavioral Specification (Static Form)
+**Version:** 7.0 | **Date:** 2026-07-22 | **Status:** Final
+**Applies to:** Invoice, Quotation, Purchase Order, and similar business documents.
+This is a STATIC form specification. It describes the behavior of the form itself — user interactions, data entry, calculations, and validations — with no persistence logic, no backend integration, and no live app concerns.
 ---
 ## 1. Purpose
-This document defines the behavioral architecture of the Invoice Workspace — a mobile‑first, offline‑ready invoice builder. It describes what the form does and how it should behave, without prescribing visual design, layout, or positioning.
-Any design system can implement this behavior while maintaining its own visual identity.
+This document defines the complete behavioral specification for a static document form — a single‑page UI that allows users to create, edit, and preview business documents (invoices, quotations, purchase orders, etc.). It describes every user interaction, data field, calculation, and validation rule without prescribing visual design, layout, or styling.
+The form is static — it only manages state in memory. All data is lost on page reload. This is purely a client‑side form UI.
 ---
 ## 2. Core Data Model
 ```typescript
-interface Invoice {
-  id: string;
-  header: InvoiceHeader;
+interface Document {
+  type: 'invoice' | 'quotation' | 'purchaseOrder';
+  header: DocumentHeader;
   groups: LineGroup[];
   standaloneItems: LineItem[];
   commercial: CommercialSettings;
   payment: PaymentDetails;
   additional: AdditionalInfo;
-  totals: InvoiceTotals;
-  status: 'draft' | 'sent' | 'paid' | 'overdue';
-  createdAt: string;
-  updatedAt: string;
+  totals: DocumentTotals;
 }
-interface InvoiceHeader {
-  title?: string;                    // Optional — what the invoice is for
-  client: string;
-  invoiceNumber: string;
-  poNumber: string;
+interface DocumentHeader {
+  title?: string;
+  clientId: string;
+  clientName: string;
+  documentNumber: string;
+  referenceNumber: string;
   issueDate: string;
   dueDate: string;
   customFields: CustomField[];
@@ -38,20 +42,32 @@ interface CustomField {
 interface LineGroup {
   id: string;
   name: string;
+  order: number;
   items: LineItem[];
-  subtotal: number;                  // Derived: sum of item totals in group
+  subtotal: number;  // Derived: sum of item totals in the group
 }
 interface LineItem {
   id: string;
-  number: number;                    // Auto-assigned, sequential
+  number: number;
   description: string;
   subDescription: string;
   quantity: number;
+  unit: string;
   unitPrice: number;
-  total: number;                     // Derived: quantity × unitPrice
+  total: number;
+  make?: string;
+  partNumber?: string;
+  condition?: string;
+  installRate?: number;
+  vatRate?: number;
+  discountRate?: number;
   hasPhoto: boolean;
   photoData?: string;
-  // Additional columns are flexible — more than description, qty, rate
+  customColumns: CustomColumnValue[];
+}
+interface CustomColumnValue {
+  columnId: string;
+  value: any;
 }
 interface CommercialSettings {
   paymentTerms: string;
@@ -81,7 +97,7 @@ interface AdditionalCharge {
   id: string;
   label: string;
   value: number;
-  taxable: boolean;                   // true = taxable, false = non-taxable (default)
+  taxable: boolean;
 }
 interface AdditionalField {
   id: string;
@@ -90,7 +106,7 @@ interface AdditionalField {
 }
 interface PaymentDetails {
   bankAccount: BankAccount;
-  showOnInvoice: boolean;
+  showOnDocument: boolean;
 }
 interface BankAccount {
   id: string;
@@ -99,8 +115,8 @@ interface BankAccount {
   bankName: string;
 }
 interface AdditionalInfo {
-  notes: string;                      // Rich text
-  terms: string;                      // Rich text
+  notes: string;
+  terms: string;
   signatoryName: string;
   signatoryTitle: string;
   signature: Signature;
@@ -113,241 +129,71 @@ interface Signature {
 }
 interface ReferenceLink {
   id: string;
+  label: string;
   url: string;
 }
-interface InvoiceTotals {
+interface DocumentTotals {
   subtotal: number;
   discount: number;
   vat: number;
   wht: number;
-  taxedCharges: number;              // Charges that are taxable
-  nonTaxedCharges: number;           // Charges that are NOT taxable
+  taxedCharges: number;
+  nonTaxedCharges: number;
+  installRateTotal: number;
   grandTotal: number;
-  amountInWords: string;             // Text representation of grand total
+  amountInWords: string;
 }
 ```
-## 3. State Management
-### 3.1 Primary State Owner
-The InvoiceWorkspace component holds the single source of truth for all invoice data.
-### 3.2 Component State Hierarchy
+## 3. Document Type Identity
+ * The document type (Invoice, Quotation, Purchase Order) is fixed for the form instance.
+ * A badge or label displays the type in the header.
+ * The type is non‑editable.
+## 4. Groups vs. Standalone Items — Visual Distinction
+### 4.1 Core Concept
 
-| Component | State Managed |
-| :--- | :--- |
-| **InvoiceWorkspace** | Full Invoice object; derived totals |
-| **InvoiceHeader** | Title, client, dates, numbers, custom fields |
-| **LineItemsSection** | Groups, standalone items, item‑level actions |
-| **CommercialSettings** | Discount, VAT, WHT, charges, fields |
-| **PaymentDetails** | Bank account selection, visibility toggle |
-| **AdditionalInfo** | Notes, terms, signatory, signature, links |
-| **TotalsSection** | Derived totals (read‑only) |
-
-### 3.3 State Update Flow
-```
-User Interaction
-    ↓
-Component Event Handler
-    ↓
-Update Local Component State
-    ↓
-Callback to Parent (`onUpdate`)
-    ↓
-Parent Updates Full Invoice State
-    ↓
-Derived Totals Recalculate
-    ↓
-UI Re‑render
-```
-## 4. Header Section
-### 4.1 Header Fields
-
+| Type | Description | Visual Treatment |
+| :--- | :--- | :--- |
+| **Grouped Items** | Items organized into named groups | Groups must have a visual container with a header (name + subtotal) and footer ("Add item" button) |
+| **Standalone Items** | Independent items not assigned to any group | Items are presented individually with a section label (e.g., "Individual items") | <br> ### 4.2 Group Rules <br> * Groups never collapse — they are always fully visible. <br> * Groups never reorder automatically — they follow creation order. <br> * Each group header displays the group name and group subtotal (sum of all item totals). <br> * Each group footer contains an "Add item" button that appends a new empty item to the group. <br> * Deleting a group moves all its items to the standalone list. <br> ### 4.3 Standalone Rules <br> * Standalone items appear after all groups (or before, depending on design — consistent placement). <br> * Standalone items are preceded by a section label (e.g., "Individual items"). <br> ### 4.4 Moving Items Between Groups / To Standalone <br> * Items can be moved from one group to another. <br> * Items can be moved from a group to the standalone list. <br> * Items can be moved from the standalone list to an existing group. <br> * This can be achieved via: <br> * A context menu ("Move to group", "Ungroup", "Move to standalone"). <br> * Drag‑and‑drop between groups and standalone sections. <br> ## 5. Header Section <br> ### 5.1 Fields
 | Field | Type | Behavior |
 | :--- | :--- | :--- |
-| **Title** | Text input | Optional; describes what the invoice is for |
-| **Client** | Select dropdown | Editable list; required |
-| **Invoice #** | Text input | Auto‑generated but editable |
-| **PO #** | Text input | Optional |
-| **Issue Date** | Date picker | Defaults to today |
-| **Due Date** | Date picker | Defaults to 30 days from issue date | <br> > **Design note:** No fixed order is imposed on header fields. Each implementation may arrange them (e.g., client before title, dates anywhere) to suit its visual language. <br> > <br> ### 4.2 Custom Header Fields
-| Behavior | Description |
-| :--- | :--- |
-| **Nature** | Same as additionalFields — different position only |
-| **Add** | Click to create new field pair (Label + Value) |
-| **Remove** | Each field pair has a remove button |
-| **Multiple** | Unlimited fields; add/remove | <br> ## 5. Line Items — Core Behavior <br> ### 5.1 Item Types
-| Type | Description | Container |
+| **Document Type Badge** | Badge | Shows type (Invoice, Quotation, etc.) — non‑editable |
+| **Title** | Text input | Optional |
+| **Client** | Picker/Select | Required; opens a client selector sheet/dropdown |
+| **Document Number** | Text input | Auto‑generated (default), editable |
+| **Reference Number** | Text input | Optional |
+| **Issue Date** | Date input | Defaults to today |
+| **Due Date** | Date input | Defaults to 30 days after issue date |
+| **Custom Header Fields** | Dynamic list | Label + Value pairs; add/remove unlimited | <br> ## 6. Line Items Section <br> ### 6.1 Item Fields
+| Field | Type | Behavior |
 | :--- | :--- | :--- |
-| **Grouped Item** | Belongs to a named group | LineGroup |
-| **Standalone Item** | Independent item, no group | standaloneItems array | <br> ### 5.2 Item Properties
-| Property | Behavior |
-| :--- | :--- |
-| **Number** | Auto‑assigned, sequential, non‑editable |
-| **Description** | Text input, multiline, auto‑height |
-| **Sub‑description** | Optional, multiline |
-| **Quantity** | Number input, min 0, step 1 |
-| **Unit Price** | Number input, min 0, step 0.01 |
-| **Total** | Auto‑calculated: quantity × unitPrice |
-| **Photo** | Optional, togglable, stores image reference | <br> ### 5.3 Flexible Columns
-| Rule | Description |
-| :--- | :--- |
-| **Minimum columns** | Description, Quantity, Rate (3 columns) |
-| **Maximum columns** | 6+ columns (flexible) |
-| **Mobile behavior** | Columns drop vertically, never expand horizontally |
-| **No horizontal scroll** | All content must fit within viewport width |
-| **Vertical stacking** | On mobile, fields stack vertically within each row | <br> ### 5.4 Item Lifecycle
+| **Number** | Auto‑generated | Sequential, non‑editable |
+| **Description** | Textarea | Multi‑line, auto‑height, required for save |
+| **Sub‑description** | Textarea | Optional; can be expanded/collapsed |
+| **Quantity** | Number input | Min 0; step 1 |
+| **Unit** | Text input | Optional, with suggestions |
+| **Unit Price** | Number input | Min 0; step 0.01 |
+| **Total** | Derived | quantity × unitPrice |
+| **Make** | Text input | Optional (if column visible) |
+| **Part Number** | Text input | Optional (if column visible) |
+| **Condition** | Text input | Optional (if column visible) |
+| **Install Rate** | Number input | Optional (if column visible) |
+| **VAT Rate** | Number input | Optional; overrides global VAT |
+| **Discount Rate** | Number input | Optional; overrides global discount |
+| **Photo** | Toggle | Opens image picker; shows thumbnail |
+| **Custom Columns** | Dynamic | User‑defined columns | <br> **Column flexibility:** <br> * Minimum: Description, Quantity, Unit Price. <br> * Additional columns may be added via Column Manager. <br> * On mobile, all columns stack vertically — no horizontal scrolling. <br> ### 6.2 Item Actions (Per Row)
 | Action | Behavior |
 | :--- | :--- |
-| **Add item** | Create new empty item; append to standalone list |
-| **Add item to group** | Create new empty item; append to specified group (via group footer) |
-| **Duplicate item** | Copy item data; append copy with new ID |
-| **Delete item** | Remove item; confirm first; × button on each row |
-| **Move up** | Swap with previous sibling item in same group/standalone |
-| **Move down** | Swap with next sibling item in same group/standalone |
-| **Insert below** | Create new empty item; insert immediately after current item within same container |
-| **Add photo** | Toggle photo state; open image picker if adding |
-| **Remove photo** | Clear photo data if present | <br> ### 5.5 Group Lifecycle
-| Action | Behavior |
-| :--- | :--- |
-| **Add group** | Create new empty group with default name |
-| **Delete group** | Remove group; move all items to standalone |
-| **Rename group** | Edit group name inline |
-| **Add item to group** | Button in group footer — creates new item inside group | <br> ### 5.6 Group Behavior Rules
-| Rule | Description |
-| :--- | :--- |
-| **Insert below within group** | Creates new row inside the same group, not outside |
-| **Add item button location** | Group footer (bottom of group), not top |
-| **Group subtotal prominence** | Must be visually prominent — shows sum of all item totals in the group |
-| **Item movement within group** | Move up/down stays within the same group | <br> ### 5.7 Row Actions <br> Each line item row must have:
-| Action | Visual | Behavior |
+| **Insert below** | Creates new empty item immediately after this row |
+| **Move up** | Swaps with previous item in same container |
+| **Move down** | Swaps with next item in same container |
+| **Duplicate** | Copies item and inserts copy after it |
+| **Delete (×)** | Removes item; requires confirmation | <br> > Drag‑and‑drop may be used as an alternative for reordering. <br> > <br> ### 6.3 Group Actions
+| Action | Location | Behavior |
 | :--- | :--- | :--- |
-| **Insert below** | Button | Insert new item after current row (same container) |
-| **Move up** | Up arrow | Swap with previous item in same container |
-| **Move down** | Down arrow | Swap with next item in same container |
-| **Duplicate** | Duplicate icon | Copy item; append to same container |
-| **Delete** | × button | Remove item; confirm first | <br> ### 5.8 Row Subtotal Prominence
-| Element | Prominence Requirement |
-| :--- | :--- |
-| **Individual item total** | Must be visually prominent — shows quantity × unitPrice for that row |
-| **Group subtotal** | Must be visually prominent — shows sum of all item totals in the group | <br> Both the individual item total and the group subtotal must stand out clearly. The design may use size, weight, color, or spacing to achieve this, but both are considered important numeric values. <br> ### 5.9 Line Item Collapsible Rule
-| Rule | Behavior |
-| :--- | :--- |
-| **Line items are NOT collapsible** | Items remain fully visible at all times |
-| **No collapse capability** | Do not allow collapsing/hiding of line items |
-| **Sub‑description** | Can be expanded/collapsed (this is a separate field, not the item itself) | <br> ## 6. Commercial Settings <br> ### 6.1 Payment Terms
-| Field | Type | Behavior |
-| :--- | :--- | :--- |
-| **Payment terms** | Select dropdown | Options: Due on receipt, Net 15, Net 30, Net 60, Custom |
-| **Custom payment terms** | Text input | Visible when "Custom" selected | <br> ### 6.2 Discount
-| Field | Type | Behavior |
-| :--- | :--- | :--- |
-| **Default state** | Closed (collapsed) | User expands to configure |
-| **Value** | Number input | Min 0; step 0.01 |
-| **Type** | Segmented control | Flat |
-| **Timing** | Segmented control | Before Tax |
-| **Calculation** | Applied based on timing selection |  |
-| **Visibility** | Hidden if value is 0 |  | <br> **Calculation Formulas:** <br> * **Before Tax:** \text{(subtotal - discount)} \times (1 + \text{vatRate}) <br> * **After Tax:** (\text{subtotal} \times (1 + \text{vatRate})) - \text{discount} <br> ### 6.3 VAT
-| Behavior | Description |
-| :--- | :--- |
-| **Default state** | Open (expanded) |
-| **Rate** | Number input; min 0; step 0.01 |
-| **Calculation** | Applied based on discount timing selection |
-| **Visibility** | Hidden if rate is 0 | <br> ### 6.4 WHT (Withholding Tax)
-| Field | Type | Behavior |
-| :--- | :--- | :--- |
-| **Default state** | Closed (collapsed) |  |
-| **Rate** | Number input | Min 0; step 0.01 |
-| **Unit** | Segmented control | Percentage |
-| **Calculation** | Applied after VAT |  |
-| **Visibility** | Hidden if rate is 0 |  | <br> ### 6.5 Additional Charges
-| Field | Type | Behavior |
-| :--- | :--- | :--- |
-| **Default state** | Closed (collapsed) |  |
-| **Add charge** | + button | Creates new charge entry (unlimited) |
-| **Label** | Text input | Required if charge is added |
-| **Value** | Number input | Min 0; step 0.01 |
-| **Taxable** | Toggle/checkbox | Default: OFF (non‑taxable) |
-| **Tax status display** | Footer below value | Shows "Taxable" or "Non‑taxable" badge |
-| **Removal** | Each charge has remove button |  |
-| **Display** | When filled, charge appears in totals |  | <br> ### 6.6 Additional Fields
-| Behavior | Description |
-| :--- | :--- |
-| **Nature** | Same as customHeaderFields — different position only |
-| **Default state** | Closed (collapsed) |
-| **Add** | Click to create new field pair |
-| **Fields** | Label + Value text inputs |
-| **Remove** | Each field pair has remove button |
-| **Multiple** | Unlimited fields; add/remove | <br> ## 7. Payment Details <br> ### 7.1 Bank Account Selection
-| Behavior | Description |
-| :--- | :--- |
-| **Account list** | Pre‑defined list of bank accounts |
-| **Selection** | Single select; highlight selected |
-| **Add new** | Option to connect/add new account |
-| **Default** | First account selected | <br> ### 7.2 Payment Visibility Switch
-| Behavior | Description |
-| :--- | :--- |
-| **Default state** | On (visible) |
-| **Toggle** | Switch to show/hide payment details on invoice output |
-| **Impact** | Affects PDF/print output only; data retained | <br> ## 8. Additional Information <br> ### 8.1 Notes
-| Behavior | Description |
-| :--- | :--- |
-| **Type** | Rich text editor (not plain textarea) |
-| **Default** | Empty |
-| **Auto‑height** | Expands with content | <br> ### 8.2 Terms & Conditions
-| Behavior | Description |
-| :--- | :--- |
-| **Type** | Rich text editor (not plain textarea) |
-| **Default** | Empty |
-| **Auto‑height** | Expands with content | <br> ### 8.3 Signatory
-| Field | Behavior |
-| :--- | :--- |
-| **Name** | Text input |
-| **Title** | Text input | <br> ### 8.4 Signature
-| Behavior | Description |
-| :--- | :--- |
-| **Interaction** | Tap to open signature picker |
-| **Options** | Sign now (draw), Upload (image), Saved (pre‑existing) |
-| **Preview** | Show signature thumbnail or placeholder |
-| **Clear** | Remove signature | <br> ### 8.5 Reference Links
-| Behavior | Description |
-| :--- | :--- |
-| **Add** | Create new link field |
-| **URL** | Text input (URL format) |
-| **Remove** | Delete link |
-| **Multiple** | Array of links; add/remove | <br> ## 9. Action Menu (Kebab) <br> ### 9.1 Menu Items
-| Item | Behavior |
-| :--- | :--- |
-| **Scroll to notes** | Smooth scroll to the Additional Information section |
-| **Import** | Open import dialog/sheet |
-| **Save** | Save current invoice state |
-| **Table settings** | Open column visibility/ordering settings |
-| **Clear all** | Clear all line items; require confirmation |
-
-## 10. Totals Calculation
-### 10.1 Calculation Order
-```
-1. Subtotal = Σ (quantity × unitPrice) for all items
-2. Discount Amount
-   - If discount.type = 'percentage': subtotal × (discount.value / 100)
-   - If discount.type = 'flat': discount.value
-3. Taxable Charges = Σ (charge.value) for charges where taxable = true
-4. Non‑Taxable Charges = Σ (charge.value) for charges where taxable = false
-5. VAT Calculation based on discount timing:
-   If discount.timing = 'beforeTax':
-     - After Discount = subtotal - discountAmount
-     - VAT Amount = (afterDiscount + taxableCharges) × (vat.rate / 100)
-     - After VAT = afterDiscount + vatAmount + taxableCharges
-   If discount.timing = 'afterTax':
-     - VAT Amount = subtotal × (vat.rate / 100)
-     - After VAT = subtotal + vatAmount
-     - After Discount = afterVAT - discountAmount + taxableCharges
-6. WHT Amount
-   - If wht.unit = 'percentage': (subtotal - discountAmount) × (wht.rate / 100)
-   - If wht.unit = 'flat': wht.rate
-7. Grand Total = (After VAT - WHT Amount) + Non‑Taxable Charges
-8. Amount in Words = text representation of Grand Total (e.g., "Six thousand four hundred eighty dollars")
-```
-### 10.2 Summary Order (Visual Display)
-The totals summary must display in this exact order:
-
+| **Add item** | Group footer | Appends new empty item to group |
+| **Rename** | Group header | Inline text editing |
+| **Delete** | Group header | Removes group; moves items to standalone | <br> ### 6.4 Subtotals — Prominence <br> * Individual item total (quantity × unitPrice) must be visually prominent. <br> * Group subtotal (sum of all item totals in the group) must be visually prominent. <br> ### 6.5 No Collapsing — Strict Rule <br> * Line items are never collapsible — they are always visible. <br> * Groups are never collapsible — they are always visible. <br> * Sub‑description (optional field) may be expanded/collapsed, but the item itself remains visible. <br> * This rule does NOT apply to Commercial Settings (Section 7) or Additional Information (Section 9). <br> ## 7. Commercial Settings <br> > **Collapsible:** Yes, all sections in Commercial Settings may be collapsible. <br> > <br> ### 7.1 Payment Terms <br> * Dropdown: Due on receipt, Net 7, Net 14, Net 30, Net 60, Custom. <br> * When Custom is selected, a text input appears. <br> ### 7.2 Discount <br> * **Fields:** <br> * Value (number input) <br> * Type: Percentage / Flat (segmented) <br> * Timing: Before Tax / After Tax (segmented) <br> ### 7.3 VAT <br> * Rate (%) (number input). <br> ### 7.4 WHT <br> * Rate (number input) <br> * Unit: Percentage / Flat (segmented) <br> ### 7.5 Additional Charges <br> * **Add charge (+) button creates a new charge entry:** <br> * Label (text input) <br> * Value (number input) <br> * Taxable (toggle/checkbox — default: OFF) <br> * Each charge shows a status footer (Taxable or Non‑taxable). <br> * Each charge has a remove (×) button. <br> * Unlimited charges. <br> ### 7.6 Additional Fields <br> * Label + Value pairs; add/remove unlimited. <br> ## 8. Payment Details <br> ### 8.1 Bank Account Selection <br> * List of predefined bank accounts (name + masked account number). <br> * Click to select; selected account is highlighted. <br> * Option to "Add new" (opens a simple form). <br> ### 8.2 Payment Visibility Toggle <br> * Switch labeled "Show payment details on document". <br> * Default: ON. <br> ## 9. Additional Information <br> > **Collapsible:** Yes, Notes and Terms sections may be collapsible. <br> > <br> ### 9.1 Notes <br> * Rich text editor (HTML support) or plain textarea. <br> * Auto‑height. <br> ### 9.2 Terms & Conditions <br> * Same as Notes: rich text or plain text. <br> ### 9.3 Signatory <br> * Signatory picker (from saved list) — optional. <br> * Fallback: text inputs for Name and Title. <br> ### 9.4 Signature <br> * **Clicking the signature area opens a picker with:** <br> * **Sign now:** drawing canvas. <br> * **Upload:** file picker. <br> * **Saved:** pre‑saved signature. <br> * Shows thumbnail once set. <br> ### 9.5 Reference Links <br> * Add reference link button creates a new link row with Label (optional) and URL inputs. <br> * Unlimited links; each has a remove button. <br> ## 10. Totals <br> ### 10.1 Calculation Order <br> 1.  2. \text{Discount Amount} — based on type and value. <br> 3.  4.  5. \text{VAT} — applied based on discount timing: <br> * **Before Tax:** (\text{subtotal} - \text{discount}) \times \text{vatRate} <br> * **After Tax:** \text{subtotal} \times \text{vatRate} <br> 6. \text{WHT} — applied after VAT: <br> * **Percentage:** (\text{subtotal} - \text{discount}) \times \text{whtRate} <br> * **Flat:** \text{whtRate} <br> 7.  8.  9. \text{Amount in Words} — text representation of grand total. <br> ### 10.2 Display Order
 | Order | Row | Visible When |
 | :--- | :--- | :--- |
 | **1** | Subtotal | Always |
@@ -357,120 +203,64 @@ The totals summary must display in this exact order:
 | **5** | Discount (after tax) | Discount value > 0 AND timing = "afterTax" |
 | **6** | Charges (non‑taxed) | Any charge where taxable = false |
 | **7** | WHT | WHT rate > 0 |
-| **8** | Grand Total | Always |
-| **9** | Amount in Words | Always (displayed alongside Grand Total) | <br> > **Design note:** Amount in words should be displayed adjacent to or near the Grand Total, but its exact placement is left to the design. <br> > <br> ## 11. Save Behavior <br> ### 11.1 Floating Save Button
-| Behavior | Description |
-| :--- | :--- |
-| **Position** | Fixed, bottom‑right corner |
-| **Style** | Icon‑only (floppy disk or similar) |
-| **Visibility** | Always visible |
-| **Interaction** | Tap to save current state |
-| **Feedback** | Toast confirmation or loading state |
-| **Importance** | Non‑negotiable — must exist regardless of design | <br> ### 11.2 Bottom Save & Cancel
-| Element | Behavior |
-| :--- | :--- |
-| **Save button** | Save current state; show validation errors |
-| **Cancel button** | Confirm discard changes; reset to last saved state | <br> ### 11.3 Validation
-| Check | Behavior |
-| :--- | :--- |
-| **Title present** | Optional — no validation |
-| **Client selected** | Required; warn if empty |
-| **At least one line item** | Required; warn if empty |
-| **All items have description** | Warn if empty | <br> ### 11.4 Save Feedback
-| State | Behavior |
-| :--- | :--- |
-| **Success** | Show confirmation toast; update status |
-| **Error** | Show error toast; scroll to first error | <br> ## 12. Photo Picker <br> ### 12.1 Item Photo
-| Behavior | Description |
-| :--- | :--- |
-| **Toggle** | Show/hide photo attachment status |
-| **Add** | Open native/custom image picker |
-| **Remove** | Clear photo data | <br> ### 12.2 Signature Photo
-| Behavior | Description |
-| :--- | :--- |
-| **Sign now** | Open signature capture (draw) |
-| **Upload** | Open native/custom image picker |
-| **Saved** | Select pre‑existing saved signature |
-| **Preview** | Show thumbnail of signature | <br> ## 13. Keyboard Interactions <br> ### 13.1 Tab Order <br> No fixed tab order is prescribed. Each design may define its own logical flow. <br> ### 13.2 Enter Behavior
-| Element | Behavior |
-| :--- | :--- |
-| **Item description** | Insert newline (textarea) |
-| **Other inputs** | Move to next field (implementation‑dependent) | <br> ### 13.3 Escape Behavior
-| Element | Behavior |
-| :--- | :--- |
-| **Action menu** | Close dropdown |
-| **Import sheet** | Close sheet |
-| **Table settings** | Close sheet | <br> ## 14. Touch Interactions
-| Interaction | Element | Behavior |
+| **8** | Install Rate Total | Any item with installRate > 0 |
+| **9** | Grand Total | Always |
+| **10** | Amount in Words | Always (displayed near Grand Total) | <br> ## 11. Column Manager <br> ### 11.1 Purpose <br> * Allows users to show/hide built‑in columns and add/remove custom columns. <br> * Accessible via toolbar or actions menu. <br> ### 11.2 Built‑in Columns
+| Column | Toggleable | Default |
 | :--- | :--- | :--- |
-| **Tap** | Button | Trigger action |
-| **Tap** | Input | Focus; open keyboard |
-| **Tap** | Date picker | Open date selection |
-| **Tap** | Bank account | Select account |
-| **Tap** | Signature picker | Open signature options |
-| **Tap** | Photo button | Toggle photo state |
-| **Tap** | Kebab menu | Open dropdown |
-| **Swipe** | Sheet | Dismiss | <br> ## 15. Mobile‑First Rules <br> ### 15.1 Vertical Stacking
-| Rule | Description |
+| **Number** | No | Visible |
+| **Description** | No | Visible |
+| **Sub‑description** | Yes | Hidden |
+| **Quantity** | No | Visible |
+| **Unit** | Yes | Hidden |
+| **Unit Price** | No | Visible |
+| **Total** | No | Visible |
+| **Make** | Yes | Hidden |
+| **Part Number** | Yes | Hidden |
+| **Condition** | Yes | Hidden |
+| **Install Rate** | Yes | Hidden |
+| **VAT Rate** | Yes | Hidden |
+| **Discount Rate** | Yes | Hidden |
+| **Photo** | Yes | Hidden | <br> ### 11.3 Custom Columns <br> * **User can add a custom column with:** <br> * Label (text) <br> * Value type (text, number, dropdown) <br> * Default value (optional) <br> * Custom columns appear as additional fields in each item row. <br> * Custom columns can be removed. <br> ## 12. Actions & Controls <br> ### 12.1 Action Menu (Kebab — ⋯)
+| Item | Behavior |
 | :--- | :--- |
-| **Columns drop vertically** | On mobile, fields stack vertically within each row |
-| **No horizontal scroll** | All content must fit within viewport width |
-| **Full‑width fields** | Each field takes full width on mobile | <br> ### 15.2 Responsive Behaviors
-| Device | Behavior |
+| **Scroll to notes** | Smooth scroll to Additional Info section |
+| **Import** | Opens import dialog/sheet (supports JSON) |
+| **Table settings** | Opens Column Manager |
+| **Clear all** | Clears all line items; requires confirmation |
+| **Add group** | Creates a new group at the end of groups list | <br> ### 12.2 Toolbar (above line items)
+| Button | Behavior |
 | :--- | :--- |
-| **Mobile (default)** | Single column; full‑width controls; bottom sheets |
-| **Tablet** | Two‑column grid for some sections; wider cards |
-| **Desktop** | Two‑column layout; hover states; more compact density | <br> ## 16. Accessibility Requirements
-| Requirement | Implementation |
+| **Import** | Same as menu item |
+| **Table settings** | Same as menu item |
+| **Clear all** | Same as menu item | <br> ### 12.3 Add Controls (below line items)
+| Button | Behavior |
 | :--- | :--- |
-| **Labels** | Every field has visible label |
-| **Focus** | Logical tab order |
-| **Touch targets** | Minimum 44×44px |
-| **Focus trap** | In dialogs and sheets |
-| **Close** | Escape key closes dialogs |
-| **Screen reader** | Announced on focus |
-| **Disabled** | aria-disabled when applicable |
-| **Loading** | aria-busy during save | <br> ## 17. Event Handlers <br> ### 17.1 Header Events
-| Event | Payload | Behavior |
-| :--- | :--- | :--- |
-| onHeaderUpdate | Partial<InvoiceHeader> | Update header fields |
-| onAddCustomField | field: CustomField | Add custom field to header |
-| onRemoveCustomField | fieldId: string | Remove custom field | <br> ### 17.2 Line Items Events
-| Event | Payload | Behavior |
-| :--- | :--- | :--- |
-| onAddItem | groupId? | Add item to group or standalone |
-| onAddGroup | name | Create new group |
-| onUpdateItem | itemId, updates | Update item fields |
-| onDuplicateItem | itemId | Duplicate item |
-| onDeleteItem | itemId | Delete item (× button) |
-| onDeleteGroup | groupId | Delete group; move items to standalone |
-| onMoveItem | itemId, direction | Move item up/down |
-| onInsertBelow | itemId | Insert new item below current (within same container) |
-| onAddPhoto | itemId, photoData | Add photo to item |
-| onRemovePhoto | itemId | Remove photo from item | <br> ### 17.3 Commercial Events
-| Event | Payload | Behavior |
-| :--- | :--- | :--- |
-| onUpdateCommercial | Partial<CommercialSettings> | Update commercial settings |
-| onAddCharge | charge: AdditionalCharge | Add new additional charge |
-| onUpdateCharge | chargeId, updates | Update charge |
-| onRemoveCharge | chargeId | Remove charge |
-| onAddField | field: AdditionalField | Add additional field |
-| onUpdateField | fieldId, updates | Update field |
-| onRemoveField | fieldId | Remove field | <br> ### 17.4 Payment Events
-| Event | Payload | Behavior |
-| :--- | :--- | :--- |
-| onSelectBank | bankAccountId | Select bank account |
-| onTogglePaymentVisibility | boolean | Toggle payment details visibility | <br> ### 17.5 Additional Info Events
-| Event | Payload | Behavior |
-| :--- | :--- | :--- |
-| onUpdateAdditional | Partial<AdditionalInfo> | Update additional info |
-| onUpdateSignature | Signature | Update signature |
-| onAddReference | url | Add reference link |
-| onDeleteReference | linkId | Delete reference link | <br> ## 18. Data Persistence <br> ### 18.1 Auto‑save (Future)
-| Behavior | Description |
+| **Add row** | Creates new standalone item at end of standalone list |
+| **Add group** | Creates new empty group at end of groups list | <br> ## 13. Validation (Client‑Side) <br> ### 13.1 Required Fields
+| Field | Validation |
 | :--- | :--- |
-| **Trigger** | After 2 seconds of inactivity |
-| **Scope** | Full invoice state |
-| **Storage** | Local SQLite / IndexedDB |
-| **Conflict** | Last write wins | <br> ### 18
+| **Client** | Must be selected |
+| **At least one item** | At least one item with non‑empty description |
+| **Item description** | Non‑empty for each item |
+
+### 13.2 Validation Feedback
+ * **Inline:** Highlight invalid fields (red border, warning icon).
+ * **On save attempt:** Toast or alert with error summary; scroll to first invalid field.
+## 14. Import (JSON)
+ * Opens a sheet/dialog with a text area for pasting JSON.
+ * Validates and imports items, groups, and header fields.
+ * Replaces current line items on successful import.
+## 15. Responsive Behavior
+ * Mobile‑first – single column, full‑width fields.
+ * Tablet/Desktop – multi‑column layout where appropriate.
+ * No horizontal scrolling – all content fits within viewport.
+ * On mobile, item fields stack vertically.
+ * Touch targets: minimum 44×44px.
+## 16. Implementation Notes
+ * This is a static form — no persistence, no backend.
+ * All calculations and validations are client‑side.
+ * The specification is design‑agnostic — any visual style can be applied.
+ * The form is document‑type agnostic — works for invoices, quotations, purchase orders, etc.
+```
 ```
