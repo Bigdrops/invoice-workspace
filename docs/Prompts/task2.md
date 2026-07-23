@@ -1,4 +1,4 @@
-:
+previous plan task5.md in this directory:
 
 ```
 TASK: Fix the Gallery / workspace-picker screen (currently running an
