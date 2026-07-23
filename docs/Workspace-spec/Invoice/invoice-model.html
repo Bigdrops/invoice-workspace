@@ -1,2827 +1,1413 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>Invoice · Ease Health</title>
-
-    <!-- Google Fonts: Cormorant Garamond (Faire Octave substitute) + Inter (Suisse Intl substitute) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-
-    <style>
-        /* ══════════════════════════════════════════════════════════════
-           EASE HEALTH — Design Tokens
-           ══════════════════════════════════════════════════════════════ */
-        :root {
-            --color-forest-ink: #0f3e17;
-            --color-sage-mist: #b1dbb8;
-            --color-keylime-wash: #e1f4df;
-            --color-mint-veil: #cfe7d3;
-            --color-slate-hush: #b6ced5;
-            --color-cream-paper: #fffefc;
-            --color-charcoal: #222222;
-            --color-border-mist: #efeeeb;
-            --color-forest-shadow: #0c2f10;
-
-            --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-            --radius-cards: 14px;
-            --radius-buttons: 14px;
-            --radius-pills: 999px;
-
-            --shadow-none: none;
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           RESET & BASE
-           ══════════════════════════════════════════════════════════════ */
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: var(--font-sans);
-            background: var(--color-cream-paper);
-            color: var(--color-charcoal);
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            padding: 16px;
-            min-height: 100vh;
-            font-weight: 400;
-        }
-
-        ::selection {
-            background: var(--color-sage-mist);
-            color: var(--color-forest-ink);
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           TYPOGRAPHY
-           ══════════════════════════════════════════════════════════════ */
-        .micro-label {
-            font-family: var(--font-sans);
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--color-forest-ink);
-            display: block;
-            margin-bottom: 6px;
-        }
-
-        .display-heading {
-            font-family: var(--font-serif);
-            font-size: 56px;
-            font-weight: 300;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            color: var(--color-forest-ink);
-        }
-
-        .heading-sm {
-            font-family: var(--font-serif);
-            font-size: 28px;
-            font-weight: 300;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            color: var(--color-forest-ink);
-        }
-
-        .body-text {
-            font-family: var(--font-sans);
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--color-charcoal);
-            line-height: 1.5;
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           CONTAINER & CARDS
-           ══════════════════════════════════════════════════════════════ */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0;
-            width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            body {
-                padding: 32px;
-            }
-        }
-
-        .card {
-            background: var(--color-cream-paper);
-            border-radius: var(--radius-cards);
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow-none);
-        }
-
-        .card.keylime {
-            background: var(--color-keylime-wash);
-        }
-
-        .card.sage {
-            background: var(--color-sage-mist);
-        }
-
-        .card.mint {
-            background: var(--color-mint-veil);
-        }
-
-        .card.slate {
-            background: var(--color-slate-hush);
-        }
-
-        @media (min-width: 768px) {
-            .card {
-                padding: 28px;
-                margin-bottom: 20px;
-            }
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .card-header .title {
-            font-family: var(--font-serif);
-            font-size: 32px;
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            color: var(--color-forest-ink);
-        }
-
-        .card-header .badge {
-            font-family: var(--font-sans);
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--color-forest-ink);
-            background: var(--color-cream-paper);
-            padding: 4px 16px;
-            border-radius: var(--radius-pills);
-            border: 1px solid var(--color-border-mist);
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           HEADER — Mobile First (1 column)
-           ══════════════════════════════════════════════════════════════ */
-        .header-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        @media (min-width: 640px) {
-            .header-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .header-grid .full-width {
-                grid-column: 1 / -1;
-            }
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .field label {
-            font-family: var(--font-sans);
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--color-forest-ink);
-        }
-
-        .field input,
-        .field select,
-        .field textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-buttons);
-            font-family: var(--font-sans);
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--color-charcoal);
-            background: var(--color-cream-paper);
-            outline: none;
-            transition: border-color 0.2s ease;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .field input:focus,
-        .field select:focus,
-        .field textarea:focus {
-            border-color: var(--color-forest-ink);
-        }
-
-        .field select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23222222' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            padding-right: 36px;
-        }
-
-        .field textarea {
-            resize: vertical;
-            min-height: 48px;
-        }
-
-        .client-row {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .client-row select {
-            flex: 1;
-        }
-        .client-row .btn-add-client {
-            flex-shrink: 0;
-            padding: 12px 18px;
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-pills);
-            background: var(--color-cream-paper);
-            color: var(--color-forest-ink);
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            touch-action: manipulation;
-            min-height: 44px;
-            font-family: var(--font-sans);
-        }
-
-        .client-row .btn-add-client:hover {
-            background: var(--color-keylime-wash);
-            border-color: var(--color-forest-ink);
-        }
-
-        .btn-ghost-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 0;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--color-border-mist);
-            font-family: var(--font-sans);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--color-forest-ink);
-            cursor: pointer;
-            transition: border-color 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .btn-ghost-link:hover {
-            border-bottom-color: var(--color-forest-ink);
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           TOOLBAR
-           ══════════════════════════════════════════════════════════════ */
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .toolbar-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 18px;
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-pills);
-            background: var(--color-cream-paper);
-            font-family: var(--font-sans);
-            font-size: 13px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--color-charcoal);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-height: 44px;
-        }
-
-        .toolbar-btn:hover {
-            background: var(--color-keylime-wash);
-            border-color: var(--color-forest-ink);
-            color: var(--color-forest-ink);
-        }
-
-        .toolbar-btn.danger:hover {
-            background: #fee2e2;
-            border-color: #b91c1c;
-            color: #b91c1c;
-        }
-
-        .toolbar-btn svg {
-            width: 14px;
-            height: 14px;
-            stroke: currentColor;
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .row-counter {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--color-forest-ink);
-            margin-left: auto;
-            padding: 4px 14px;
-            background: var(--color-keylime-wash);
-            border-radius: var(--radius-pills);
-            font-family: var(--font-sans);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           LINE ITEMS — Unified List (No Segregation)
-           ══════════════════════════════════════════════════════════════ */
-        .item-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        /* ── Group Container ── */
-        .group-container {
-            background: var(--color-mint-veil);
-            border-radius: var(--radius-cards);
-            overflow: hidden;
-            transition: all 0.2s ease;
-            border: 1px solid var(--color-border-mist);
-        }
-
-        .group-container .group-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 18px;
-            background: var(--color-keylime-wash);
-            border-bottom: 1px solid var(--color-border-mist);
-            flex-wrap: wrap;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .group-container .group-header .group-toggle {
-            font-size: 16px;
-            color: var(--color-forest-ink);
-            transition: transform 0.2s ease;
-            line-height: 1;
-        }
-
-        .group-container .group-header .group-toggle.collapsed {
-            transform: rotate(-90deg);
-        }
-
-        .group-container .group-header .group-name {
-            font-family: var(--font-serif);
-            font-size: 20px;
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            color: var(--color-forest-ink);
-            flex: 1;
-        }
-
-        .group-container .group-header .group-meta {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: var(--font-sans);
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--color-forest-ink);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .group-container .group-header .group-meta .count {
-            background: var(--color-cream-paper);
-            padding: 2px 12px;
-            border-radius: var(--radius-pills);
-            border: 1px solid var(--color-border-mist);
-        }
-
-        .group-container .group-header .group-meta .subtotal {
-            font-weight: 600;
-        }
-
-        .group-container .group-header .group-actions {
-            display: flex;
-            gap: 4px;
-        }
-
-        .group-container .group-header .group-actions .btn-icon {
-            background: var(--color-cream-paper);
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-pills);
-            color: var(--color-forest-ink);
-            cursor: pointer;
-            padding: 4px 12px;
-            font-size: 14px;
-            transition: all 0.15s ease;
-            touch-action: manipulation;
-            min-height: 32px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-sans);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .group-container .group-header .group-actions .btn-icon:hover {
-            background: var(--color-sage-mist);
-            border-color: var(--color-forest-ink);
-        }
-
-        .group-container .group-items {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .group-container .group-items.collapsed {
-            display: none;
-        }
-
-        .group-container .group-footer {
-            padding: 10px 18px 14px 18px;
-            background: var(--color-keylime-wash);
-            border-top: 1px solid var(--color-border-mist);
-        }
-
-        .group-container .group-footer .btn-add-item-group {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 18px;
-            border: 1px dashed var(--color-forest-ink);
-            border-radius: var(--radius-pills);
-            background: transparent;
-            font-family: var(--font-sans);
-            font-size: 13px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--color-forest-ink);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .group-container .group-footer .btn-add-item-group:hover {
-            background: var(--color-cream-paper);
-            border-style: solid;
-        }
-
-        .group-container .group-footer .btn-add-item-group svg {
-            width: 14px;
-            height: 14px;
-            stroke: currentColor;
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* ── Item Row ── */
-        .item-row {
-            background: var(--color-cream-paper);
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-cards);
-            padding: 14px;
-            transition: border-color 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .item-row:hover {
-            border-color: var(--color-sage-mist);
-        }
-
-        .item-row .row-main {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .item-row .row-number {
-            font-family: var(--font-serif);
-            font-size: 20px;
-            font-weight: 300;
-            letter-spacing: -0.02em;
-            color: var(--color-sage-mist);
-            min-width: 28px;
-            padding-top: 2px;
-            flex-shrink: 0;
-        }
-
-        .item-row .row-fields {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 0;
-        }
-
-        .item-row .row-fields .item-desc {
-            width: 100%;
-            border: none;
-            background: transparent;
-            font-family: var(--font-serif);
-            font-size: 18px;
-            font-weight: 300;
-            color: var(--color-forest-ink);
-            outline: none;
-            resize: none;
-            overflow: hidden;
-            line-height: 1.3;
-            letter-spacing: -0.02em;
-            min-height: 28px;
-            padding: 2px 0;
-        }
-
-        .item-row .row-fields .item-desc::placeholder {
-            color: var(--color-sage-mist);
-        }
-
-        .item-row .row-fields .row-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            align-items: end;
-            padding-top: 4px;
-            border-top: 1px solid var(--color-border-mist);
-        }
-
-        .item-row .row-fields .row-controls .control-total {
-            grid-column: 1 / -1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 8px;
-            border-top: 1px solid var(--color-border-mist);
-        }
-
-        @media (min-width: 480px) {
-            .item-row .row-fields .row-controls {
-                grid-template-columns: 80px 1fr auto;
-                gap: 12px;
-            }
-            .item-row .row-fields .row-controls .control-total {
-                grid-column: auto;
-                border-top: none;
-                padding-top: 0;
-            }
-        }
-
-        .control-field label {
-            font-family: var(--font-sans);
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--color-forest-ink);
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .control-field input {
-            width: 100%;
-            padding: 8px 10px;
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-buttons);
-            font-family: var(--font-sans);
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--color-charcoal);
-            background: var(--color-cream-paper);
-            outline: none;
-            text-align: right;
-            transition: border-color 0.2s ease;
-        }
-
-        .control-field input:focus {
-            border-color: var(--color-forest-ink);
-        }
-
-        .control-total span {
-            font-family: var(--font-serif);
-            font-size: 18px;
-            font-weight: 300;
-            color: var(--color-forest-ink);
-        }
-
-        .control-total label {
-            font-family: var(--font-sans);
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--color-forest-ink);
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        /* ── Row Actions ── */
-        .item-row .row-actions {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            justify-content: flex-start;
-            padding-top: 8px;
-            border-top: 1px solid var(--color-border-mist);
-            flex-wrap: wrap;
-        }
-
-        .row-action-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-pills);
-            background: var(--color-cream-paper);
-            font-family: var(--font-sans);
-            font-size: 12px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--color-charcoal);
-            cursor: pointer;
-            transition: all 0.15s ease;
-            touch-action: manipulation;
-            min-height: 40px;
-            justify-content: center;
-        }
-
-        .row-action-btn:hover {
-            background: var(--color-keylime-wash);
-            border-color: var(--color-forest-ink);
-            color: var(--color-forest-ink);
-        }
-
-        .row-action-btn.icon-only {
-            padding: 6px 10px;
-        }
-
-        .row-action-btn.danger:hover {
-            background: #fee2e2;
-            border-color: #b91c1c;
-            color: #b91c1c;
-        }
-
-        .row-action-btn .label-text {
-            display: none;
-        }
-
-        .row-action-btn .label-mobile {
-            display: inline;
-        }
-
-        @media (min-width: 480px) {
-            .row-action-btn .label-text {
-                display: inline;
-            }
-            .row-action-btn .label-mobile {
-                display: none;
-            }
-        }
-
-        .row-action-btn svg {
-            width: 14px;
-            height: 14px;
-            stroke: currentColor;
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* ── Add Controls ── */
-        .add-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-
-        .add-actions button {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 20px;
-            background: var(--color-cream-paper);
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-pills);
-            font-family: var(--font-sans);
-            font-size: 13px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--color-charcoal);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-height: 44px;
-        }
-
-        .add-actions button:hover {
-            background: var(--color-keylime-wash);
-            border-color: var(--color-forest-ink);
-            color: var(--color-forest-ink);
-        }
-
-        .add-actions button svg {
-            width: 14px;
-            height: 14px;
-            stroke: currentColor;
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           COMMERCIAL — Collapsible Sections
-           ══════════════════════════════════════════════════════════════ */
-        .commercial-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        @media (min-width: 640px) {
-            .commercial-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-            }
-        }
-
-        .collapsible {
-            border-bottom: 1px solid var(--color-border-mist);
-            padding: 8px 0;
-        }
-
-        .collapsible:last-child {
-            border-bottom: none;
-        }
-
-        .collapsible-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 0;
-            cursor: pointer;
-            touch-action: manipulation;
-            min-height: 44px;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .collapsible-header .label {
-            font-family: var(--font-sans);
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--color-forest-ink);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .collapsible-header .label .hint {
-            font-weight: 400;
-            color: var(--color-charcoal);
-            font-size: 12px;
-            letter-spacing: 0;
-            text-transform: none;
-        }
-
-        .collapsible-header .chevron {
-            transition: transform 0.25s ease;
-            color: var(--color-charcoal);
-            font-size: 12px;
-        }
-
-        .collapsible-header .chevron.open {
-            transform: rotate(180deg);
-        }
-
-        .collapsible-body {
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            padding: 0 4px;
-        }
-
-        .collapsible-body.open {
-            max-height: 600px;
-            padding: 8px 4px 12px;
-        }
-
-        .collapsible-body .field-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-        }
-
-        @media (min-width: 480px) {
-            .collapsible-body .field-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 12px;
-            }
-        }
-
-        .checkbox-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 0;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--color-forest-ink);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .checkbox-row input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--color-forest-ink);
-            cursor: pointer;
-        }
-
-        .charge-status {
-            font-family: var(--font-sans);
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            padding: 2px 12px;
-            border-radius: var(--radius-pills);
-            background: var(--color-cream-paper);
-            border: 1px solid var(--color-border-mist);
-            display: inline-block;
-            margin-top: 4px;
-        }
-
-        .charge-status.taxable {
-            background: var(--color-sage-mist);
-            border-color: var(--color-forest-ink);
-            color: var(--color-forest-ink);
-        }
-
-        .charge-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
-            gap: 8px;
-            align-items: end;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--color-border-mist);
-        }
-
-        .charge-row:last-child {
-            border-bottom: none;
-        }
-
-        .charge-row .field {
-            margin-bottom: 0;
-        }
-
-        .charge-row .remove-charge-btn {
-            padding: 8px 10px;
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-pills);
-            background: var(--color-cream-paper);
-            color: var(--color-charcoal);
-            cursor: pointer;
-            transition: all 0.15s ease;
-            touch-action: manipulation;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .charge-row .remove-charge-btn:hover {
-            border-color: #b91c1c;
-            color: #b91c1c;
-            background: #fee2e2;
-        }
-
-        .charge-row .remove-charge-btn svg {
-            width: 16px;
-            height: 16px;
-            stroke: currentColor;
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           PAYMENT DETAILS
-           ══════════════════════════════════════════════════════════════ */
-        .bank-picker {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        @media (min-width: 480px) {
-            .bank-picker {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-        }
-
-        .bank-option {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-cards);
-            background: var(--color-cream-paper);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .bank-option:hover {
-            background: var(--color-keylime-wash);
-        }
-
-        .bank-option.selected {
-            border-color: var(--color-forest-ink);
-            background: var(--color-keylime-wash);
-        }
-
-        .bank-option .bank-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-cards);
-            background: var(--color-forest-ink);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 12px;
-            color: var(--color-cream-paper);
-            flex-shrink: 0;
-        }
-
-        .bank-option .bank-name {
-            font-family: var(--font-sans);
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--color-charcoal);
-        }
-
-        .bank-option .bank-account {
-            font-family: var(--font-sans);
-            font-size: 12px;
-            color: var(--color-charcoal);
-        }
-
-        .bank-option .bank-check {
-            margin-left: auto;
-            color: var(--color-forest-ink);
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            font-weight: 700;
-        }
-
-        .bank-option.selected .bank-check {
-            opacity: 1;
-        }
-
-        .visibility-switch {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            background: var(--color-keylime-wash);
-            border-radius: var(--radius-cards);
-            border: 1px solid var(--color-border-mist);
-            margin-top: 12px;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .visibility-switch .label {
-            font-family: var(--font-sans);
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--color-forest-ink);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .visibility-switch .desc {
-            font-size: 12px;
-            color: var(--color-charcoal);
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-switch .slider {
-            position: absolute;
-            inset: 0;
-            background: var(--color-cream-paper);
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-pills);
-            transition: background 0.25s ease;
-        }
-
-        .toggle-switch .slider::before {
-            content: '';
-            position: absolute;
-            height: 16px;
-            width: 16px;
-            left: 3px;
-            bottom: 3px;
-            background: var(--color-forest-ink);
-            border-radius: 50%;
-            transition: transform 0.25s ease;
-        }
-
-        .toggle-switch input:checked+.slider {
-            background: var(--color-sage-mist);
-            border-color: var(--color-forest-ink);
-        }
-
-        .toggle-switch input:checked+.slider::before {
-            transform: translateX(20px);
-            background: var(--color-cream-paper);
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           TOTALS
-           ══════════════════════════════════════════════════════════════ */
-        .totals-section {
-            border-top: 1px solid var(--color-border-mist);
-            padding-top: 20px;
-            max-width: 420px;
-            margin-left: auto;
-        }
-
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            font-family: var(--font-sans);
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--color-charcoal);
-            border-bottom: 1px solid var(--color-border-mist);
-        }
-
-        .total-row:last-of-type {
-            border-bottom: none;
-        }
-
-        .total-row .value {
-            font-weight: 500;
-        }
-
-        .total-row.grand-total {
-            border-top: 2px solid var(--color-forest-ink);
-            border-bottom: none;
-            margin-top: 8px;
-            padding-top: 16px;
-            font-family: var(--font-serif);
-            font-size: 24px;
-            font-weight: 300;
-            color: var(--color-forest-ink);
-        }
-
-        .total-row.grand-total .value {
-            font-weight: 400;
-            font-size: 26px;
-        }
-
-        .amount-in-words {
-            font-size: 13px;
-            font-weight: 400;
-            color: var(--color-charcoal);
-            font-style: italic;
-            padding: 12px 0 4px;
-            border-top: 1px solid var(--color-border-mist);
-            margin-top: 4px;
-            font-family: var(--font-serif);
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           ADDITIONAL INFO
-           ══════════════════════════════════════════════════════════════ */
-        .additional-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        @media (min-width: 640px) {
-            .additional-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 16px;
-            }
-        }
-
-        .signature-picker {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border: 1px dashed var(--color-border-mist);
-            border-radius: var(--radius-cards);
-            background: var(--color-cream-paper);
-            min-height: 60px;
-            cursor: pointer;
-            transition: border-color 0.2s ease, background 0.2s ease;
-            flex-wrap: wrap;
-        }
-
-        .signature-picker:hover {
-            border-color: var(--color-forest-ink);
-            background: var(--color-keylime-wash);
-        }
-
-        .signature-picker.has-signature {
-            border-color: var(--color-forest-ink);
-            border-style: solid;
-            background: var(--color-keylime-wash);
-        }
-
-        .signature-picker .sig-preview {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-        }
-
-        .signature-picker .sig-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-cards);
-            background: var(--color-cream-paper);
-            border: 1px solid var(--color-border-mist);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .signature-picker .sig-placeholder {
-            color: var(--color-charcoal);
-            font-size: 13px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-        .signature-picker .sig-name {
-            font-weight: 500;
-            color: var(--color-forest-ink);
-            font-size: 14px;
-        }
-
-        .signature-picker .sig-actions {
-            display: flex;
-            gap: 8px;
-            margin-left: auto;
-            flex-wrap: wrap;
-        }
-
-        .signature-picker .sig-actions button {
-            padding: 4px 14px;
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-pills);
-            background: var(--color-cream-paper);
-            font-family: var(--font-sans);
-            font-size: 12px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--color-charcoal);
-            cursor: pointer;
-            transition: all 0.15s ease;
-            min-height: 36px;
-        }
-
-        .signature-picker .sig-actions button:hover {
-            background: var(--color-keylime-wash);
-            border-color: var(--color-forest-ink);
-            color: var(--color-forest-ink);
-        }
-
-        .signature-picker .sig-actions button.primary {
-            background: var(--color-forest-ink);
-            color: var(--color-cream-paper);
-            border-color: var(--color-forest-ink);
-        }
-
-        .signature-picker .sig-actions button.primary:hover {
-            background: var(--color-forest-shadow);
-            border-color: var(--color-forest-shadow);
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           BOTTOM ACTION BAR
-           ══════════════════════════════════════════════════════════════ */
-        .bottom-action-bar {
-            display: flex;
-            flex-direction: column-reverse;
-            gap: 8px;
-            padding: 20px 0 8px;
-            border-top: 1px solid var(--color-border-mist);
-            margin-top: 8px;
-        }
-
-        @media (min-width: 480px) {
-            .bottom-action-bar {
-                flex-direction: row;
-                justify-content: flex-end;
-                gap: 12px;
-            }
-        }
-
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: var(--color-cream-paper);
-            border: 1px solid var(--color-border-mist);
-            border-radius: var(--radius-pills);
-            font-family: var(--font-sans);
-            font-size: 14px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--color-charcoal);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-height: 48px;
-        }
-
-        .btn-secondary:hover {
-            background: var(--color-keylime-wash);
-            border-color: var(--color-forest-ink);
-            color: var(--color-forest-ink);
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 28px;
-            background: var(--color-forest-ink);
-            border: none;
-            border-radius: var(--radius-pills);
-            font-family: var(--font-sans);
-            font-size: 14px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--color-cream-paper);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-height: 48px;
-        }
-
-        .btn-primary:hover {
-            background: var(--color-forest-shadow);
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           FLOATING SAVE
-           ══════════════════════════════════════════════════════════════ */
-        .floating-save {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--color-forest-ink);
-            color: var(--color-cream-paper);
-            border: none;
-            border-radius: var(--radius-pills);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            z-index: 50;
-            box-shadow: var(--shadow-none);
-        }
-
-        .floating-save:hover {
-            background: var(--color-forest-shadow);
-            transform: scale(1.05);
-        }
-
-        .floating-save svg {
-            width: 24px;
-            height: 24px;
-            stroke: currentColor;
-            stroke-width: 2;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        @media (max-width: 480px) {
-            .floating-save {
-                bottom: 100px;
-                right: 16px;
-                width: 48px;
-                height: 48px;
-            }
-            .floating-save svg {
-                width: 20px;
-                height: 20px;
-            }
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           TOAST
-           ══════════════════════════════════════════════════════════════ */
-        .toast-container {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 60;
-            pointer-events: none;
-            width: calc(100% - 32px);
-            max-width: 400px;
-        }
-
-        .toast {
-            background: var(--color-forest-ink);
-            color: var(--color-cream-paper);
-            padding: 10px 20px;
-            border-radius: var(--radius-pills);
-            font-family: var(--font-sans);
-            font-size: 14px;
-            font-weight: 500;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            opacity: 0;
-            transform: translateY(16px) scale(0.95);
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            pointer-events: none;
-        }
-
-        .toast.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        /* ══════════════════════════════════════════════════════════════
-           MISC
-           ══════════════════════════════════════════════════════════════ */
-        .mt-2 {
-            margin-top: 8px;
-        }
-        .mt-4 {
-            margin-top: 16px;
-        }
-        .gap-2 {
-            gap: 8px;
-        }
-        .flex {
-            display: flex;
-        }
-        .items-center {
-            align-items: center;
-        }
-        .justify-between {
-            justify-content: space-between;
-        }
-        .w-full {
-            width: 100%;
-        }
-    
-        /* ══════════════════════════════════════════════════════════════
-           WIDTH EXPANSION OVERRIDES
-           ══════════════════════════════════════════════════════════════ */
-
-        /* Header card - reduce padding to maximize content width */
-        header.card {
-            padding: 16px 12px;
-        }
-        @media (min-width: 768px) {
-            header.card {
-                padding: 20px 16px;
-            }
-        }
-
-        /* Header grid - remove gap, let fields breathe edge-to-edge */
-        .header-grid {
-            gap: 10px;
-        }
-
-        /* Field inputs should stretch full width of their grid cell */
-        .field input,
-        .field select,
-        .field textarea {
-            width: 100%;
-            min-width: 0;
-        }
-
-        /* Client row should stretch full width */
-        .client-row {
-            width: 100%;
-        }
-        .client-row select {
-            min-width: 0;
-            flex: 1;
-        }
-
-        /* Line Items card - reduce padding */
-        #lineItemsCard.card {
-            padding: 16px 10px;
-        }
-        @media (min-width: 768px) {
-            #lineItemsCard.card {
-                padding: 20px 14px;
-            }
-        }
-
-        /* Item list should have no side gaps */
-        .item-list {
-            gap: 10px;
-            width: 100%;
-        }
-
-        /* Item rows - minimal side padding, let content breathe */
-        .item-row {
-            padding: 12px 10px;
-            width: 100%;
-        }
-        @media (min-width: 480px) {
-            .item-row {
-                padding: 14px 12px;
-            }
-        }
-
-        /* Row main should use full width */
-        .item-row .row-main {
-            gap: 8px;
-            width: 100%;
-        }
-
-        /* Row fields should stretch */
-        .item-row .row-fields {
-            min-width: 0;
-            width: 100%;
-        }
-
-        /* Row controls grid should be edge-to-edge */
-        .item-row .row-fields .row-controls {
-            padding-top: 6px;
-            width: 100%;
-        }
-
-        /* Control inputs should stretch */
-        .control-field input {
-            width: 100%;
-            min-width: 0;
-        }
-
-        /* Row actions should stretch full width */
-        .item-row .row-actions {
-            padding-top: 6px;
-            width: 100%;
-        }
-
-        /* Group container - minimal side padding */
-        .group-container {
-            width: 100%;
-        }
-
-        .group-container .group-header {
-            padding: 12px 10px;
-        }
-        @media (min-width: 480px) {
-            .group-container .group-header {
-                padding: 14px 12px;
-            }
-        }
-
-        .group-container .group-items {
-            padding: 10px 8px;
-            gap: 10px;
-        }
-
-        .group-container .group-footer {
-            padding: 10px 10px 12px 10px;
-        }
-
-        /* Toolbar should stretch */
-        .toolbar {
-            width: 100%;
-            margin-bottom: 12px;
-        }
-
-        /* Add actions should stretch */
-        .add-actions {
-            width: 100%;
-            margin-top: 12px;
-        }
-
-        /* Card header should have minimal side padding */
-        .card-header {
-            padding: 0 2px;
-            margin-bottom: 12px;
-        }
-
-        /* Row number should be tighter */
-        .item-row .row-number {
-            min-width: 22px;
-            padding-top: 4px;
-        }
-
-        /* Textarea should stretch full width */
-        .item-row .row-fields .item-desc {
-            width: 100%;
-            min-width: 0;
-        }
-
-        /* Make the container itself allow edge-to-edge on very small screens */
-        @media (max-width: 480px) {
-            body {
-                padding: 8px;
-            }
-            .container {
-                padding: 0;
-            }
-        }
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Invoice Workspace</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.0.8/index.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@5.0.8/index.css" />
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root {
+    --bg: #f5f6f4;
+    --card: linear-gradient(160deg, #ffffff 0%, #f2f4f1 100%);
+    --card-shadow: 0 1px 2px rgba(20,25,20,0.04), 0 10px 30px -12px rgba(20,25,20,0.10);
+    --border: #e4e7e2;
+    --border-strong: #d3d8d0;
+    --ink: #181a17;
+    --ink-soft: #6f766c;
+    --ink-faint: #a2a89c;
+    --green: #0e9f6e;
+    --green-deep: #0a7d57;
+    --green-soft: #e7f5ef;
+    --glow: 0 0 0 3px rgba(14,159,110,0.14), 0 0 24px -4px rgba(14,159,110,0.35);
+    --glow-strong: 0 0 0 4px rgba(14,159,110,0.16), 0 8px 28px -6px rgba(14,159,110,0.55);
+    --red: #d1453b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; color: var(--ink); min-height: 100vh; }
+  .font-display { font-family: 'Fraunces', ui-serif, Georgia, serif; }
+  .font-body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
+
+  .card {
+    border-radius: 1.5rem;
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    margin-bottom: 0.625rem;
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+  }
+  @media(min-width:640px) { .card { padding: 1.5rem; } }
+
+  .input-base {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.75rem;
+    font-size: 15px;
+    outline: none;
+    transition: box-shadow 0.15s, border-color 0.15s;
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+  }
+  .input-base:focus {
+    border-color: var(--green);
+    box-shadow: var(--glow);
+  }
+
+  .ghost-btn {
+    display: inline-flex; align-items: center; gap: 0.375rem;
+    border-radius: 9999px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.025em; transition: all 0.15s; cursor: pointer;
+    border: 1px solid var(--border); color: var(--ink-soft); background: white;
+    font-family: 'Inter', sans-serif; font-size: 13px; padding: 0.5rem 1rem;
+  }
+  .ghost-btn:hover { border-color: var(--border-strong); color: var(--ink); background: #fbfbfa; }
+  .ghost-btn.small { font-size: 11px; padding: 0.375rem 0.75rem; }
+  .ghost-btn.danger:hover { border-color: var(--red); color: var(--red); background: #fdecea; }
+
+  .primary-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    border-radius: 1rem; font-size: 14px; font-weight: 600; letter-spacing: 0.025em;
+    padding: 0.625rem 1.5rem; cursor: pointer; border: none;
+    background: linear-gradient(160deg, var(--green), var(--green-deep));
+    color: white; box-shadow: var(--glow); transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .primary-btn:hover { box-shadow: var(--glow-strong); transform: translateY(-1px); }
+
+  .row-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 9999px; width: 32px; height: 32px; cursor: pointer;
+    border: 1px solid var(--border); color: var(--ink-soft); background: white;
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .row-icon:hover { border-color: var(--border-strong); color: var(--ink); }
+  .row-icon.danger:hover { border-color: var(--red); color: var(--red); background: #fdecea; }
+
+  .item-row {
+    border-radius: 0.75rem; padding: 0.5rem; display: flex; flex-direction: column;
+    gap: 0.5rem; background: white; border: 1px solid var(--border);
+  }
+  @media(min-width:640px) { .item-row { padding: 0.625rem; } }
+
+  .select-wrap { position: relative; }
+  .select-wrap select {
+    appearance: none; padding-right: 2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236f766c' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+  }
+
+  .toast-container {
+    position: fixed; bottom: 6rem; left: 50%; transform: translateX(-50%);
+    z-index: 60; pointer-events: none; width: calc(100% - 32px); max-width: 24rem;
+  }
+  .toast-msg {
+    border-radius: 9999px; padding: 0.625rem 1.25rem; font-size: 14px; font-weight: 500;
+    text-align: center; transition: all 0.3s; background: var(--ink); color: white;
+  }
+  .toast-msg.hidden { opacity: 0; transform: translateY(16px) scale(0.95); }
+  .toast-msg.visible { opacity: 1; transform: translateY(0) scale(1); }
+
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 100; display: flex; align-items: center;
+    justify-content: center; padding: 1rem; background: rgba(24,26,23,0.4);
+    backdrop-filter: blur(4px);
+  }
+  .modal-box {
+    width: 100%; max-width: 24rem; border-radius: 1.5rem; padding: 1.25rem;
+    display: flex; flex-direction: column; gap: 1rem; background: white;
+    box-shadow: var(--card-shadow); border: 1px solid var(--border);
+  }
+
+  .floating-save {
+    position: fixed; bottom: 1.5rem; right: 1.25rem; width: 3.5rem; height: 3.5rem;
+    border-radius: 9999px; display: flex; align-items: center; justify-content: center;
+    z-index: 50; cursor: pointer; border: none;
+    background: linear-gradient(160deg, var(--green), var(--green-deep));
+    color: white; box-shadow: var(--glow-strong);
+  }
+  @media(min-width:640px) { .floating-save { bottom: 2rem; right: 2rem; } }
+
+  .toggle-track {
+    position: relative; width: 42px; height: 22px; border-radius: 9999px;
+    cursor: pointer; transition: background 0.2s; flex-shrink: 0; border: none;
+  }
+  .toggle-thumb {
+    position: absolute; width: 16px; height: 16px; border-radius: 9999px;
+    background: white; top: 3px; left: 3px; transition: transform 0.2s;
+  }
+
+  .group-box { border-radius: 1rem; overflow: hidden; border: 2.5px solid var(--ink); }
+  .group-header {
+    display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem 0.75rem;
+    flex-wrap: wrap; background: var(--ink);
+  }
+  .group-body { padding: 0.625rem; display: flex; flex-direction: column; gap: 0.625rem; background: #fbfcfa; }
+  .group-footer { padding: 0.5rem 0.75rem; display: flex; justify-content: center; background: var(--ink); }
+
+  textarea { font-family: 'Inter', sans-serif; }
+  .field-label {
+    font-size: 10.5px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink-soft); font-family: 'Inter', sans-serif;
+  }
+  .badge {
+    font-size: 11px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 0.25rem 0.75rem; border-radius: 9999px;
+    color: var(--green); background: var(--green-soft); border: 1px solid rgba(14,159,110,0.2);
+  }
+  .add-link {
+    font-size: 12px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.05em; padding-bottom: 0.25rem; width: fit-content;
+    color: var(--ink-soft); border-bottom: 1px solid var(--border); cursor: pointer;
+    background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .add-link:hover { color: var(--ink); }
+
+  .action-menu-wrap { position: relative; }
+  .action-menu-dropdown {
+    position: absolute; right: 0; top: 2.75rem; border-radius: 1rem; overflow: hidden;
+    z-index: 50; background: white; border: 1px solid var(--border);
+    box-shadow: var(--card-shadow); min-width: 190px;
+  }
+  .action-menu-item {
+    width: 100%; display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.625rem 1rem; text-align: left; font-size: 13px; font-weight: 500;
+    cursor: pointer; border: none; background: none; color: var(--ink);
+    font-family: 'Inter', sans-serif;
+  }
+  .action-menu-item:hover { background: #f5f6f4; }
+  .action-menu-item.danger { color: var(--red); }
+  .action-menu-item.danger:hover { background: #fdecea; }
+  .action-menu-divider { border: none; border-top: 1px solid var(--border); margin: 4px 8px; }
+
+  .timing-btn {
+    padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 12px; font-weight: 500;
+    border: 1px solid; cursor: pointer; transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .timing-btn.active { background: #dcfce7; color: #15803d; border-color: #86efac; }
+  .timing-btn.inactive { background: #f9fafb; color: #6b7280; border-color: #e5e7eb; }
+
+  .bank-card {
+    display: flex; align-items: center; gap: 0.75rem; border-radius: 1rem;
+    padding: 0.625rem 0.875rem; text-align: left; cursor: pointer;
+    border: 1px solid var(--border); background: white; transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .bank-card.selected { border-color: var(--green); background: var(--green-soft); box-shadow: var(--glow); }
+
+  .total-row {
+    display: flex; justify-content: space-between; padding: 0.375rem 0;
+    font-size: 14px; color: var(--ink-soft); border-bottom: 1px solid var(--border);
+  }
+  .total-row .val { font-weight: 500; color: var(--ink); }
+
+  .collapsible-header {
+    width: 100%; display: flex; align-items: center; justify-content: space-between;
+    padding: 0.625rem 0; cursor: pointer; border: none; background: none;
+    font-family: 'Inter', sans-serif; text-align: left; min-height: 40px;
+  }
+  .collapsible-header span {
+    font-size: 13px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--ink);
+  }
+  .collapsible-header .hint {
+    font-weight: 400; text-transform: none; letter-spacing: normal;
+    font-size: 12px; color: var(--ink-faint);
+  }
+  .collapsible-header .chevron { transition: transform 0.2s; color: var(--ink-soft); }
+  .collapsible-header .chevron.open { transform: rotate(180deg); }
+
+  .index-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 4px;
+    padding-top: 2px;
+  }
+  .index-num {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--ink-faint);
+    line-height: 1;
+  }
+  .arrows-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .arrows-col .row-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .subdesc-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 0;
+    font-family: 'Inter', sans-serif;
+  }
+  .subdesc-toggle:hover { color: var(--ink); }
+  .subdesc-toggle .chev { transition: transform 0.2s; }
+  .subdesc-toggle .chev.open { transform: rotate(180deg); }
+
+  .insert-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .insert-link {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--green);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+  }
 </style>
 </head>
 <body>
+<div id="app"></div>
 
-    <div class="container">
+<script>
+let uid = 100;
+const nextId = () => `id${uid++}`;
+const money = (n) => (Number.isFinite(n) ? n : 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        <!-- ════════════════════════════════════════════════════════════════
-        HEADER
-        ════════════════════════════════════════════════════════════════ -->
-        <header class="card">
-            <div class="card-header">
-                <span class="title">Invoice</span>
-                <span class="badge">Draft</span>
-            </div>
+const state = {
+  header: {
+    client: "Acme Corp",
+    title: "Website Development — Q2 2026",
+    number: "INV-2026-001",
+    po: "",
+    issueDate: "2026-07-22",
+    dueDate: "2026-08-21",
+  },
+  clients: ["Acme Corp", "Beta Inc.", "Gamma Studios", "Delta Labs"],
+  customHeaderFields: [],
+  sections: [
+    {
+      type: "group", id: "g1", name: "Design Phase",
+      items: [
+        { id: nextId(), description: "Homepage Design", qty: 1, price: 1200, subDescription: "", unit: "", make: "", _showSub: false },
+        { id: nextId(), description: "Dashboard UI", qty: 2, price: 850, subDescription: "", unit: "", make: "", _showSub: false },
+        { id: nextId(), description: "Brand Identity & Logo", qty: 1, price: 600, subDescription: "", unit: "", make: "", _showSub: false },
+      ],
+    },
+    { type: "item", id: nextId(), description: "React Frontend Build", qty: 1, price: 2500, subDescription: "", unit: "", make: "", _showSub: false },
+    { type: "item", id: nextId(), description: "Server Setup & Deployment", qty: 1, price: 400, subDescription: "", unit: "", make: "", _showSub: false },
+  ],
+  paymentTerms: "Net 30",
+  customTerms: "",
+  discount: { value: 0, type: "percentage", timing: "beforeTax" },
+  vatRate: 20,
+  wht: { rate: 0, unit: "percentage" },
+  charges: [{ id: nextId(), label: "Shipping", value: 25, taxable: true }],
+  additionalFields: [],
+  banks: [
+    { id: "b1", name: "Chase", account: "•••• 4821" },
+    { id: "b2", name: "Bank of America", account: "•••• 7392" },
+    { id: "b3", name: "Wells Fargo", account: "•••• 1546" },
+  ],
+  selectedBank: "b1",
+  showPayment: true,
+  notes: "Thank you for your business.",
+  terms: "Payment due within 30 days.",
+  signatoryName: "",
+  signatoryTitle: "",
+  signature: null,
+  refLinks: [],
+  toast: "",
+  toastTimer: null,
+  showClearAllModal: false,
+  actionMenuOpen: false,
+  collapsibles: { discount: false, vat: true, wht: false, charges: false, addFields: false, notes: true, termsCond: false },
+};
 
-            <div class="header-grid">
-                <!-- Client -->
-                <div class="field">
-                    <label>Client</label>
-                    <div class="client-row">
-                        <select>
-                            <option value="Acme Corp" selected>Acme Corp</option>
-                            <option value="Beta Inc.">Beta Inc.</option>
-                            <option value="Gamma Studios">Gamma Studios</option>
-                            <option value="Delta Labs">Delta Labs</option>
-                        </select>
-                        <button class="btn-add-client" id="addClientBtn">+ New</button>
-                    </div>
-                </div>
+function showToast(msg) {
+  state.toast = msg;
+  clearTimeout(state.toastTimer);
+  renderToast();
+  state.toastTimer = setTimeout(() => { state.toast = ""; renderToast(); }, 2000);
+}
 
-                <!-- Title -->
-                <div class="field">
-                    <label>Title</label>
-                    <input type="text" value="Website Development — Q2 2026" />
-                </div>
+function emptyItem() { return { id: nextId(), description: "", qty: 1, price: 0, subDescription: "", unit: "", make: "", _showSub: false }; }
 
-                <!-- Invoice # -->
-                <div class="field">
-                    <label>Invoice #</label>
-                    <input type="text" value="INV-2026-001" />
-                </div>
+function getFlatOrder() {
+  const order = [];
+  state.sections.forEach(s => {
+    if (s.type === "item") order.push(s.id);
+    else s.items.forEach(it => order.push(it.id));
+  });
+  return order;
+}
 
-                <!-- PO # -->
-                <div class="field">
-                    <label>PO #</label>
-                    <input type="text" placeholder="Optional" />
-                </div>
+function numberOf(id) { return getFlatOrder().indexOf(id) + 1; }
 
-                <!-- Issue Date -->
-                <div class="field">
-                    <label>Issue Date</label>
-                    <input type="date" value="2026-07-22" />
-                </div>
+function calcTotals() {
+  let subtotal = 0;
+  state.sections.forEach(s => {
+    const items = s.type === "group" ? s.items : [s];
+    items.forEach(it => (subtotal += (Number(it.qty) || 0) * (Number(it.price) || 0)));
+  });
+  const discountAmt = state.discount.value > 0
+    ? (state.discount.type === "percentage" ? subtotal * (Number(state.discount.value) / 100) : Number(state.discount.value))
+    : 0;
+  const taxedCharges = state.charges.filter(c => c.taxable).reduce((a, c) => a + (Number(c.value) || 0), 0);
+  const nonTaxedCharges = state.charges.filter(c => !c.taxable).reduce((a, c) => a + (Number(c.value) || 0), 0);
+  const taxableBase = state.discount.timing === "beforeTax" ? subtotal - discountAmt : subtotal;
+  const vatBase = taxableBase + taxedCharges;
+  const vat = vatBase * (Number(state.vatRate) / 100 || 0);
+  const whtBase = state.discount.timing === "beforeTax" ? subtotal - discountAmt : subtotal;
+  const whtAmt = state.wht.rate > 0 ? (state.wht.unit === "percentage" ? whtBase * (Number(state.wht.rate) / 100) : Number(state.wht.rate)) : 0;
+  const grandTotal = subtotal - discountAmt + vat + taxedCharges - whtAmt + nonTaxedCharges;
+  return { subtotal, discountAmt, taxedCharges, nonTaxedCharges, vat, whtAmt, grandTotal };
+}
 
-                <!-- Due Date -->
-                <div class="field">
-                    <label>Due Date</label>
-                    <input type="date" value="2026-08-21" />
-                </div>
+function numberToWords(num) {
+  if (num === 0) return "Zero";
+  const ones = ["","one","two","three","four","five","six","seven","eight","nine"];
+  const teens = ["ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+  const tens = ["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+  const scales = ["","thousand","million","billion","trillion"];
+  const conv = (n) => {
+    let s = "";
+    if (n >= 100) { s += ones[Math.floor(n/100)] + " hundred "; n %= 100; }
+    if (n >= 20) { s += tens[Math.floor(n/10)] + (n%10 ? "-" + ones[n%10] : " ") + " "; }
+    else if (n >= 10) { s += teens[n-10] + " "; }
+    else if (n > 0) { s += ones[n] + " "; }
+    return s;
+  };
+  let whole = Math.floor(Math.abs(num));
+  let decimal = Math.round((Math.abs(num) - whole) * 100);
+  let result = whole === 0 ? "zero" : "";
+  let i = 0;
+  while (whole > 0) {
+    if (whole % 1000 !== 0) result = conv(whole % 1000) + scales[i] + " " + result;
+    whole = Math.floor(whole / 1000); i++;
+  }
+  result = result.trim();
+  if (decimal > 0) result += " and " + decimal + "/100";
+  if (num < 0) result = "minus " + result;
+  return result.charAt(0).toUpperCase() + result.slice(1);
+}
 
-                <!-- Custom Header Fields -->
-                <div class="field full-width" style="margin-top:4px;">
-                    <button class="btn-ghost-link" id="addCustomHeaderBtn">
-                        + Add custom header fields
-                    </button>
-                </div>
-            </div>
+function escHtml(str) {
+  if (str == null) return "";
+  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
 
-            <div id="customHeaderContainer" style="margin-top:12px; display:none;">
-                <div class="header-grid" style="padding-top:12px; border-top:1px solid var(--color-border-mist);">
-                    <div class="field">
-                        <label>Label</label>
-                        <input type="text" placeholder="e.g. Project ID" />
-                    </div>
-                    <div class="field">
-                        <label>Value</label>
-                        <input type="text" placeholder="e.g. PRJ-001" />
-                    </div>
-                </div>
-                <button class="btn-ghost-link" style="margin-top:8px;" id="removeCustomHeaderBtn">− Remove</button>
-            </div>
-        </header>
+function updateItem(itemId, updater) {
+  state.sections = state.sections.map(s => {
+    if (s.type === "item" && s.id === itemId) return updater(s);
+    if (s.type === "group") return { ...s, items: s.items.map(it => it.id === itemId ? updater(it) : it) };
+    return s;
+  });
+}
 
-        <!-- ════════════════════════════════════════════════════════════════
-        LINE ITEMS
-        ════════════════════════════════════════════════════════════════ -->
-        <section class="card" id="lineItemsCard">
-            <div class="card-header">
-                <span class="title">Line Items</span>
-                <span class="row-counter" id="rowCounter">5 rows</span>
-            </div>
+function insertBelow(itemId) {
+  const next = [];
+  state.sections.forEach(s => {
+    if (s.type === "item") { next.push(s); if (s.id === itemId) next.push(emptyItem()); }
+    else { const items = []; s.items.forEach(it => { items.push(it); if (it.id === itemId) items.push(emptyItem()); }); next.push({...s, items}); }
+  });
+  state.sections = next;
+  showToast("Row inserted below");
+}
 
-            <!-- Toolbar -->
-            <div class="toolbar">
-                <button class="toolbar-btn" id="importBtn">
-                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    Import
-                </button>
-                <button class="toolbar-btn danger" id="clearAllBtn">
-                    <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                    Clear all
-                </button>
-            </div>
+function duplicateItem(itemId) {
+  const next = [];
+  state.sections.forEach(s => {
+    if (s.type === "item") { next.push(s); if (s.id === itemId) next.push({...s, id: nextId()}); }
+    else { const items = []; s.items.forEach(it => { items.push(it); if (it.id === itemId) items.push({...it, id: nextId()}); }); next.push({...s, items}); }
+  });
+  state.sections = next;
+  showToast("Row duplicated");
+}
 
-            <!-- Unified Item List -->
-            <div class="item-list" id="itemList">
+function deleteItem(itemId) {
+  state.sections = state.sections
+    .map(s => s.type === "group" ? {...s, items: s.items.filter(it => it.id !== itemId)} : s)
+    .filter(s => s.type === "group" || s.id !== itemId);
+  showToast("Row deleted");
+}
 
-                <!-- ── GROUP CONTAINER (Rows 1, 2, 3) ── -->
-                <div class="group-container" data-group-id="g1">
-                    <div class="group-header" data-target="groupItems-g1">
-                        <span class="group-toggle">▾</span>
-                        <span class="group-name">Design Phase</span>
-                        <div class="group-meta">
-                            <span class="count">3 items</span>
-                            <span class="subtotal">$3,500.00</span>
-                        </div>
-                        <div class="group-actions">
-                            <button class="btn-icon" id="addToGroupBtn">+</button>
-                            <button class="btn-icon danger" id="deleteGroupBtn">✕</button>
-                        </div>
-                    </div>
-                    <div class="group-items" id="groupItems-g1">
+function moveItem(itemId, dir) {
+  const next = state.sections.map(s => s.type === "group" ? {...s, items: [...s.items]} : {...s});
+  let arr = null, idx = -1;
+  for (const s of next) {
+    if (s.type === "group") { const i = s.items.findIndex(it => it.id === itemId); if (i !== -1) { arr = s.items; idx = i; } }
+  }
+  if (arr) {
+    const sw = dir === "up" ? idx - 1 : idx + 1;
+    if (sw < 0 || sw >= arr.length) return;
+    [arr[idx], arr[sw]] = [arr[sw], arr[idx]];
+    state.sections = next; return;
+  }
+  const ri = next.findIndex(s => s.type === "item" && s.id === itemId);
+  if (ri === -1) return;
+  const sw = dir === "up" ? ri - 1 : ri + 1;
+  if (sw < 0 || sw >= next.length) return;
+  [next[ri], next[sw]] = [next[sw], next[ri]];
+  state.sections = next;
+}
 
-                        <!-- ROW 1 -->
-                        <div class="item-row" data-row="1" data-group="g1">
-                            <div class="row-main">
-                                <span class="row-number">1</span>
-                                <div class="row-fields">
-                                    <textarea class="item-desc" rows="1" placeholder="Description">Homepage Design</textarea>
-                                    <div class="row-controls">
-                                        <div class="control-field">
-                                            <label>Qty</label>
-                                            <input type="number" class="item-qty" value="1" min="0" step="1" />
-                                        </div>
-                                        <div class="control-field">
-                                            <label>Price</label>
-                                            <input type="number" class="item-price" value="1200" min="0" step="0.01" />
-                                        </div>
-                                        <div class="control-total">
-                                            <label>Total</label>
-                                            <span class="item-total">$1,200.00</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-actions">
-                                <button class="row-action-btn insert-below"><span class="label-text">Insert below</span><span class="label-mobile">+ Below</span></button>
-                                <button class="row-action-btn icon-only move-up" aria-label="Move up"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
-                                <button class="row-action-btn icon-only move-down" aria-label="Move down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
-                                <button class="row-action-btn icon-only duplicate" aria-label="Duplicate"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                                <button class="row-action-btn icon-only danger delete-row" aria-label="Delete"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-                            </div>
-                        </div>
+function addStandaloneRow() { state.sections.push({type:"item", ...emptyItem()}); showToast("Row added"); }
+function addGroup() { state.sections.push({type:"group", id:nextId(), name:"New Group", items:[emptyItem()]}); showToast("Group added"); }
+function addItemToGroup(gid) { state.sections = state.sections.map(s => s.type === "group" && s.id === gid ? {...s, items:[...s.items, emptyItem()]} : s); }
+function deleteGroup(gid) {
+  if (!confirm("Delete this group? Items will be ungrouped.")) return;
+  const g = state.sections.find(s => s.type === "group" && s.id === gid);
+  const released = (g?.items || []).map(it => ({type:"item", ...it}));
+  state.sections = [...state.sections.filter(s => !(s.type === "group" && s.id === gid)), ...released];
+  showToast("Group deleted");
+}
+function clearAll() { state.sections = []; state.showClearAllModal = false; showToast("All items cleared"); render(); }
 
-                        <!-- ROW 2 -->
-                        <div class="item-row" data-row="2" data-group="g1">
-                            <div class="row-main">
-                                <span class="row-number">2</span>
-                                <div class="row-fields">
-                                    <textarea class="item-desc" rows="1" placeholder="Description">Dashboard UI</textarea>
-                                    <div class="row-controls">
-                                        <div class="control-field">
-                                            <label>Qty</label>
-                                            <input type="number" class="item-qty" value="2" min="0" step="1" />
-                                        </div>
-                                        <div class="control-field">
-                                            <label>Price</label>
-                                            <input type="number" class="item-price" value="850" min="0" step="0.01" />
-                                        </div>
-                                        <div class="control-total">
-                                            <label>Total</label>
-                                            <span class="item-total">$1,700.00</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-actions">
-                                <button class="row-action-btn insert-below"><span class="label-text">Insert below</span><span class="label-mobile">+ Below</span></button>
-                                <button class="row-action-btn icon-only move-up" aria-label="Move up"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
-                                <button class="row-action-btn icon-only move-down" aria-label="Move down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
-                                <button class="row-action-btn icon-only duplicate" aria-label="Duplicate"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                                <button class="row-action-btn icon-only danger delete-row" aria-label="Delete"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-                            </div>
-                        </div>
+function render() {
+  const totals = calcTotals();
+  const rowCount = getFlatOrder().length;
 
-                        <!-- ROW 3 -->
-                        <div class="item-row" data-row="3" data-group="g1">
-                            <div class="row-main">
-                                <span class="row-number">3</span>
-                                <div class="row-fields">
-                                    <textarea class="item-desc" rows="1" placeholder="Description">Brand Identity &amp; Logo</textarea>
-                                    <div class="row-controls">
-                                        <div class="control-field">
-                                            <label>Qty</label>
-                                            <input type="number" class="item-qty" value="1" min="0" step="1" />
-                                        </div>
-                                        <div class="control-field">
-                                            <label>Price</label>
-                                            <input type="number" class="item-price" value="600" min="0" step="0.01" />
-                                        </div>
-                                        <div class="control-total">
-                                            <label>Total</label>
-                                            <span class="item-total">$600.00</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row-actions">
-                                <button class="row-action-btn insert-below"><span class="label-text">Insert below</span><span class="label-mobile">+ Below</span></button>
-                                <button class="row-action-btn icon-only move-up" aria-label="Move up"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
-                                <button class="row-action-btn icon-only move-down" aria-label="Move down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
-                                <button class="row-action-btn icon-only duplicate" aria-label="Duplicate"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                                <button class="row-action-btn icon-only danger delete-row" aria-label="Delete"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="group-footer">
-                        <button class="btn-add-item-group" id="addItemToGroupBtn">
-                            <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-                            Add item
-                        </button>
-                    </div>
-                </div>
-
-                <!-- ── STANDALONE ROW 4 ── -->
-                <div class="item-row" data-row="4" data-group="">
-                    <div class="row-main">
-                        <span class="row-number">4</span>
-                        <div class="row-fields">
-                            <textarea class="item-desc" rows="1" placeholder="Description">React Frontend Build</textarea>
-                            <div class="row-controls">
-                                <div class="control-field">
-                                    <label>Qty</label>
-                                    <input type="number" class="item-qty" value="1" min="0" step="1" />
-                                </div>
-                                <div class="control-field">
-                                    <label>Price</label>
-                                    <input type="number" class="item-price" value="2500" min="0" step="0.01" />
-                                </div>
-                                <div class="control-total">
-                                    <label>Total</label>
-                                    <span class="item-total">$2,500.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row-actions">
-                        <button class="row-action-btn insert-below"><span class="label-text">Insert below</span><span class="label-mobile">+ Below</span></button>
-                        <button class="row-action-btn icon-only move-up" aria-label="Move up"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
-                        <button class="row-action-btn icon-only move-down" aria-label="Move down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
-                        <button class="row-action-btn icon-only duplicate" aria-label="Duplicate"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                        <button class="row-action-btn icon-only danger delete-row" aria-label="Delete"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-                    </div>
-                </div>
-
-                <!-- ── STANDALONE ROW 5 ── -->
-                <div class="item-row" data-row="5" data-group="">
-                    <div class="row-main">
-                        <span class="row-number">5</span>
-                        <div class="row-fields">
-                            <textarea class="item-desc" rows="1" placeholder="Description">Server Setup &amp; Deployment</textarea>
-                            <div class="row-controls">
-                                <div class="control-field">
-                                    <label>Qty</label>
-                                    <input type="number" class="item-qty" value="1" min="0" step="1" />
-                                </div>
-                                <div class="control-field">
-                                    <label>Price</label>
-                                    <input type="number" class="item-price" value="400" min="0" step="0.01" />
-                                </div>
-                                <div class="control-total">
-                                    <label>Total</label>
-                                    <span class="item-total">$400.00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row-actions">
-                        <button class="row-action-btn insert-below"><span class="label-text">Insert below</span><span class="label-mobile">+ Below</span></button>
-                        <button class="row-action-btn icon-only move-up" aria-label="Move up"><svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg></button>
-                        <button class="row-action-btn icon-only move-down" aria-label="Move down"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></button>
-                        <button class="row-action-btn icon-only duplicate" aria-label="Duplicate"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                        <button class="row-action-btn icon-only danger delete-row" aria-label="Delete"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Add Controls -->
-            <div class="add-actions">
-                <button id="addRowBtn">
-                    <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-                    Add row
-                </button>
-                <button id="addGroupBtn">
-                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-                    Add group
-                </button>
-            </div>
-        </section>
-
-        <!-- ════════════════════════════════════════════════════════════════
-        COMMERCIAL SETTINGS
-        ════════════════════════════════════════════════════════════════ -->
-        <section class="card keylime" id="commercialCard">
-            <div class="card-header">
-                <span class="title">Commercial Terms</span>
-            </div>
-
-            <div class="commercial-grid">
-                <div class="field">
-                    <label>Payment Terms</label>
-                    <select>
-                        <option value="Due on receipt">Due on receipt</option>
-                        <option value="Net 7">Net 7</option>
-                        <option value="Net 14">Net 14</option>
-                        <option value="Net 30" selected>Net 30</option>
-                        <option value="Net 60">Net 60</option>
-                        <option value="Custom">Custom</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label>Custom Terms</label>
-                    <input type="text" placeholder="e.g. 2/10 Net 30" />
-                </div>
-            </div>
-
-            <!-- Discount -->
-            <div class="collapsible">
-                <div class="collapsible-header" data-target="discountBody">
-                    <span class="label">Discount <span class="hint">— optional</span></span>
-                    <span class="chevron">▾</span>
-                </div>
-                <div class="collapsible-body" id="discountBody">
-                    <div class="field-row">
-                        <div class="field">
-                            <label>Value</label>
-                            <input type="number" placeholder="0" min="0" step="0.01" />
-                        </div>
-                        <div class="field">
-                            <label>Type</label>
-                            <select>
-                                <option value="percentage">Percentage</option>
-                                <option value="flat">Flat</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="field-row" style="margin-top:8px;">
-                        <div class="field">
-                            <label>Timing</label>
-                            <select>
-                                <option value="beforeTax">Before Tax</option>
-                                <option value="afterTax">After Tax</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- VAT -->
-            <div class="collapsible">
-                <div class="collapsible-header" data-target="vatBody">
-                    <span class="label">VAT <span class="hint">— optional</span></span>
-                    <span class="chevron open">▾</span>
-                </div>
-                <div class="collapsible-body open" id="vatBody">
-                    <div class="field">
-                        <label>Rate (%)</label>
-                        <input type="number" value="20" min="0" step="0.01" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- WHT -->
-            <div class="collapsible">
-                <div class="collapsible-header" data-target="whtBody">
-                    <span class="label">WHT <span class="hint">— optional</span></span>
-                    <span class="chevron">▾</span>
-                </div>
-                <div class="collapsible-body" id="whtBody">
-                    <div class="field-row">
-                        <div class="field">
-                            <label>Rate</label>
-                            <input type="number" placeholder="0" min="0" step="0.01" />
-                        </div>
-                        <div class="field">
-                            <label>Unit</label>
-                            <select>
-                                <option value="percentage">Percentage</option>
-                                <option value="flat">Flat</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Additional Charges -->
-            <div class="collapsible">
-                <div class="collapsible-header" data-target="chargesBody">
-                    <span class="label">Additional Charges <span class="hint">— optional</span></span>
-                    <span class="chevron">▾</span>
-                </div>
-                <div class="collapsible-body" id="chargesBody">
-                    <div id="chargesList">
-                        <div class="charge-row">
-                            <div class="field">
-                                <label>Label</label>
-                                <input type="text" value="Shipping" placeholder="e.g. Shipping" />
-                            </div>
-                            <div class="field">
-                                <label>Value</label>
-                                <input type="number" value="25" min="0" step="0.01" />
-                            </div>
-                            <button class="remove-charge-btn" aria-label="Remove charge">
-                                <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="checkbox-row" style="margin-top:8px;">
-                        <input type="checkbox" id="chargeTaxable" checked />
-                        <label for="chargeTaxable">Taxable</label>
-                    </div>
-                    <div class="charge-status taxable" id="chargeStatusDisplay">Taxable</div>
-                    <button class="btn-ghost-link" style="margin-top:8px;" id="addChargeBtn">
-                        + Add charge
-                    </button>
-                </div>
-            </div>
-
-            <!-- Additional Fields -->
-            <div class="collapsible" style="border-bottom:none; margin-bottom:0;">
-                <div class="collapsible-header" data-target="fieldsBody">
-                    <span class="label">Additional Fields <span class="hint">— optional</span></span>
-                    <span class="chevron">▾</span>
-                </div>
-                <div class="collapsible-body" id="fieldsBody">
-                    <div class="field-row">
-                        <div class="field">
-                            <label>Label</label>
-                            <input type="text" placeholder="e.g. Project ID" />
-                        </div>
-                        <div class="field">
-                            <label>Value</label>
-                            <input type="text" placeholder="e.g. PRJ-001" />
-                        </div>
-                    </div>
-                    <button class="btn-ghost-link" style="margin-top:8px;">+ Add field</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ════════════════════════════════════════════════════════════════
-        PAYMENT DETAILS
-        ════════════════════════════════════════════════════════════════ -->
-        <section class="card" id="paymentCard">
-            <div class="card-header">
-                <span class="title">Payment Details</span>
-            </div>
-
-            <div style="margin-bottom:4px;">
-                <label>Bank Account</label>
-                <div class="bank-picker">
-                    <div class="bank-option selected">
-                        <div class="bank-icon">🏦</div>
-                        <div>
-                            <div class="bank-name">Chase</div>
-                            <div class="bank-account">•••• 4821</div>
-                        </div>
-                        <span class="bank-check">✓</span>
-                    </div>
-                    <div class="bank-option">
-                        <div class="bank-icon">🏦</div>
-                        <div>
-                            <div class="bank-name">Bank of America</div>
-                            <div class="bank-account">•••• 7392</div>
-                        </div>
-                        <span class="bank-check">✓</span>
-                    </div>
-                    <div class="bank-option">
-                        <div class="bank-icon">🏦</div>
-                        <div>
-                            <div class="bank-name">Wells Fargo</div>
-                            <div class="bank-account">•••• 1546</div>
-                        </div>
-                        <span class="bank-check">✓</span>
-                    </div>
-                    <div class="bank-option">
-                        <div class="bank-icon">+</div>
-                        <div>
-                            <div class="bank-name">Add new</div>
-                            <div class="bank-account">Connect account</div>
-                        </div>
-                        <span class="bank-check">✓</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="visibility-switch">
-                <div>
-                    <div class="label">Show payment details on invoice</div>
-                    <div class="desc">Display bank account information to the client</div>
-                </div>
-                <label class="toggle-switch">
-                    <input type="checkbox" checked />
-                    <span class="slider"></span>
-                </label>
-            </div>
-        </section>
-
-        <!-- ════════════════════════════════════════════════════════════════
-        TOTALS
-        ════════════════════════════════════════════════════════════════ -->
-        <section class="card mint" id="totalsCard">
-            <div class="card-header">
-                <span class="title">Summary</span>
-            </div>
-            <div class="totals-section" style="max-width:100%; margin-left:0;">
-                <div class="total-row">
-                    <span>Subtotal</span>
-                    <span class="value" id="subtotalDisplay">$5,400.00</span>
-                </div>
-                <div class="total-row" style="display:none;" id="discountBeforeRow">
-                    <span>Discount (before tax)</span>
-                    <span class="value" id="discountBeforeValue">-$0.00</span>
-                </div>
-                <div class="total-row" id="taxedChargesRow">
-                    <span>Charges (taxed)</span>
-                    <span class="value" id="taxedChargesValue">$25.00</span>
-                </div>
-                <div class="total-row" id="vatRow">
-                    <span>VAT (20%)</span>
-                    <span class="value" id="vatValue">$1,085.00</span>
-                </div>
-                <div class="total-row" style="display:none;" id="discountAfterRow">
-                    <span>Discount (after tax)</span>
-                    <span class="value" id="discountAfterValue">-$0.00</span>
-                </div>
-                <div class="total-row" style="display:none;" id="nonTaxedChargesRow">
-                    <span>Charges (non-taxed)</span>
-                    <span class="value" id="nonTaxedChargesValue">$0.00</span>
-                </div>
-                <div class="total-row" style="display:none;" id="whtRow">
-                    <span>WHT</span>
-                    <span class="value" id="whtValue">-$0.00</span>
-                </div>
-                <div class="total-row grand-total">
-                    <span>Grand Total</span>
-                    <span class="value" id="grandTotalDisplay">$6,510.00</span>
-                </div>
-                <div class="amount-in-words" id="amountWords">Six thousand five hundred ten dollars</div>
-            </div>
-        </section>
-
-        <!-- ════════════════════════════════════════════════════════════════
-        ADDITIONAL INFO
-        ════════════════════════════════════════════════════════════════ -->
-        <section class="card" id="additionalCard">
-            <div class="card-header">
-                <span class="title">Additional Information</span>
-            </div>
-
-            <div class="additional-grid">
-                <div class="collapsible" style="border-bottom:1px solid var(--color-border-mist); padding:8px 0;">
-                    <div class="collapsible-header" data-target="notesBody">
-                        <span class="label">Notes</span>
-                        <span class="chevron open">▾</span>
-                    </div>
-                    <div class="collapsible-body open" id="notesBody">
-                        <textarea rows="3" style="width:100%; padding:10px 14px; border:1px solid var(--color-border-mist); border-radius:var(--radius-buttons); font-family:var(--font-sans); font-size:14px; resize:vertical; min-height:60px; background:var(--color-cream-paper); outline:none;">Thank you for your business.</textarea>
-                    </div>
-                </div>
-
-                <div class="collapsible" style="border-bottom:1px solid var(--color-border-mist); padding:8px 0;">
-                    <div class="collapsible-header" data-target="termsBody">
-                        <span class="label">Terms &amp; Conditions</span>
-                        <span class="chevron">▾</span>
-                    </div>
-                    <div class="collapsible-body" id="termsBody">
-                        <textarea rows="3" style="width:100%; padding:10px 14px; border:1px solid var(--color-border-mist); border-radius:var(--radius-buttons); font-family:var(--font-sans); font-size:14px; resize:vertical; min-height:60px; background:var(--color-cream-paper); outline:none;">Payment due within 30 days.</textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="additional-grid" style="margin-top:12px;">
-                <div class="field">
-                    <label>Signatory Name</label>
-                    <input type="text" placeholder="Full name" />
-                </div>
-                <div class="field">
-                    <label>Title</label>
-                    <input type="text" placeholder="e.g. CEO" />
-                </div>
-            </div>
-
-            <div style="margin-top:12px;">
-                <label>Signature</label>
-                <div class="signature-picker" id="signaturePicker">
-                    <div class="sig-preview">
-                        <div class="sig-icon">✍️</div>
-                        <span class="sig-placeholder">Tap to sign or upload</span>
-                    </div>
-                    <div class="sig-actions">
-                        <button class="primary" id="sigSignBtn">Sign now</button>
-                        <button id="sigUploadBtn">Upload</button>
-                        <button id="sigSavedBtn">Saved</button>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-top:12px;">
-                <button class="btn-ghost-link" style="border-bottom:1px dashed var(--color-border-mist);">
-                    + Add reference link
-                </button>
-            </div>
-        </section>
-
-        <!-- ════════════════════════════════════════════════════════════════
-        BOTTOM ACTION BAR
-        ════════════════════════════════════════════════════════════════ -->
-        <div class="bottom-action-bar">
-            <button class="btn-secondary" id="cancelBtn">Cancel</button>
-            <button class="btn-primary" id="saveBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                Save Invoice
+  let sectionsHtml = "";
+  state.sections.forEach(s => {
+    if (s.type === "group") {
+      const groupTotal = s.items.reduce((a, it) => a + (Number(it.qty)||0) * (Number(it.price)||0), 0);
+      let itemsHtml = "";
+      s.items.forEach(it => {
+        itemsHtml += renderItemRow(it, numberOf(it.id));
+      });
+      sectionsHtml += `
+        <div class="group-box">
+          <div class="group-header">
+            <input value="${escHtml(s.name)}" data-action="renameGroup" data-gid="${s.id}"
+              class="flex-1 min-w-[100px] bg-transparent outline-none text-white placeholder-white/50 font-display"
+              style="font-weight:500;font-size:16px" />
+            <span class="text-[10.5px] font-medium uppercase px-2 py-0.5 rounded-full" style="background:rgba(255,255,255,0.12);color:white">
+              ${s.items.length} items
+            </span>
+            <span class="font-body" style="font-weight:600;color:var(--green)">$${money(groupTotal)}</span>
+            <button data-action="deleteGroup" data-gid="${s.id}"
+              class="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style="background:rgba(255,255,255,0.1);color:white;border:none;cursor:pointer">
+              <i data-lucide="x" style="width:13px;height:13px"></i>
             </button>
+          </div>
+          <div class="group-body">${itemsHtml}</div>
+          <div class="group-footer">
+            <button data-action="addItemToGroup" data-gid="${s.id}"
+              class="inline-flex items-center gap-1.5 text-[12px] font-medium uppercase tracking-wide text-white/85"
+              style="background:none;border:none;cursor:pointer">
+              <i data-lucide="plus" style="width:13px;height:13px"></i> Add item to group
+            </button>
+          </div>
+        </div>`;
+    } else {
+      sectionsHtml += renderItemRow(s, numberOf(s.id));
+    }
+  });
+
+  let chargesHtml = "";
+  state.charges.forEach(c => {
+    chargesHtml += `
+      <div class="flex flex-col gap-1.5">
+        <div class="grid gap-2 items-end" style="grid-template-columns:1fr 1fr auto">
+          <div class="flex flex-col gap-1">
+            <span class="field-label">Label</span>
+            <input class="input-base" value="${escHtml(c.label)}" data-action="chargeLabel" data-cid="${c.id}" />
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="field-label">Value</span>
+            <input class="input-base" type="number" min="0" step="0.01" value="${c.value}" data-action="chargeValue" data-cid="${c.id}" style="text-align:right" />
+          </div>
+          <button class="row-icon danger" data-action="removeCharge" data-cid="${c.id}"><i data-lucide="x" style="width:14px;height:14px"></i></button>
+        </div>
+        <label class="flex items-center gap-2 text-[12px] font-medium" style="color:var(--ink);cursor:pointer">
+          <input type="checkbox" ${c.taxable ? "checked" : ""} data-action="chargeTaxable" data-cid="${c.id}" style="width:16px;height:16px;accent-color:var(--green)" />
+          <span class="text-[10.5px] uppercase font-medium px-2 py-0.5 rounded-full" style="${c.taxable ? 'color:var(--green);background:var(--green-soft)' : 'color:var(--ink-faint);background:var(--bg)'}">
+            ${c.taxable ? "Taxable" : "Non-taxable"}
+          </span>
+        </label>
+      </div>`;
+  });
+
+  let customFieldsHtml = "";
+  state.customHeaderFields.forEach(f => {
+    customFieldsHtml += `
+      <div class="grid gap-2 items-end" style="grid-template-columns:1fr 1fr auto">
+        <input class="input-base" value="${escHtml(f.label)}" data-action="customHeaderLabel" data-fid="${f.id}" placeholder="e.g. Project ID" />
+        <input class="input-base" value="${escHtml(f.value)}" data-action="customHeaderValue" data-fid="${f.id}" placeholder="e.g. PRJ-001" />
+        <button class="row-icon danger" data-action="removeCustomHeader" data-fid="${f.id}"><i data-lucide="x" style="width:14px;height:14px"></i></button>
+      </div>`;
+  });
+
+  let addFieldsHtml = "";
+  state.additionalFields.forEach(f => {
+    addFieldsHtml += `
+      <div class="grid gap-2 items-end" style="grid-template-columns:1fr 1fr auto">
+        <input class="input-base" value="${escHtml(f.label)}" data-action="addFieldLabel" data-fid="${f.id}" />
+        <input class="input-base" value="${escHtml(f.value)}" data-action="addFieldValue" data-fid="${f.id}" />
+        <button class="row-icon danger" data-action="removeAddField" data-fid="${f.id}"><i data-lucide="x" style="width:14px;height:14px"></i></button>
+      </div>`;
+  });
+
+  let refLinksHtml = "";
+  state.refLinks.forEach(l => {
+    refLinksHtml += `
+      <div class="grid gap-2 items-end" style="grid-template-columns:1fr 1.4fr auto">
+        <input class="input-base" value="${escHtml(l.label)}" data-action="refLabel" data-lid="${l.id}" placeholder="Label (optional)" />
+        <input class="input-base" value="${escHtml(l.url)}" data-action="refUrl" data-lid="${l.id}" placeholder="https://..." />
+        <button class="row-icon danger" data-action="removeRef" data-lid="${l.id}"><i data-lucide="x" style="width:14px;height:14px"></i></button>
+      </div>`;
+  });
+
+  let banksHtml = "";
+  state.banks.forEach(b => {
+    const sel = state.selectedBank === b.id;
+    banksHtml += `
+      <button class="bank-card ${sel ? 'selected' : ''}" data-action="selectBank" data-bid="${b.id}">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0" style="background:var(--bg);color:var(--ink-soft)">
+          <i data-lucide="landmark" style="width:16px;height:16px"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="text-sm font-medium" style="color:var(--ink)">${b.name}</div>
+          <div class="text-xs" style="color:var(--ink-soft)">${b.account}</div>
+        </div>
+        ${sel ? '<i data-lucide="check" style="margin-left:auto;flex-shrink:0;width:16px;height:16px;color:var(--green)"></i>' : ''}
+      </button>`;
+  });
+
+  let summaryRows = `<div class="total-row"><span>Subtotal</span><span class="val">$${money(totals.subtotal)}</span></div>`;
+  if (state.discount.value > 0 && state.discount.timing === "beforeTax") {
+    summaryRows += `<div class="total-row"><span>Discount (before tax)</span><span class="val">-$${money(totals.discountAmt)}</span></div>`;
+  }
+  state.charges.filter(c => c.taxable && Number(c.value) !== 0).forEach(c => {
+    summaryRows += `<div class="total-row"><span>${escHtml(c.label || "Charge")}</span><span class="val">$${money(Number(c.value))}</span></div>`;
+  });
+  if (Number(state.vatRate) > 0) {
+    summaryRows += `<div class="total-row"><span>VAT (${state.vatRate}%)</span><span class="val">$${money(totals.vat)}</span></div>`;
+  }
+  if (state.discount.value > 0 && state.discount.timing === "afterTax") {
+    summaryRows += `<div class="total-row"><span>Discount (after tax)</span><span class="val">-$${money(totals.discountAmt)}</span></div>`;
+  }
+  state.charges.filter(c => !c.taxable && Number(c.value) !== 0).forEach(c => {
+    summaryRows += `<div class="total-row"><span>${escHtml(c.label || "Charge")}</span><span class="val">$${money(Number(c.value))}</span></div>`;
+  });
+  if (state.wht.rate > 0) {
+    summaryRows += `<div class="total-row"><span>WHT</span><span class="val">-$${money(totals.whtAmt)}</span></div>`;
+  }
+
+  let clientOpts = `<option value="__new__">+ New client...</option>` + 
+    state.clients.map(c => `<option value="${escHtml(c)}" ${c === state.header.client ? 'selected' : ''}>${escHtml(c)}</option>`).join("");
+  const ptOpts = ["Due on receipt","Net 7","Net 14","Net 30","Net 60","Custom"].map(v => `<option value="${v}" ${v === state.paymentTerms ? 'selected' : ''}>${v}</option>`).join("");
+
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <div class="pb-24">
+      <div class="max-w-3xl mx-auto px-3 sm:px-6 pt-4 sm:pt-6">
+
+        <div class="card">
+          <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+            <h2 class="text-lg sm:text-xl font-display" style="font-weight:500;color:var(--ink)">Invoice</h2>
+            <div class="flex items-center gap-2 ml-auto">
+              <span class="badge">Draft</span>
+              <div class="action-menu-wrap" id="actionMenuWrap">
+                <button class="w-9 h-9 rounded-full flex items-center justify-center shrink-0" style="border:1px solid var(--border);color:var(--ink-soft);background:white;cursor:pointer" data-action="toggleActionMenu">
+                  <i data-lucide="ellipsis-vertical" style="width:17px;height:17px"></i>
+                </button>
+                ${state.actionMenuOpen ? `
+                <div class="action-menu-dropdown" id="actionMenuDropdown">
+                  <button class="action-menu-item" data-action="scrollNotes"><i data-lucide="file-text" style="width:15px;height:15px"></i>Scroll to notes</button>
+                  <button class="action-menu-item" data-action="showToast" data-msg="Import dialog"><i data-lucide="upload" style="width:15px;height:15px"></i>Import</button>
+                  <button class="action-menu-item" data-action="showToast" data-msg="Invoice saved"><i data-lucide="save" style="width:15px;height:15px"></i>Save</button>
+                  <button class="action-menu-item" data-action="showToast" data-msg="Table settings"><i data-lucide="sliders-horizontal" style="width:15px;height:15px"></i>Table settings</button>
+                  <hr class="action-menu-divider" />
+                  <button class="action-menu-item danger" data-action="openClearModal"><i data-lucide="trash-2" style="width:15px;height:15px"></i>Clear all</button>
+                </div>` : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-2.5">
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Client</span>
+              <div class="select-wrap">
+                <select class="input-base" data-action="setClient">${clientOpts}</select>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Title</span>
+              <input class="input-base" value="${escHtml(state.header.title)}" data-action="setTitle" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div class="flex flex-col gap-1">
+                <span class="field-label">Invoice #</span>
+                <input class="input-base" value="${escHtml(state.header.number)}" data-action="setNumber" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="field-label">PO #</span>
+                <input class="input-base" value="${escHtml(state.header.po)}" data-action="setPo" placeholder="Optional" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div class="flex flex-col gap-1">
+                <span class="field-label">Issue Date</span>
+                <input class="input-base" type="date" value="${state.header.issueDate}" data-action="setIssueDate" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="field-label">Due Date</span>
+                <input class="input-base" type="date" value="${state.header.dueDate}" data-action="setDueDate" />
+              </div>
+            </div>
+
+            <div class="pt-2 flex flex-col gap-2" style="border-top:1px solid var(--border)">
+              <span class="field-label">Custom fields</span>
+              ${customFieldsHtml}
+              <button class="add-link" data-action="addCustomHeader">+ Add field</button>
+            </div>
+          </div>
         </div>
 
+        <div class="card">
+          <div class="flex items-center justify-between gap-2 mb-3 flex-wrap">
+            <h2 class="text-lg sm:text-xl font-display" style="font-weight:500;color:var(--ink)">Line Items</h2>
+            <span class="text-[11px] font-medium uppercase tracking-wide px-3 py-1 rounded-full ml-auto" style="color:var(--ink-soft);border:1px solid var(--border);background:white">${rowCount} rows</span>
+          </div>
+
+          <div class="flex items-center gap-2 mb-3">
+            <button class="ghost-btn small" data-action="showToast" data-msg="Import dialog"><i data-lucide="upload" style="width:13px;height:13px"></i>Import</button>
+            <button class="ghost-btn small" data-action="showToast" data-msg="Table settings"><i data-lucide="sliders-horizontal" style="width:13px;height:13px"></i>Table settings</button>
+            <div class="flex-1"></div>
+            <button class="ghost-btn small danger" data-action="openClearModal"><i data-lucide="trash-2" style="width:13px;height:13px"></i>Clear all</button>
+          </div>
+
+          <div class="flex flex-col gap-2.5">${sectionsHtml}</div>
+
+          <div class="flex flex-wrap gap-2 mt-3">
+            <button class="ghost-btn" data-action="addStandaloneRow"><i data-lucide="list-plus" style="width:14px;height:14px"></i>Add row</button>
+            <button class="ghost-btn" data-action="addGroup"><i data-lucide="folder-plus" style="width:14px;height:14px"></i>Add group</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <h2 class="text-lg sm:text-xl font-display" style="font-weight:500;color:var(--ink)">Commercial Terms</h2>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 mb-1.5">
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Payment Terms</span>
+              <div class="select-wrap"><select class="input-base" data-action="setPaymentTerms">${ptOpts}</select></div>
+            </div>
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Custom Terms</span>
+              <input class="input-base" value="${escHtml(state.customTerms)}" data-action="setCustomTerms" placeholder="e.g. 2/10 Net 30" />
+            </div>
+          </div>
+
+          ${renderCollapsible("discount", "Discount", () => `
+            <div class="grid grid-cols-2 gap-2">
+              <div class="flex flex-col gap-1">
+                <span class="field-label">Value</span>
+                <input class="input-base" type="number" min="0" step="0.01" value="${state.discount.value}" data-action="setDiscountValue" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="field-label">Type</span>
+                <div class="flex gap-1">
+                  <button class="timing-btn ${state.discount.type === 'percentage' ? 'active' : 'inactive'}" data-action="setDiscountType" data-val="percentage">Percentage</button>
+                  <button class="timing-btn ${state.discount.type === 'flat' ? 'active' : 'inactive'}" data-action="setDiscountType" data-val="flat">Flat</button>
+                </div>
+              </div>
+            </div>
+            <div class="mt-2">
+              <span class="field-label block mb-1">Timing</span>
+              <div class="flex gap-1">
+                <button class="timing-btn ${state.discount.timing === 'beforeTax' ? 'active' : 'inactive'}" data-action="setDiscountTiming" data-val="beforeTax">Before Tax</button>
+                <button class="timing-btn ${state.discount.timing === 'afterTax' ? 'active' : 'inactive'}" data-action="setDiscountTiming" data-val="afterTax">After Tax</button>
+              </div>
+            </div>
+          `)}
+
+          ${renderCollapsible("vat", "VAT", () => `
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Rate (%)</span>
+              <input class="input-base" type="number" min="0" step="0.01" value="${state.vatRate}" data-action="setVatRate" />
+            </div>
+          `)}
+
+          ${renderCollapsible("wht", "WHT", () => `
+            <div class="grid grid-cols-2 gap-2">
+              <div class="flex flex-col gap-1">
+                <span class="field-label">Rate</span>
+                <input class="input-base" type="number" min="0" step="0.01" value="${state.wht.rate}" data-action="setWhtRate" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="field-label">Unit</span>
+                <div class="flex gap-1">
+                  <button class="timing-btn ${state.wht.unit === 'percentage' ? 'active' : 'inactive'}" data-action="setWhtUnit" data-val="percentage">Percentage</button>
+                  <button class="timing-btn ${state.wht.unit === 'flat' ? 'active' : 'inactive'}" data-action="setWhtUnit" data-val="flat">Flat</button>
+                </div>
+              </div>
+            </div>
+          `)}
+
+          ${renderCollapsible("charges", "Additional Charges", () => `
+            <div class="flex flex-col gap-2.5">
+              ${chargesHtml}
+              <button class="add-link" data-action="addCharge">+ Add charge</button>
+            </div>
+          `)}
+
+          ${renderCollapsible("addFields", "Additional Fields", () => `
+            <div class="flex flex-col gap-2">
+              ${addFieldsHtml}
+              <button class="add-link" data-action="addAddField">+ Add field</button>
+            </div>
+          `)}
+        </div>
+
+        <div class="card">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <h2 class="text-lg sm:text-xl font-display" style="font-weight:500;color:var(--ink)">Payment Details</h2>
+          </div>
+
+          <span class="field-label block mb-1.5">Bank Account</span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">${banksHtml}</div>
+
+          <div class="flex items-center justify-between gap-3 rounded-2xl px-3.5 py-2.5 flex-wrap" style="border:1px solid var(--border);background:#fbfcfa">
+            <div>
+              <div class="text-[12px] font-medium uppercase tracking-wide" style="color:var(--ink)">Show payment details on invoice</div>
+              <div class="text-xs" style="color:var(--ink-soft)">Display bank account information to the client</div>
+            </div>
+            <button class="toggle-track" style="background:${state.showPayment ? 'var(--green)' : 'var(--border)'}" data-action="togglePayment">
+              <span class="toggle-thumb" style="transform:${state.showPayment ? 'translateX(20px)' : 'none'};${state.showPayment ? 'box-shadow:var(--glow)' : ''}"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <h2 class="text-lg sm:text-xl font-display" style="font-weight:500;color:var(--ink)">Summary</h2>
+          </div>
+          <div class="flex flex-col">
+            ${summaryRows}
+            <div class="flex justify-between items-baseline pt-3 mt-1" style="border-top:2px solid var(--ink)">
+              <span class="font-display" style="font-weight:500;font-size:20px;color:var(--ink)">Grand Total</span>
+              <span class="font-display" style="font-weight:500;font-size:24px;color:var(--green)">$${money(totals.grandTotal)}</span>
+            </div>
+            <div class="text-xs italic pt-2 mt-1" style="color:var(--ink-soft);border-top:1px solid var(--border)">
+              ${numberToWords(totals.grandTotal)} dollars
+            </div>
+          </div>
+        </div>
+
+        <div id="additionalInfoRef">
+        <div class="card">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <h2 class="text-lg sm:text-xl font-display" style="font-weight:500;color:var(--ink)">Additional Information</h2>
+          </div>
+
+          ${renderCollapsible("notes", "Notes", () => `
+            <textarea class="w-full rounded-xl px-3 py-2 text-sm outline-none resize-y bg-white" style="border:1px solid var(--border);color:var(--ink);min-height:56px" rows="3" data-action="setNotes">${escHtml(state.notes)}</textarea>
+          `)}
+
+          ${renderCollapsible("termsCond", "Terms & Conditions", () => `
+            <textarea class="w-full rounded-xl px-3 py-2 text-sm outline-none resize-y bg-white" style="border:1px solid var(--border);color:var(--ink);min-height:56px" rows="3" data-action="setTerms">${escHtml(state.terms)}</textarea>
+          `)}
+
+          <div class="grid grid-cols-2 gap-2 mt-3">
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Signatory Name</span>
+              <input class="input-base" value="${escHtml(state.signatoryName)}" data-action="setSignatoryName" placeholder="Full name" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Title</span>
+              <input class="input-base" value="${escHtml(state.signatoryTitle)}" data-action="setSignatoryTitle" placeholder="e.g. CEO" />
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <span class="field-label block mb-1.5">Signature</span>
+            <div class="flex items-center gap-3 rounded-2xl px-3.5 py-2.5 flex-wrap" style="border:1px dashed ${state.signature ? 'var(--green)' : 'var(--border-strong)'};background:${state.signature ? 'var(--green-soft)' : 'white'};${state.signature ? 'box-shadow:var(--glow)' : ''}">
+              <div class="flex items-center gap-3 flex-1 min-w-[160px]">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background:white;border:1px solid var(--border)">
+                  ${state.signature ? '<i data-lucide="check" style="width:17px;height:17px;color:var(--green)"></i>' : '<i data-lucide="pen-line" style="width:17px;height:17px;color:var(--ink-soft)"></i>'}
+                </div>
+                <span class="text-[13px] font-medium" style="color:${state.signature ? 'var(--ink)' : 'var(--ink-soft)'}">${state.signature || "Tap to sign or upload"}</span>
+              </div>
+              <div class="flex gap-2 flex-wrap">
+                <button class="ghost-btn small" data-action="signNow">Sign now</button>
+                <button class="ghost-btn small" data-action="uploadSign"><i data-lucide="upload" style="width:12px;height:12px"></i>Upload</button>
+                <button class="ghost-btn small" data-action="savedSign"><i data-lucide="folder-open" style="width:12px;height:12px"></i>Saved</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3 flex flex-col gap-2">
+            <span class="field-label block">Reference Links</span>
+            ${refLinksHtml}
+            <button class="add-link inline-flex items-center gap-1.5" data-action="addRefLink"><i data-lucide="link-2" style="width:13px;height:13px"></i>Add reference link</button>
+          </div>
+        </div>
+        </div>
+
+        <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 sm:gap-3 pt-4 mt-1" style="border-top:1px solid var(--border)">
+          <button class="ghost-btn" data-action="cancel">Cancel</button>
+          <button class="primary-btn" data-action="saveInvoice"><i data-lucide="save" style="width:16px;height:16px"></i>Save Invoice</button>
+        </div>
+      </div>
+
+      ${state.showClearAllModal ? `
+      <div class="modal-overlay" id="clearModalOverlay">
+        <div class="modal-box">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style="background:#fdecea;color:var(--red)">
+              <i data-lucide="trash-2" style="width:20px;height:20px"></i>
+            </div>
+            <h3 class="text-lg font-semibold font-display" style="color:var(--ink)">Clear all items?</h3>
+          </div>
+          <p class="text-sm" style="color:var(--ink-soft);line-height:1.5">
+            This action will permanently remove all line items and groups from this invoice. This cannot be undone.
+          </p>
+          <div class="flex gap-3 mt-2">
+            <button class="flex-1 py-2.5 rounded-2xl text-sm font-semibold tracking-wide" style="border:1px solid var(--border);color:var(--ink);background:white;cursor:pointer" data-action="closeClearModal">Cancel</button>
+            <button class="flex-1 py-2.5 rounded-2xl text-sm font-semibold tracking-wide text-white" style="background:var(--red);box-shadow:0 4px 12px rgba(209,69,59,0.3);border:none;cursor:pointer" data-action="confirmClear">Yes, clear all</button>
+          </div>
+        </div>
+      </div>` : ''}
+
+      <button class="floating-save" data-action="showToast" data-msg="Invoice saved">
+        <i data-lucide="save" style="width:22px;height:22px"></i>
+      </button>
+
+      <div class="toast-container">
+        <div class="toast-msg ${state.toast ? 'visible' : 'hidden'}">${escHtml(state.toast)}</div>
+      </div>
     </div>
-
-    <!-- ════════════════════════════════════════════════════════════════
-    FLOATING SAVE
-    ════════════════════════════════════════════════════════════════ -->
-    <button class="floating-save" id="floatingSave" aria-label="Save invoice">
-        <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-            <polyline points="17 21 17 13 7 13 7 21"/>
-            <polyline points="7 3 7 8 15 8"/>
-        </svg>
-    </button>
-
-    <!-- ════════════════════════════════════════════════════════════════
-    TOAST
-    ════════════════════════════════════════════════════════════════ -->
-    <div class="toast-container"><div class="toast" id="toast">Action completed</div></div>
-
-    <script>
-        (function() {
-            'use strict';
-
-            // ─── Toast ───
-            const toast = document.getElementById('toast');
-            let toastTimeout;
-
-            function showToast(message) {
-                toast.textContent = message;
-                toast.classList.add('visible');
-                clearTimeout(toastTimeout);
-                toastTimeout = setTimeout(() => toast.classList.remove('visible'), 2000);
-            }
-
-            // ─── Auto-resize textareas ───
-            document.querySelectorAll('textarea').forEach(tx => {
-                tx.addEventListener('input', function() {
-                    this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
-                });
-                setTimeout(() => {
-                    tx.style.height = 'auto';
-                    tx.style.height = (tx.scrollHeight) + 'px';
-                }, 100);
-            });
-
-            // ─── Collapsible sections ───
-            document.querySelectorAll('.collapsible-header').forEach(header => {
-                header.addEventListener('click', function() {
-                    const targetId = this.dataset.target;
-                    const body = document.getElementById(targetId);
-                    if (!body) return;
-                    const chevron = this.querySelector('.chevron');
-                    body.classList.toggle('open');
-                    if (chevron) chevron.classList.toggle('open');
-                });
-            });
-
-            // ─── Group Toggle ───
-            document.querySelectorAll('.group-header').forEach(header => {
-                header.addEventListener('click', function(e) {
-                    if (e.target.closest('.group-actions') || e.target.closest('.btn-icon')) return;
-                    const targetId = this.dataset.target;
-                    const itemsContainer = document.getElementById(targetId);
-                    const toggleIcon = this.querySelector('.group-toggle');
-                    if (!itemsContainer || !toggleIcon) return;
-                    itemsContainer.classList.toggle('collapsed');
-                    toggleIcon.classList.toggle('collapsed');
-                });
-            });
-
-            // ─── Toolbar ───
-            document.getElementById('importBtn').addEventListener('click', function() {
-                showToast('Import dialog');
-            });
-
-            document.getElementById('clearAllBtn').addEventListener('click', function() {
-                if (confirm('Clear all line items?')) {
-                    document.getElementById('itemList').innerHTML = '';
-                    updateTotals();
-                    showToast('All items cleared');
-                }
-            });
-
-            // ─── Add row ───
-            document.getElementById('addRowBtn').addEventListener('click', function() {
-                const list = document.getElementById('itemList');
-                const template = document.querySelector('.item-row');
-                if (!template) return;
-
-                const newRow = template.cloneNode(true);
-                newRow.querySelectorAll('input, textarea').forEach(el => {
-                    if (el.type === 'number') el.value = '0';
-                    else if (el.tagName === 'TEXTAREA') el.value = '';
-                    else el.value = '';
-                });
-                newRow.querySelector('.item-total').textContent = '$0.00';
-                newRow.dataset.group = '';
-                newRow.dataset.row = 'new';
-
-                list.appendChild(newRow);
-                renumberRows();
-                updateTotals();
-                showToast('Row added');
-            });
-
-            // ─── Add group ───
-            document.getElementById('addGroupBtn').addEventListener('click', function() {
-                const list = document.getElementById('itemList');
-                const template = document.querySelector('.group-container');
-                if (!template) return;
-
-                const newGroup = template.cloneNode(true);
-                const newId = 'g' + Date.now();
-                newGroup.dataset.groupId = newId;
-
-                const header = newGroup.querySelector('.group-header');
-                const body = newGroup.querySelector('.group-items');
-                header.dataset.target = 'groupItems-' + newId;
-                body.id = 'groupItems-' + newId;
-
-                const nameInput = newGroup.querySelector('.group-name');
-                if (nameInput) nameInput.textContent = 'New Group';
-
-                const items = newGroup.querySelectorAll('.item-row');
-                items.forEach((item, index) => {
-                    item.dataset.group = newId;
-                    item.dataset.row = 'new';
-                    item.querySelectorAll('input, textarea').forEach(el => {
-                        if (el.type === 'number') el.value = '0';
-                        else if (el.tagName === 'TEXTAREA') el.value = '';
-                        else el.value = '';
-                    });
-                    item.querySelector('.item-total').textContent = '$0.00';
-                });
-
-                const meta = newGroup.querySelector('.group-meta');
-                if (meta) {
-                    const countSpan = meta.querySelector('.count');
-                    const subtotalSpan = meta.querySelector('.subtotal');
-                    if (countSpan) countSpan.textContent = items.length + ' items';
-                    if (subtotalSpan) subtotalSpan.textContent = '$0.00';
-                }
-
-                list.appendChild(newGroup);
-                renumberRows();
-                updateTotals();
-                showToast('Group added');
-            });
-
-            // ─── Add item to group ───
-            document.getElementById('addItemToGroupBtn').addEventListener('click', function() {
-                const groupContainer = this.closest('.group-container');
-                if (!groupContainer) return;
-                const itemsContainer = groupContainer.querySelector('.group-items');
-                if (!itemsContainer) return;
-
-                const template = itemsContainer.querySelector('.item-row');
-                if (!template) return;
-
-                const newRow = template.cloneNode(true);
-                newRow.querySelectorAll('input, textarea').forEach(el => {
-                    if (el.type === 'number') el.value = '0';
-                    else if (el.tagName === 'TEXTAREA') el.value = '';
-                    else el.value = '';
-                });
-                newRow.querySelector('.item-total').textContent = '$0.00';
-                newRow.dataset.group = groupContainer.dataset.groupId;
-                newRow.dataset.row = 'new';
-
-                itemsContainer.appendChild(newRow);
-
-                const meta = groupContainer.querySelector('.group-meta');
-                if (meta) {
-                    const countSpan = meta.querySelector('.count');
-                    const items = itemsContainer.querySelectorAll('.item-row');
-                    if (countSpan) countSpan.textContent = items.length + ' items';
-                }
-
-                renumberRows();
-                updateTotals();
-                showToast('Item added to group');
-            });
-
-            // ─── Add to group (top) ───
-            document.getElementById('addToGroupBtn').addEventListener('click', function(e) {
-                e.stopPropagation();
-                const groupContainer = this.closest('.group-container');
-                if (!groupContainer) return;
-                const itemsContainer = groupContainer.querySelector('.group-items');
-                if (!itemsContainer) return;
-
-                const template = itemsContainer.querySelector('.item-row');
-                if (!template) return;
-
-                const newRow = template.cloneNode(true);
-                newRow.querySelectorAll('input, textarea').forEach(el => {
-                    if (el.type === 'number') el.value = '0';
-                    else if (el.tagName === 'TEXTAREA') el.value = '';
-                    else el.value = '';
-                });
-                newRow.querySelector('.item-total').textContent = '$0.00';
-                newRow.dataset.group = groupContainer.dataset.groupId;
-                newRow.dataset.row = 'new';
-
-                itemsContainer.appendChild(newRow);
-
-                const meta = groupContainer.querySelector('.group-meta');
-                if (meta) {
-                    const countSpan = meta.querySelector('.count');
-                    const items = itemsContainer.querySelectorAll('.item-row');
-                    if (countSpan) countSpan.textContent = items.length + ' items';
-                }
-
-                renumberRows();
-                updateTotals();
-                showToast('Item added to group');
-            });
-
-            // ─── Delete group ───
-            document.getElementById('deleteGroupBtn').addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (confirm('Delete this group? Items will be ungrouped.')) {
-                    const groupContainer = this.closest('.group-container');
-                    if (!groupContainer) return;
-                    const items = groupContainer.querySelectorAll('.item-row');
-                    const list = document.getElementById('itemList');
-
-                    items.forEach(item => {
-                        item.dataset.group = '';
-                        list.insertBefore(item, groupContainer);
-                    });
-
-                    groupContainer.remove();
-                    renumberRows();
-                    updateTotals();
-                    showToast('Group deleted');
-                }
-            });
-
-            // ─── Row Actions ───
-            document.querySelectorAll('.row-action-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const row = this.closest('.item-row');
-                    if (!row) return;
-                    const list = document.getElementById('itemList');
-                    const groupContainer = row.closest('.group-container');
-
-                    if (this.classList.contains('insert-below')) {
-                        const newRow = row.cloneNode(true);
-                        newRow.querySelectorAll('input, textarea').forEach(el => {
-                            if (el.type === 'number') el.value = '0';
-                            else if (el.tagName === 'TEXTAREA') el.value = '';
-                            else el.value = '';
-                        });
-                        newRow.querySelector('.item-total').textContent = '$0.00';
-                        if (groupContainer) {
-                            newRow.dataset.group = groupContainer.dataset.groupId;
-                            const itemsContainer = groupContainer.querySelector('.group-items');
-                            itemsContainer.insertBefore(newRow, row.nextSibling);
-                            const meta = groupContainer.querySelector('.group-meta');
-                            if (meta) {
-                                const countSpan = meta.querySelector('.count');
-                                const items = itemsContainer.querySelectorAll('.item-row');
-                                if (countSpan) countSpan.textContent = items.length + ' items';
-                            }
-                        } else {
-                            newRow.dataset.group = '';
-                            list.insertBefore(newRow, row.nextSibling);
-                        }
-                        renumberRows();
-                        updateTotals();
-                        showToast('Row inserted below');
-                        return;
-                    }
-
-                    if (this.classList.contains('move-up')) {
-                        const prev = row.previousElementSibling;
-                        if (!prev || !prev.classList.contains('item-row')) return;
-                        if (groupContainer) {
-                            const itemsContainer = groupContainer.querySelector('.group-items');
-                            itemsContainer.insertBefore(row, prev);
-                        } else {
-                            list.insertBefore(row, prev);
-                        }
-                        renumberRows();
-                        updateTotals();
-                        return;
-                    }
-
-                    if (this.classList.contains('move-down')) {
-                        const next = row.nextElementSibling;
-                        if (!next || !next.classList.contains('item-row')) return;
-                        if (groupContainer) {
-                            const itemsContainer = groupContainer.querySelector('.group-items');
-                            itemsContainer.insertBefore(next, row);
-                        } else {
-                            list.insertBefore(next, row);
-                        }
-                        renumberRows();
-                        updateTotals();
-                        return;
-                    }
-
-                    if (this.classList.contains('duplicate')) {
-                        const newRow = row.cloneNode(true);
-                        newRow.querySelectorAll('input, textarea').forEach(el => {
-                            if (el.type === 'number') el.value = el.value || '0';
-                            else if (el.tagName === 'TEXTAREA') el.value = el.value || '';
-                            else el.value = el.value || '';
-                        });
-                        if (groupContainer) {
-                            newRow.dataset.group = groupContainer.dataset.groupId;
-                            const itemsContainer = groupContainer.querySelector('.group-items');
-                            itemsContainer.insertBefore(newRow, row.nextSibling);
-                            const meta = groupContainer.querySelector('.group-meta');
-                            if (meta) {
-                                const countSpan = meta.querySelector('.count');
-                                const items = itemsContainer.querySelectorAll('.item-row');
-                                if (countSpan) countSpan.textContent = items.length + ' items';
-                            }
-                        } else {
-                            newRow.dataset.group = '';
-                            list.insertBefore(newRow, row.nextSibling);
-                        }
-                        renumberRows();
-                        updateTotals();
-                        showToast('Row duplicated');
-                        return;
-                    }
-
-                    if (this.classList.contains('delete-row')) {
-                        if (confirm('Delete this row?')) {
-                            if (groupContainer) {
-                                const itemsContainer = groupContainer.querySelector('.group-items');
-                                row.remove();
-                                const meta = groupContainer.querySelector('.group-meta');
-                                if (meta) {
-                                    const countSpan = meta.querySelector('.count');
-                                    const items = itemsContainer.querySelectorAll('.item-row');
-                                    if (countSpan) countSpan.textContent = items.length + ' items';
-                                }
-                            } else {
-                                row.remove();
-                            }
-                            renumberRows();
-                            updateTotals();
-                            showToast('Row deleted');
-                        }
-                        return;
-                    }
-                });
-            });
-
-            // ─── Renumber rows ───
-            function renumberRows() {
-                let counter = 1;
-                const allRows = document.querySelectorAll('.item-row');
-                allRows.forEach(row => {
-                    const numSpan = row.querySelector('.row-number');
-                    if (numSpan) numSpan.textContent = counter;
-                    row.dataset.row = counter;
-                    counter++;
-                });
-                const counterBadge = document.getElementById('rowCounter');
-                if (counterBadge) counterBadge.textContent = (counter - 1) + ' rows';
-
-                document.querySelectorAll('.group-container').forEach(group => {
-                    const itemsContainer = group.querySelector('.group-items');
-                    const meta = group.querySelector('.group-meta');
-                    if (meta && itemsContainer) {
-                        const countSpan = meta.querySelector('.count');
-                        const items = itemsContainer.querySelectorAll('.item-row');
-                        if (countSpan) countSpan.textContent = items.length + ' items';
-                    }
-                });
-            }
-
-            // ─── Update totals ───
-            function updateTotals() {
-                let subtotal = 0;
-
-                document.querySelectorAll('.item-row').forEach(row => {
-                    const qty = parseFloat(row.querySelector('.item-qty')?.value) || 0;
-                    const price = parseFloat(row.querySelector('.item-price')?.value) || 0;
-                    const total = qty * price;
-                    const totalSpan = row.querySelector('.item-total');
-                    if (totalSpan) totalSpan.textContent = '$' + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                    subtotal += total;
-                });
-
-                document.querySelectorAll('.group-container').forEach(group => {
-                    let groupTotal = 0;
-                    const items = group.querySelectorAll('.item-row');
-                    items.forEach(row => {
-                        const totalText = row.querySelector('.item-total')?.textContent || '$0.00';
-                        const num = parseFloat(totalText.replace(/[$,]/g, '')) || 0;
-                        groupTotal += num;
-                    });
-                    const subtotalSpan = group.querySelector('.group-meta .subtotal');
-                    if (subtotalSpan) subtotalSpan.textContent = '$' + groupTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/
-                        g, ',');
-                });
-
-                document.getElementById('subtotalDisplay').textContent = '$' + subtotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/
-                    g, ',');
-                const vat = subtotal * 0.20;
-                document.getElementById('vatValue').textContent = '$' + vat.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-                const grandTotal = subtotal + vat;
-                document.getElementById('grandTotalDisplay').textContent = '$' + grandTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/
-                    g, ',');
-                document.getElementById('amountWords').textContent = Math.round(grandTotal).toLocaleString() + ' dollars';
-            }
-
-            // ─── Charge taxable toggle ───
-            const chargeTaxableCheck = document.getElementById('chargeTaxable');
-            const chargeStatusDisplay = document.getElementById('chargeStatusDisplay');
-            chargeTaxableCheck.addEventListener('change', function() {
-                chargeStatusDisplay.textContent = this.checked ? 'Taxable' : 'Non-taxable';
-                chargeStatusDisplay.classList.toggle('taxable', this.checked);
-            });
-
-            // ─── Add charge ───
-            document.getElementById('addChargeBtn').addEventListener('click', function() {
-                const list = document.getElementById('chargesList');
-                const row = document.createElement('div');
-                row.className = 'charge-row';
-                row.innerHTML = `
-                    <div class="field">
-                        <label>Label</label>
-                        <input type="text" placeholder="e.g. Transport" />
-                    </div>
-                    <div class="field">
-                        <label>Value</label>
-                        <input type="number" placeholder="0" min="0" step="0.01" />
-                    </div>
-                    <button class="remove-charge-btn" aria-label="Remove charge">
-                        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                    </button>
-                `;
-                list.appendChild(row);
-                row.querySelector('.remove-charge-btn').addEventListener('click', function() {
-                    row.remove();
-                    showToast('Charge removed');
-                });
-                showToast('Charge added');
-            });
-
-            // ─── Charge remove (existing) ───
-            document.querySelectorAll('.charge-row .remove-charge-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    this.closest('.charge-row').remove();
-                    showToast('Charge removed');
-                });
-            });
-
-            // ─── Bank selection ───
-            document.querySelectorAll('.bank-option').forEach(opt => {
-                opt.addEventListener('click', function() {
-                    document.querySelectorAll('.bank-option').forEach(o => o.classList.remove('selected'));
-                    this.classList.add('selected');
-                    showToast('Bank account selected');
-                });
-            });
-
-            // ─── Payment visibility toggle ───
-            document.querySelector('.toggle-switch input').addEventListener('change', function() {
-                showToast(this.checked ? 'Payment details visible' : 'Payment details hidden');
-            });
-
-            // ─── Signature picker ───
-            const sigPicker = document.getElementById('signaturePicker');
-
-            document.getElementById('sigSignBtn').addEventListener('click', function(e) {
-                e.stopPropagation();
-                sigPicker.classList.add('has-signature');
-                sigPicker.querySelector('.sig-placeholder').textContent = '✍️ Signature captured';
-                sigPicker.querySelector('.sig-icon').textContent = '✅';
-                showToast('Signature signed');
-            });
-
-            document.getElementById('sigUploadBtn').addEventListener('click', function(e) {
-                e.stopPropagation();
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*';
-                input.onchange = function() {
-                    if (this.files && this.files[0]) {
-                        sigPicker.classList.add('has-signature');
-                        sigPicker.querySelector('.sig-placeholder').textContent = '📷 ' + this.files[0].name;
-                        sigPicker.querySelector('.sig-icon').textContent = '🖼️';
-                        showToast('Signature uploaded');
-                    }
-                };
-                input.click();
-            });
-
-            document.getElementById('sigSavedBtn').addEventListener('click', function(e) {
-                e.stopPropagation();
-                sigPicker.classList.add('has-signature');
-                sigPicker.querySelector('.sig-placeholder').textContent = '📂 Saved signature';
-                sigPicker.querySelector('.sig-icon').textContent = '📄';
-                showToast('Saved signature selected');
-            });
-
-            // ─── Add custom header ───
-            let customHeaderVisible = false;
-            document.getElementById('addCustomHeaderBtn').addEventListener('click', function() {
-                const container = document.getElementById('customHeaderContainer');
-                customHeaderVisible = !customHeaderVisible;
-                container.style.display = customHeaderVisible ? 'block' : 'none';
-                this.textContent = customHeaderVisible ? '− Hide custom fields' : '+ Add custom header fields';
-            });
-
-            document.getElementById('removeCustomHeaderBtn').addEventListener('click', function() {
-                document.getElementById('customHeaderContainer').style.display = 'none';
-                document.getElementById('addCustomHeaderBtn').textContent = '+ Add custom header fields';
-                customHeaderVisible = false;
-                showToast('Custom field removed');
-            });
-
-            // ─── Add client ───
-            document.getElementById('addClientBtn').addEventListener('click', function() {
-                const name = prompt('Enter client name:');
-                if (name && name.trim()) {
-                    const select = document.querySelector('.client-row select');
-                    const opt = document.createElement('option');
-                    opt.value = name.trim();
-                    opt.textContent = name.trim();
-                    select.appendChild(opt);
-                    select.value = name.trim();
-                    showToast('Client added');
-                }
-            });
-
-            // ─── Floating save ───
-            document.getElementById('floatingSave').addEventListener('click', function() {
-                showToast('Invoice saved');
-            });
-
-            // ─── Bottom Save ───
-            document.getElementById('saveBtn').addEventListener('click', function() {
-                showToast('Invoice saved successfully');
-            });
-
-            // ─── Bottom Cancel ───
-            document.getElementById('cancelBtn').addEventListener('click', function() {
-                if (confirm('Discard changes?')) {
-                    showToast('Changes discarded');
-                }
-            });
-
-            // ─── Add reference link ───
-            document.querySelector('.btn-ghost-link:last-child').addEventListener('click', function() {
-                showToast('Reference link added');
-            });
-
-            // ─── Auto calculate on input change ───
-            document.addEventListener('input', function(e) {
-                if (e.target.classList.contains('item-qty') || e.target.classList.contains('item-price')) {
-                    const row = e.target.closest('.item-row');
-                    if (row) {
-                        const qty = parseFloat(row.querySelector('.item-qty')?.value) || 0;
-                        const price = parseFloat(row.querySelector('.item-price')?.value) || 0;
-                        const total = qty * price;
-                        const totalSpan = row.querySelector('.item-total');
-                        if (totalSpan) totalSpan.textContent = '$' + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,
-                        ',');
-                    }
-                    updateTotals();
-                }
-            });
-
-            // ─── Init ───
-            renumberRows();
-            updateTotals();
-
-            console.log('✦ Ease Health · Invoice Workspace');
-            console.log('  Botanical greenhouse · Cream paper · Forest ink');
-
-        })();
-    </script>
-
+  `;
+
+  lucide.createIcons();
+  bindEvents();
+}
+
+function renderCollapsible(key, label, contentFn) {
+  const open = state.collapsibles[key];
+  return `
+    <div style="border-bottom:1px solid var(--border)">
+      <button class="collapsible-header" data-action="toggleCollapsible" data-key="${key}">
+        <span>${label}</span>
+        <i data-lucide="chevron-down" style="width:16px;height:16px" class="chevron ${open ? 'open' : ''}"></i>
+      </button>
+      ${open ? `<div class="pb-3">${contentFn()}</div>` : ''}
+    </div>
+  `;
+}
+
+function renderItemRow(item, index) {
+  const total = (Number(item.qty) || 0) * (Number(item.price) || 0);
+  const showSub = item._showSub;
+  return `
+    <div class="item-row">
+      <div class="flex items-start gap-2">
+        <div class="index-col">
+          <span class="index-num">${index}</span>
+          <div class="arrows-col">
+            <button class="row-icon" data-action="moveUp" data-iid="${item.id}"><i data-lucide="chevron-up" style="width:12px;height:12px"></i></button>
+            <button class="row-icon" data-action="moveDown" data-iid="${item.id}"><i data-lucide="chevron-down" style="width:12px;height:12px"></i></button>
+          </div>
+        </div>
+
+        <div class="flex-1 min-w-0 flex flex-col gap-1.5">
+          <textarea rows="1" data-action="setDescription" data-iid="${item.id}" placeholder="Description"
+            class="w-full resize-none outline-none bg-transparent leading-snug font-display"
+            style="font-weight:500;font-size:16px;color:var(--ink);min-height:22px;overflow:hidden">${escHtml(item.description)}</textarea>
+
+          <div>
+            <button class="subdesc-toggle" data-action="toggleSubDesc" data-iid="${item.id}">
+              <span>Sub description</span>
+              <i data-lucide="chevron-down" style="width:11px;height:11px" class="chev ${showSub ? 'open' : ''}"></i>
+            </button>
+            ${showSub ? `
+              <textarea data-action="setSubDescription" data-iid="${item.id}" placeholder="Additional details..." rows="2"
+                class="w-full rounded-xl px-2 py-1 text-sm outline-none resize-y bg-white mt-1"
+                style="border:1px solid var(--border);color:var(--ink)">${escHtml(item.subDescription || "")}</textarea>
+            ` : ''}
+          </div>
+
+          <div class="grid gap-2 pt-1.5" style="border-top:1px solid var(--border);grid-template-columns:1fr 1fr">
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Qty</span>
+              <input class="input-base" type="number" min="0" step="1" value="${item.qty}" data-action="setQty" data-iid="${item.id}" style="text-align:right" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Price</span>
+              <input class="input-base" type="number" min="0" step="0.01" value="${item.price}" data-action="setPrice" data-iid="${item.id}" style="text-align:right" />
+            </div>
+          </div>
+
+          <div class="grid gap-2" style="grid-template-columns:1fr 1fr">
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Unit</span>
+              <input class="input-base" value="${escHtml(item.unit || '')}" data-action="setUnit" data-iid="${item.id}" placeholder="e.g. pcs, hrs" />
+            </div>
+            <div class="flex flex-col gap-1">
+              <span class="field-label">Make</span>
+              <input class="input-base" value="${escHtml(item.make || '')}" data-action="setMake" data-iid="${item.id}" placeholder="e.g. Brand" />
+            </div>
+          </div>
+
+          <div class="flex justify-between items-baseline pt-1.5" style="border-top:2px solid var(--ink)">
+            <span class="text-[11px] font-medium uppercase tracking-wide" style="color:var(--ink-soft)">Total</span>
+            <span class="text-lg font-bold font-display" style="color:var(--ink)">$${money(total)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-1 mt-1">
+        <div class="insert-col">
+          <button class="insert-link" data-action="insertBelow" data-iid="${item.id}">Insert below</button>
+        </div>
+
+        <div class="flex items-center gap-1.5 pt-1.5" style="border-top:1px solid var(--border)">
+          <button class="row-icon" data-action="duplicate" data-iid="${item.id}"><i data-lucide="copy" style="width:13px;height:13px"></i></button>
+          <div class="flex-1"></div>
+          <button class="row-icon danger" data-action="delete" data-iid="${item.id}"><i data-lucide="x" style="width:13px;height:13px;color:var(--red)"></i></button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderToast() {
+  const el = document.querySelector(".toast-msg");
+  if (!el) return;
+  el.textContent = state.toast;
+  el.className = `toast-msg ${state.toast ? 'visible' : 'hidden'}`;
+}
+
+function bindEvents() {
+  document.querySelectorAll('textarea[data-action="setDescription"]').forEach(ta => {
+    ta.style.height = "auto";
+    ta.style.height = ta.scrollHeight + "px";
+    ta.addEventListener("input", function() {
+      this.style.height = "auto";
+      this.style.height = this.scrollHeight + "px";
+    });
+  });
+
+  if (state.actionMenuOpen) {
+    setTimeout(() => {
+      const handler = (e) => {
+        const wrap = document.getElementById("actionMenuWrap");
+        if (wrap && !wrap.contains(e.target)) {
+          state.actionMenuOpen = false;
+          render();
+          document.removeEventListener("click", handler);
+        }
+      };
+      document.addEventListener("click", handler);
+    }, 0);
+  }
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-action]");
+  if (!btn) return;
+  const action = btn.dataset.action;
+
+  switch(action) {
+    case "toggleActionMenu":
+      e.stopPropagation();
+      state.actionMenuOpen = !state.actionMenuOpen;
+      render();
+      break;
+    case "scrollNotes":
+      state.actionMenuOpen = false;
+      document.getElementById("additionalInfoRef")?.scrollIntoView({behavior:"smooth",block:"start"});
+      break;
+    case "showToast":
+      state.actionMenuOpen = false;
+      showToast(btn.dataset.msg || "Done");
+      break;
+    case "openClearModal":
+      state.actionMenuOpen = false;
+      state.showClearAllModal = true;
+      render();
+      break;
+    case "closeClearModal":
+      state.showClearAllModal = false;
+      render();
+      break;
+    case "confirmClear":
+      clearAll();
+      break;
+    case "addCustomHeader":
+      state.customHeaderFields.push({id:nextId(), label:"", value:""});
+      render();
+      break;
+    case "removeCustomHeader":
+      state.customHeaderFields = state.customHeaderFields.filter(f => f.id !== btn.dataset.fid);
+      render();
+      break;
+    case "addStandaloneRow":
+      addStandaloneRow(); render(); break;
+    case "addGroup":
+      addGroup(); render(); break;
+    case "addItemToGroup":
+      addItemToGroup(btn.dataset.gid); render(); break;
+    case "deleteGroup":
+      deleteGroup(btn.dataset.gid); render(); break;
+    case "insertBelow":
+      insertBelow(btn.dataset.iid); render(); break;
+    case "duplicate":
+      duplicateItem(btn.dataset.iid); render(); break;
+    case "delete":
+      deleteItem(btn.dataset.iid); render(); break;
+    case "moveUp":
+      moveItem(btn.dataset.iid, "up"); render(); break;
+    case "moveDown":
+      moveItem(btn.dataset.iid, "down"); render(); break;
+    case "toggleSubDesc": {
+      const iid = btn.dataset.iid;
+      state.sections.forEach(s => {
+        if (s.type === "item" && s.id === iid) s._showSub = !s._showSub;
+        if (s.type === "group") s.items.forEach(it => { if (it.id === iid) it._showSub = !it._showSub; });
+      });
+      render();
+      break;
+    }
+    case "selectBank":
+      state.selectedBank = btn.dataset.bid;
+      showToast("Bank account selected");
+      render();
+      break;
+    case "togglePayment":
+      state.showPayment = !state.showPayment;
+      showToast(state.showPayment ? "Payment details visible" : "Payment details hidden");
+      render();
+      break;
+    case "toggleCollapsible":
+      state.collapsibles[btn.dataset.key] = !state.collapsibles[btn.dataset.key];
+      render();
+      break;
+    case "addCharge":
+      state.charges.push({id:nextId(), label:"", value:0, taxable:false});
+      render();
+      break;
+    case "removeCharge":
+      state.charges = state.charges.filter(c => c.id !== btn.dataset.cid);
+      render();
+      break;
+    case "addAddField":
+      state.additionalFields.push({id:nextId(), label:"", value:""});
+      render();
+      break;
+    case "removeAddField":
+      state.additionalFields = state.additionalFields.filter(f => f.id !== btn.dataset.fid);
+      render();
+      break;
+    case "addRefLink":
+      state.refLinks.push({id:nextId(), label:"", url:""});
+      showToast("Reference link added");
+      render();
+      break;
+    case "removeRef":
+      state.refLinks = state.refLinks.filter(l => l.id !== btn.dataset.lid);
+      render();
+      break;
+    case "signNow":
+      state.signature = "Signature captured";
+      showToast("Signature signed");
+      render();
+      break;
+    case "uploadSign":
+      state.signature = "Uploaded signature";
+      showToast("Signature uploaded");
+      render();
+      break;
+    case "savedSign":
+      state.signature = "Saved signature";
+      showToast("Saved signature selected");
+      render();
+      break;
+    case "cancel":
+      if (confirm("Discard changes?")) showToast("Changes discarded");
+      break;
+    case "saveInvoice":
+      showToast("Invoice saved successfully");
+      break;
+    case "setDiscountTiming":
+      state.discount.timing = btn.dataset.val;
+      updateSummaryOnly();
+      render();
+      break;
+    case "setDiscountType":
+      state.discount.type = btn.dataset.val;
+      updateSummaryOnly();
+      render();
+      break;
+    case "setWhtUnit":
+      state.wht.unit = btn.dataset.val;
+      updateSummaryOnly();
+      render();
+      break;
+  }
+});
+
+document.addEventListener("input", (e) => {
+  const el = e.target;
+  const action = el.dataset?.action;
+  if (!action) return;
+
+  switch(action) {
+    case "setTitle": state.header.title = el.value; break;
+    case "setNumber": state.header.number = el.value; break;
+    case "setPo": state.header.po = el.value; break;
+    case "setIssueDate": state.header.issueDate = el.value; break;
+    case "setDueDate": state.header.dueDate = el.value; break;
+    case "setDescription": {
+      const iid = el.dataset.iid;
+      updateItem(iid, it => ({...it, description: el.value}));
+      const row = el.closest(".item-row");
+      if (row) {
+        const item = findItem(iid);
+        if (item) {
+          const total = (Number(item.qty)||0) * (Number(item.price)||0);
+          const totalEl = row.querySelector(".text-lg.font-bold");
+          if (totalEl) totalEl.textContent = "$" + money(total);
+        }
+      }
+      updateSummaryAndGroups();
+      break;
+    }
+    case "setSubDescription": {
+      const iid = el.dataset.iid;
+      updateItem(iid, it => ({...it, subDescription: el.value}));
+      break;
+    }
+    case "setQty": {
+      const iid = el.dataset.iid;
+      updateItem(iid, it => ({...it, qty: el.value === '' ? 0 : Number(el.value)}));
+      const row = el.closest(".item-row");
+      if (row) {
+        const item = findItem(iid);
+        if (item) {
+          const total = (Number(item.qty)||0) * (Number(item.price)||0);
+          const totalEl = row.querySelector(".text-lg.font-bold");
+          if (totalEl) totalEl.textContent = "$" + money(total);
+        }
+      }
+      updateSummaryAndGroups();
+      break;
+    }
+    case "setPrice": {
+      const iid = el.dataset.iid;
+      updateItem(iid, it => ({...it, price: el.value === '' ? 0 : Number(el.value)}));
+      const row = el.closest(".item-row");
+      if (row) {
+        const item = findItem(iid);
+        if (item) {
+          const total = (Number(item.qty)||0) * (Number(item.price)||0);
+          const totalEl = row.querySelector(".text-lg.font-bold");
+          if (totalEl) totalEl.textContent = "$" + money(total);
+        }
+      }
+      updateSummaryAndGroups();
+      break;
+    }
+    case "setUnit": {
+      const iid = el.dataset.iid;
+      updateItem(iid, it => ({...it, unit: el.value}));
+      break;
+    }
+    case "setMake": {
+      const iid = el.dataset.iid;
+      updateItem(iid, it => ({...it, make: el.value}));
+      break;
+    }
+    case "setNotes": state.notes = el.value; break;
+    case "setTerms": state.terms = el.value; break;
+    case "setSignatoryName": state.signatoryName = el.value; break;
+    case "setSignatoryTitle": state.signatoryTitle = el.value; break;
+    case "setCustomTerms": state.customTerms = el.value; break;
+    case "setDiscountValue": state.discount.value = el.value === '' ? 0 : Number(el.value); updateSummaryOnly(); break;
+    case "setVatRate": state.vatRate = el.value === '' ? 0 : Number(el.value); updateSummaryOnly(); break;
+    case "setWhtRate": state.wht.rate = el.value === '' ? 0 : Number(el.value); updateSummaryOnly(); break;
+    case "renameGroup": {
+      const gid = el.dataset.gid;
+      state.sections = state.sections.map(s => s.type === "group" && s.id === gid ? {...s, name: el.value} : s);
+      break;
+    }
+    case "chargeLabel": {
+      const cid = el.dataset.cid;
+      state.charges = state.charges.map(c => c.id === cid ? {...c, label: el.value} : c);
+      break;
+    }
+    case "chargeValue": {
+      const cid = el.dataset.cid;
+      state.charges = state.charges.map(c => c.id === cid ? {...c, value: el.value === '' ? 0 : Number(el.value)} : c);
+      updateSummaryOnly();
+      break;
+    }
+    case "customHeaderLabel": {
+      const fid = el.dataset.fid;
+      state.customHeaderFields = state.customHeaderFields.map(f => f.id === fid ? {...f, label: el.value} : f);
+      break;
+    }
+    case "customHeaderValue": {
+      const fid = el.dataset.fid;
+      state.customHeaderFields = state.customHeaderFields.map(f => f.id === fid ? {...f, value: el.value} : f);
+      break;
+    }
+    case "addFieldLabel": {
+      const fid = el.dataset.fid;
+      state.additionalFields = state.additionalFields.map(f => f.id === fid ? {...f, label: el.value} : f);
+      break;
+    }
+    case "addFieldValue": {
+      const fid = el.dataset.fid;
+      state.additionalFields = state.additionalFields.map(f => f.id === fid ? {...f, value: el.value} : f);
+      break;
+    }
+    case "refLabel": {
+      const lid = el.dataset.lid;
+      state.refLinks = state.refLinks.map(l => l.id === lid ? {...l, label: el.value} : l);
+      break;
+    }
+    case "refUrl": {
+      const lid = el.dataset.lid;
+      state.refLinks = state.refLinks.map(l => l.id === lid ? {...l, url: el.value} : l);
+      break;
+    }
+  }
+});
+
+document.addEventListener("change", (e) => {
+  const el = e.target;
+  const action = el.dataset?.action;
+  if (!action) return;
+
+  switch(action) {
+    case "setClient":
+      if (el.value === "__new__") {
+        const name = prompt("Enter client name:");
+        if (name && name.trim()) {
+          state.clients.push(name.trim());
+          state.header.client = name.trim();
+          showToast("Client added");
+          render();
+        } else {
+          el.value = state.header.client;
+        }
+      } else {
+        state.header.client = el.value;
+      }
+      break;
+    case "setPaymentTerms": state.paymentTerms = el.value; break;
+    case "setDiscountType": state.discount.type = el.value; updateSummaryOnly(); break;
+    case "setWhtUnit": state.wht.unit = el.value; updateSummaryOnly(); break;
+    case "chargeTaxable": {
+      const cid = el.dataset.cid;
+      state.charges = state.charges.map(c => c.id === cid ? {...c, taxable: el.checked} : c);
+      updateSummaryOnly();
+      render();
+      break;
+    }
+  }
+});
+
+function findItem(id) {
+  for (const s of state.sections) {
+    if (s.type === "item" && s.id === id) return s;
+    if (s.type === "group") {
+      const found = s.items.find(it => it.id === id);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+function updateSummaryOnly() {
+  const totals = calcTotals();
+  const summaryCard = document.querySelectorAll(".card")[4];
+  if (!summaryCard) return;
+
+  let rows = `<div class="total-row"><span>Subtotal</span><span class="val">$${money(totals.subtotal)}</span></div>`;
+  if (state.discount.value > 0 && state.discount.timing === "beforeTax") {
+    rows += `<div class="total-row"><span>Discount (before tax)</span><span class="val">-$${money(totals.discountAmt)}</span></div>`;
+  }
+  state.charges.filter(c => c.taxable && Number(c.value) !== 0).forEach(c => {
+    rows += `<div class="total-row"><span>${escHtml(c.label || "Charge")}</span><span class="val">$${money(Number(c.value))}</span></div>`;
+  });
+  if (Number(state.vatRate) > 0) {
+    rows += `<div class="total-row"><span>VAT (${state.vatRate}%)</span><span class="val">$${money(totals.vat)}</span></div>`;
+  }
+  if (state.discount.value > 0 && state.discount.timing === "afterTax") {
+    rows += `<div class="total-row"><span>Discount (after tax)</span><span class="val">-$${money(totals.discountAmt)}</span></div>`;
+  }
+  state.charges.filter(c => !c.taxable && Number(c.value) !== 0).forEach(c => {
+    rows += `<div class="total-row"><span>${escHtml(c.label || "Charge")}</span><span class="val">$${money(Number(c.value))}</span></div>`;
+  });
+  if (state.wht.rate > 0) {
+    rows += `<div class="total-row"><span>WHT</span><span class="val">-$${money(totals.whtAmt)}</span></div>`;
+  }
+
+  const flexCol = summaryCard.querySelector(".flex.flex-col");
+  if (flexCol) {
+    const grandTotalHtml = `
+      <div class="flex justify-between items-baseline pt-3 mt-1" style="border-top:2px solid var(--ink)">
+        <span class="font-display" style="font-weight:500;font-size:20px;color:var(--ink)">Grand Total</span>
+        <span class="font-display" style="font-weight:500;font-size:24px;color:var(--green)">$${money(totals.grandTotal)}</span>
+      </div>
+      <div class="text-xs italic pt-2 mt-1" style="color:var(--ink-soft);border-top:1px solid var(--border)">
+        ${numberToWords(totals.grandTotal)} dollars
+      </div>`;
+    flexCol.innerHTML = rows + grandTotalHtml;
+  }
+
+  const rowCountBadge = document.querySelectorAll(".card")[1]?.querySelector(".text-\\[11px\\]");
+  if (rowCountBadge) rowCountBadge.textContent = getFlatOrder().length + " rows";
+}
+
+function updateSummaryAndGroups() {
+  updateSummaryOnly();
+  state.sections.forEach(s => {
+    if (s.type === "group") {
+      const groupBox = document.querySelector(`[data-gid="${s.id}"]`)?.closest(".group-box");
+      if (groupBox) {
+        const totalSpan = groupBox.querySelector(".group-header span[style*='font-weight:600']");
+        if (totalSpan) {
+          const gt = s.items.reduce((a, it) => a + (Number(it.qty)||0) * (Number(it.price)||0), 0);
+          totalSpan.textContent = "$" + money(gt);
+        }
+      }
+    }
+  });
+}
+
+render();
+</script>
 </body>
 </html>
