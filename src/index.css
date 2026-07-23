@@ -1,56 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  /* Caldera Design Tokens */
-  --color-ember: #fc5000;
-  --color-plasma-violet: #524ae9;
-  --color-sulfur: #f5f28e;
-  --color-limestone: #f7f6f2;
-  --color-pumice: #e2e2df;
-  --color-obsidian: #070607;
-  --color-chalk: #ffffff;
-
-  /* Typography */
-  --font-display: 'PP Neue Corp Compact', 'Bebas Neue', 'Anton', ui-sans-serif, system-ui, sans-serif;
-  --font-body: 'DM Sans', 'Inter', 'Manrope', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-  /* Spacing */
-  --space-4: 4px;
-  --space-8: 8px;
-  --space-12: 12px;
-  --space-16: 16px;
-  --space-20: 20px;
-  --space-24: 24px;
-  --space-32: 32px;
-  --space-40: 40px;
-  --space-48: 48px;
-  --space-64: 64px;
-  --space-80: 80px;
-
-  /* Layout */
-  --page-max-width: 1280px;
-  --section-gap: 80px;
-  --card-padding: 40px;
-  --element-gap: 16px;
-
-  /* Radius */
-  --radius-card: 40px;
-  --radius-pill: 800px;
-  --radius-input: 100px;
-  --radius-button: 40px;
-  --radius-tag: 16px;
-  --radius-medium: 20px;
-
-  /* Transitions */
-  --transition-fast: 150ms ease;
-  --transition-normal: 250ms ease;
-  --transition-slow: 400ms ease;
-}
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -59,15 +9,12 @@
 }
 
 html {
-  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--color-pumice);
-  color: var(--color-obsidian);
   line-height: 1.55;
   min-height: 100vh;
 }
@@ -93,13 +40,11 @@ img {
   display: block;
 }
 
-/* Focus styles */
 :focus-visible {
-  outline: 2px solid var(--color-ember);
+  outline: 2px solid var(--mp-color-electric);
   outline-offset: 2px;
 }
 
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -107,10 +52,4 @@ img {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* Selection */
-::selection {
-  background: var(--color-ember);
-  color: var(--color-chalk);
 }

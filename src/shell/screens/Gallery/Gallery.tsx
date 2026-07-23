@@ -27,26 +27,30 @@ export function Gallery({
   const [searchOpen, setSearchOpen] = useState(false)
   const [category, setCategory] = useState('all')
 
-  if (activeTopicId) {
-    const topic = topics.find((t) => t.id === activeTopicId)
-    if (!topic) return null
+  const activeTopic = activeTopicId
+    ? topics.find((t) => t.id === activeTopicId)
+    : null
 
-    const topicWorkspaces = workspaces.filter((w) =>
-      topic.workspaces.some((e) => e.id === w.id)
-    )
+  const topicWorkspaces = useMemo(
+    () => activeTopic
+      ? workspaces.filter((w) => activeTopic.workspaces.some((e) => e.id === w.id))
+      : [],
+    [activeTopic, workspaces]
+  )
 
-    const categories = useMemo(
-      () => ['all', ...Array.from(new Set(topicWorkspaces.map((w) => w.category.toLowerCase())))],
-      [topicWorkspaces]
-    )
+  const categories = useMemo(
+    () => ['all', ...Array.from(new Set(topicWorkspaces.map((w) => w.category.toLowerCase())))],
+    [topicWorkspaces]
+  )
 
-    const filtered = topicWorkspaces.filter((w) => {
-      const matchesCategory = category === 'all' || w.category.toLowerCase() === category
-      const q = query.toLowerCase().trim()
-      const matchesQuery = q === '' || w.name.toLowerCase().includes(q) || w.description.toLowerCase().includes(q)
-      return matchesCategory && matchesQuery
-    })
+  const filtered = topicWorkspaces.filter((w) => {
+    const matchesCategory = category === 'all' || w.category.toLowerCase() === category
+    const q = query.toLowerCase().trim()
+    const matchesQuery = q === '' || w.name.toLowerCase().includes(q) || w.description.toLowerCase().includes(q)
+    return matchesCategory && matchesQuery
+  })
 
+  if (activeTopic) {
     return (
       <div className="mp-section" style={{ paddingTop: 0 }}>
         <button
@@ -73,7 +77,7 @@ export function Gallery({
         </div>
 
         <div className="mp-section-label">
-          <h2>{topic.name}</h2>
+          <h2>{activeTopic.name}</h2>
           <span>{filtered.length} {filtered.length === 1 ? 'shot' : 'shots'}</span>
         </div>
 

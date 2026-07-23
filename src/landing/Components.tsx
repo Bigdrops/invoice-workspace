@@ -16,30 +16,35 @@ const COMPONENTS = [
 
 export function Components({ onNavigateToShell }: ComponentsProps) {
   return (
-    <section className="bgd-section" id="components">
-      <div className="bgd-section__inner">
-        <div className="bgd-section__header">
-          <h2 className="bgd-section__title">Components</h2>
-          <a href="#" className="bgd-section__link" onClick={(e) => { e.preventDefault(); onNavigateToShell?.() }}>
+    <section className="mp-section mp-section-alt" id="components">
+      <div className="mp-container">
+        <div className="mp-section-label">
+          <h2>Components</h2>
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); onNavigateToShell?.() }}
+            style={{ fontFamily: 'var(--mp-font-display)', fontSize: 16, color: 'var(--mp-color-electric)', textDecoration: 'none' }}
+          >
             View all →
           </a>
         </div>
 
-        <div className="bgd-components__grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 'var(--mp-space-16)' }}>
           {COMPONENTS.map((comp) => {
             const Icon = comp.icon
             return (
-              <a
+              <article
                 key={comp.name}
-                href="#"
-                className="bgd-component-card"
+                className="mp-shot"
+                tabIndex={0}
+                style={{ textAlign: 'center', padding: 'var(--mp-space-32) var(--mp-space-24)' }}
                 onClick={(e) => { e.preventDefault(); onNavigateToShell?.() }}
               >
-                <div className="bgd-component-card__icon">
-                  <Icon size={24} />
+                <div style={{ marginBottom: 'var(--mp-space-16)', color: 'var(--mp-color-electric)' }}>
+                  <Icon size={32} />
                 </div>
-                <span className="bgd-component-card__name">{comp.name}</span>
-              </a>
+                <h3 className="shot-name" style={{ fontSize: 18 }}>{comp.name}</h3>
+              </article>
             )
           })}
         </div>

@@ -642,6 +642,7 @@
   flex-direction: column;
   border-bottom: 1px solid var(--mp-color-smoke);
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .moving-parts-shell .shot-preview .product-mock {

@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import { YellowPanel } from '../shell/components/YellowPanel/YellowPanel'
 
 interface CTAProps {
   onNavigateToShell?: () => void
@@ -6,19 +7,22 @@ interface CTAProps {
 
 export function CTA({ onNavigateToShell }: CTAProps) {
   return (
-    <section className="bgd-cta">
-      <h2 className="bgd-cta__title">Ready to build something amazing?</h2>
-      <p className="bgd-cta__subtitle">
-        Start building with BGD UI today. Open source, production ready, and endlessly customizable.
-      </p>
-      <div className="bgd-cta__actions">
-        <button className="bgd-hero__btn-primary" onClick={onNavigateToShell}>
-          Get Started
-          <ArrowRight size={18} />
-        </button>
-        <button className="bgd-hero__btn-secondary" onClick={onNavigateToShell}>
-          Browse Components
-        </button>
+    <section className="mp-section">
+      <div className="mp-container">
+        <YellowPanel
+          title="Ready to build something amazing?"
+          description="Start building with BGD UI today. Open source, production ready, and endlessly customizable."
+        >
+          <div className="mp-hero-actions">
+            <button className="btn-electric" onClick={onNavigateToShell}>
+              Get Started
+              <ArrowRight size={18} />
+            </button>
+            <button className="btn-ghost" onClick={onNavigateToShell}>
+              Browse Components
+            </button>
+          </div>
+        </YellowPanel>
       </div>
     </section>
   )

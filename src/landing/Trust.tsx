@@ -1,25 +1,25 @@
 export function Trust() {
   return (
-    <section className="bgd-section">
-      <div className="bgd-trust">
-        <div className="bgd-trust__grid">
-          <div className="bgd-trust__stat">
-            <div className="bgd-trust__value">50+</div>
-            <div className="bgd-trust__label">Components</div>
+    <section className="mp-section mp-section-dark">
+      <div className="mp-container">
+        <dl className="mp-hero-stats" style={{ margin: '0 auto' }}>
+          <div>
+            <dt>Components</dt>
+            <dd>50+</dd>
           </div>
-          <div className="bgd-trust__stat">
-            <div className="bgd-trust__value">12+</div>
-            <div className="bgd-trust__label">Workspaces</div>
+          <div>
+            <dt>Workspaces</dt>
+            <dd>12+</dd>
           </div>
-          <div className="bgd-trust__stat">
-            <div className="bgd-trust__value">100%</div>
-            <div className="bgd-trust__label">Open Source</div>
+          <div>
+            <dt>Open Source</dt>
+            <dd>100%</dd>
           </div>
-          <div className="bgd-trust__stat">
-            <div className="bgd-trust__value">∞</div>
-            <div className="bgd-trust__label">Possibilities</div>
+          <div>
+            <dt>Possibilities</dt>
+            <dd><span className="electric">∞</span></dd>
           </div>
-        </div>
+        </dl>
       </div>
     </section>
   )
