@@ -1,103 +1,83 @@
-You are taking over an implementation that does not match the approved shell design.
+[
+# EXECUTION PROMPT – Remove Side Gutters for Full-Width Mobile Line Items
 
-Your task is not to add new features. Your task is to audit the current implementation, identify every deviation from the approved design, and correct the implementation until it matches the architect-approved specification.
-
-Authoritative References (read in this order)
-
-1. "docs/AGENTS.md"
-2. "docs/bgd-ui-prd/PRD.md"
-3. "docs/bgd-ui-prd/bgd-shell-final-recommendation.md"
-
-Treat "bgd-shell-final-recommendation.md" as the canonical shell specification.
+## Load Required Skills
+- `/frontend-design` – apply responsive layout overrides.
+- `/executing-plans` – execute structured changes.
+- `/verification-before-completion` – validate.
 
 ---
 
-Known Problems
-
-The current implementation has the following issues and they must be investigated first:
-
-- The shell design does not match the approved recommendation.
-- The visual design is poor and does not reflect the intended neutral design language.
-- There is horizontal scrolling.
-- The shell theme appears to leak into at least two workspaces.
-- Shell/workspace design isolation appears to be broken.
-
-Do not assume the implementation report is correct. Verify everything yourself.
+## A. Project Context
+The line-item cards in EASEHEALTH and Ditto have large horizontal gaps (side gutters) on mobile screens. The user wants them to extend edge-to-edge, touching the screen wall, instead of floating in the middle with whitespace on the left and right.
 
 ---
 
-Audit Requirements
-
-Perform a complete implementation audit.
-
-Verify:
-
-- Shell/workspace CSS isolation.
-- CSS Module usage.
-- Any global CSS imports.
-- Any selectors affecting "html", "body", ":root", or generic elements.
-- Theme implementation.
-- Design token usage.
-- Responsive layouts.
-- Overflow causing horizontal scrolling.
-- Navigation implementation.
-- Typography.
-- Spacing.
-- Card styling.
-- Search overlay.
-- Gallery layout.
-- Theme switching.
-- Accessibility implementation.
-
-Compare every implementation decision against the approved recommendation.
+## B. Target Components
+- **EASEHEALTH**: `src/workspaces/invoice/easehealth/` – find the main container wrapping the line items and the card component.
+- **Ditto**: `src/workspaces/invoice/ditto/` – same.
+- Do **not** touch the shell or other workspaces.
 
 ---
 
-Corrective Requirements
+## C. Implementation Constraints
+### Mobile Overrides (max-width: 640px)
+- **Remove horizontal padding** from the outermost container that holds the line items – set `padding-left: 0` and `padding-right: 0`.
+- **Remove `max-width` constraints** on mobile so the container is `width: 100%`.
+- **Optional but recommended**: set the card's `border-radius` to `0` on mobile when it spans full width, to avoid awkward rounded corners that bleed into the screen edge. (Check with user if they want this, or keep the radius).
 
-Correct every deviation from the recommendation.
-
-In particular:
-
-- Eliminate all horizontal scrolling.
-- Restore complete shell/workspace style isolation.
-- Ensure shell styles cannot affect any workspace.
-- Ensure removing the shell leaves every workspace visually unchanged.
-- Ensure adding new workspaces cannot change the shell.
-- Remove any global styling introduced by the shell.
-- Ensure every component uses semantic "--shell-*" tokens.
-- Do not hard-code design values in components.
-
-Do not redesign the shell.
-
-Implement the approved design—not your own interpretation.
+### Desktop Behavior (min-width: 641px)
+- Keep the container centered with a `max-width` (e.g., `max-w-lg` or `max-w-2xl`) and side padding (`px-4` or `px-6`) so it doesn't stretch out on wide monitors.
 
 ---
 
-Before Making Changes
+## D. Implementation Example
+In the workspace's CSS or Tailwind utility classes, apply this pattern:
 
-Produce a deviation report with:
-
-- Every issue found.
-- The file(s) responsible.
-- Which section of "bgd-shell-final-recommendation.md" or the PRD is being violated.
-- Your proposed fix.
-
-Wait for approval before making architectural changes. If a fix is purely corrective and aligns with the approved recommendation, implement it directly.
+```css
+/* Within the workspace's own CSS */
+@media (max-width: 640px) {
+  .line-items-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .line-item-card {
+    border-radius: 0 !important; /* optional: removes corners for edge-to-edge look */
+  }
+}
+```
 
 ---
 
-Deliverables
+E. Verification
 
-1. Audit report.
-2. Deviation report.
-3. Corrected implementation.
-4. Summary of every file modified.
-5. Verification that:
-   - No horizontal scrolling exists.
-   - Shell/workspace isolation is restored.
-   - No shell CSS leaks into workspaces.
-   - The implementation matches the approved recommendation.
-   - Any remaining issues or implementation constraints are clearly documented.
+1. bun run typecheck – no errors.
+2. bun run build – succeeds.
+3. Manual test on a mobile viewport (375px):
+   · Line-item cards must span the full screen width with zero horizontal gaps.
+   · Desktop view (1024px) must remain centered with proper padding.
+4. Save report to docs/Reports/.
 
-Do not introduce new architecture, new design language, or new UX patterns. Your objective is faithful implementation of the approved shell design.
+---
+
+F. Acceptance Criteria
+
+· EASEHEALTH line-item cards touch the screen wall on mobile.
+· Ditto line-item cards touch the screen wall on mobile.
+· Desktop layout remains unchanged and centered.
+· Build and typecheck pass.
+· Manual verification complete.
+
+---
+
+G. Execution Order
+
+1. Locate the main container and card component in each workspace.
+2. Apply the mobile CSS overrides (remove side padding/max-width).
+3. Test on mobile and desktop.
+4. Verify and report.
+
+```
